@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GeoDetective</string>
+    <string name="app_welcome">Welcome to GeoDetective!</string>
+    <string name="logo">GeoDetective</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+
 </resources>
