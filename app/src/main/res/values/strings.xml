@@ -6,4 +6,7 @@
     <string name="username">Username</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="settings">Settings</string>
+    <string name="createQuest">Create a Quest!</string>
+    <string name="goOnQuest">Go on a Quest!</string>
 </resources>
