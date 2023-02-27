@@ -9,4 +9,9 @@
     <string name="settings">Settings</string>
     <string name="createQuest">Create a Quest!</string>
     <string name="goOnQuest">Go on a Quest!</string>
+    <string name="chooseQuest">Choose Image</string>
+    <string name="questName">Quest Name</string>
+    <string name="submitQuest">Submit Quest</string>
+    <string name="questDescription">Quest Description</string>
+    <string name="questHint">Quest Hint (optional)</string>
 </resources>

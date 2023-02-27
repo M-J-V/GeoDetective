@@ -16,13 +16,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Get buttons from activity
         Button loginBtn = findViewById(R.id.Login_Btn);
+        Button registerBtn = findViewById(R.id.Register_Btn);
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start home activity
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-            }
+        loginBtn.setOnClickListener(v -> {
+            // Start home activity
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
     }
 
