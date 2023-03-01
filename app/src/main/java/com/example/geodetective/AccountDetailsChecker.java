@@ -97,18 +97,4 @@ public class AccountDetailsChecker {
         return false;
     }
 
-    /**
-     * This method offers more information on why the details are wrong.
-     * It first checks the username and returns information on that (if it is wrong),
-     * then check the correctness of the password, then checks that the two passwords
-     * are the same.
-     *
-     * @param username input string
-     * @param password input string
-     * @param passwordAgain input string
-     * @return a string with information on why the details are not correct
-     * according to the specification
-     */
-    public void getCheckerErrorInformation(String username, String password,
-                                             String passwordAgain) { }
 }
