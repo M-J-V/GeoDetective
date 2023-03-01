@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/goOnQuest"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/Create_Quest_Btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,14 +37,14 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/createQuest"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/Play_Quest_Btn"
         app:layout_constraintStart_toStartOf="@+id/Play_Quest_Btn"
         app:layout_constraintTop_toBottomOf="@+id/Play_Quest_Btn" />
 
     <ImageButton
-        android:id="@+id/Settings_Btn"
+        android:id="@+id/Profile_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

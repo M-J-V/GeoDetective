@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/geo_green"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/geo_green_darker"
+        app:layout_constraintBottom_toTopOf="@+id/changePasswordTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeUsernameBtn" />
+
+    <TextView
+        android:id="@+id/changeUsernameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/changeUsername"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/newUsernameEditTxt"/>
+
+    <EditText
+        android:id="@+id/newUsernameEditTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="@string/inputNewUsername"
+        app:layout_constraintBottom_toTopOf="@id/changeUsernameBtn"
+        app:layout_constraintEnd_toEndOf="@+id/changeUsernameTxt"
+        app:layout_constraintStart_toStartOf="@+id/changeUsernameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/changeUsernameTxt"
+        android:importantForAutofill="no"
+        android:textColor="@color/black"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/changeUsernameBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/applyNewUsername"
+        app:layout_constraintBottom_toTopOf="@+id/changePasswordTxt"
+        app:layout_constraintEnd_toEndOf="@+id/newUsernameEditTxt"
+        app:layout_constraintStart_toStartOf="@+id/newUsernameEditTxt"
+        app:layout_constraintTop_toBottomOf="@+id/newUsernameEditTxt"
+        android:backgroundTint="@color/geo_green_darker"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:id="@+id/changePasswordTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/changePass"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/changeUsernameBtn"
+        app:layout_constraintStart_toStartOf="@+id/changeUsernameBtn"
+        app:layout_constraintTop_toBottomOf="@+id/changeUsernameBtn"
+        app:layout_constraintBottom_toTopOf="@id/oldPasswordEditTxt"/>
+
+    <EditText
+        android:id="@+id/oldPasswordEditTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enterOldPass"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@id/newPasswordEditTxt"
+        app:layout_constraintEnd_toStartOf="@+id/oldPasswordTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changePasswordTxt"
+        android:textColor="@color/black"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/newPasswordEditTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enterNewPass"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@id/changePasswordBtn"
+        app:layout_constraintEnd_toStartOf="@+id/newPasswordTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/oldPasswordEditTxt"
+        android:textColor="@color/black"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/oldPasswordTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/oldPass"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/oldPasswordEditTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/oldPasswordEditTxt"
+        app:layout_constraintTop_toTopOf="@+id/oldPasswordEditTxt" />
+
+    <TextView
+        android:id="@+id/newPasswordTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/newPass"
+        android:textColor="@color/black"
+
+        app:layout_constraintBottom_toBottomOf="@+id/newPasswordEditTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/newPasswordEditTxt"
+        app:layout_constraintTop_toTopOf="@+id/newPasswordEditTxt" />
+
+    <Button
+        android:id="@+id/changePasswordBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/applyNewPass"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/changeUsernameBtn"
+        app:layout_constraintStart_toStartOf="@+id/changeUsernameBtn"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordEditTxt"
+        android:backgroundTint="@color/geo_green_darker"
+        android:textColor="@color/black"/>
+
+    <ImageButton
+        android:id="@+id/BackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:contentDescription="@string/Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        tools:ignore="ImageContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
