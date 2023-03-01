@@ -22,6 +22,11 @@ public class LoginActivity extends AppCompatActivity {
             // Start home activity
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
+
+        registerBtn.setOnClickListener(v -> {
+            // Start register activity
+            startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+        });
     }
 
 
