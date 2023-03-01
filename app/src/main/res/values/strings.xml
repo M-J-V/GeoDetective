@@ -17,5 +17,18 @@
     <string name="questName">Quest Name</string>
     <string name="submitQuest">Submit Quest</string>
     <string name="questDescription">Quest Description</string>
-    <string name="questHint">Quest Hint (optional)</string>
+    <string name="questHint">Quest Hint (Optional)</string>
+    <string name="changeUsername">Change Username</string>
+    <string name="inputNewUsername">Input New Username</string>
+    <string name="applyNewUsername">Apply New Username</string>
+    <string name="changePass">Change Password</string>
+    <string name="enterOldPass">Enter Old Password</string>
+    <string name="enterNewPass">Enter New Password</string>
+    <string name="oldPass">Old Password</string>
+    <string name="newPass">New Password</string>
+    <string name="applyNewPass">Apply New Password</string>
+    <string name="Back">Back</string>
+
+
+
 </resources>

@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/goOnQuest"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/Create_Quest_Btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,22 +37,24 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/createQuest"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/Play_Quest_Btn"
         app:layout_constraintStart_toStartOf="@+id/Play_Quest_Btn"
         app:layout_constraintTop_toBottomOf="@+id/Play_Quest_Btn" />
 
     <ImageButton
-        android:id="@+id/Settings_Btn"
+        android:id="@+id/Profile_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/settings"
-        android:backgroundTint="@color/geo_green_darker"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:contentDescription="@string/settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_preferences" />
+        app:srcCompat="@android:drawable/ic_menu_preferences"
+        tools:ignore="ImageContrastCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
