@@ -13,6 +13,9 @@
         android:theme="@style/Theme.GeoDetective"
         tools:targetApi="31">
         <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
@@ -36,8 +39,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".CreateQuestActivity"/>
-        <activity android:name=".EditDetailsActivity"/>
+        <activity android:name=".CreateQuestActivity" />
+        <activity android:name=".EditDetailsActivity" />
     </application>
 
 </manifest>
