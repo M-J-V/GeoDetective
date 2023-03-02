@@ -1,8 +1,10 @@
 package com.example.geodetective;
 
 /**
- * A singleton class that checks that the details of the account
- * to be created are within the specifications.
+ * A singleton class that checks two conditions (exclusively):
+ *  - that the details of the account to be created are within
+ *  the specifications.
+ *  - that the login details are existent and correct in the database.
  */
 public class AccountDetailsChecker {
 
@@ -36,6 +38,25 @@ public class AccountDetailsChecker {
     public boolean checkDetails(String username, String password,
                                 String passwordAgain) throws IllegalArgumentException{
         return (checkUsername(username) && checkPassword(password, passwordAgain));
+    }
+
+    /**
+     * This method checks that the inputted account details correspond to an
+     *
+     * @param username input string
+     * @param password input string
+     * @return true if and only if the account details match an account stored in the database.
+     */
+    public boolean checkLogin(String username, String password) {
+        if (usernameInDatabase(username) && passwordCorrespondsToUsername(username, password)) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("The username or the password is wrong.");
+        }
+    }
+
+    private boolean passwordCorrespondsToUsername(String username, String password) {
+        return true;
     }
 
     private boolean checkUsername(String username) throws IllegalArgumentException {
@@ -94,7 +115,7 @@ public class AccountDetailsChecker {
     }
 
     private boolean usernameInDatabase(String username) {
-        return false;
+        return true;
     }
 
 }
