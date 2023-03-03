@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 
 public class ListOfQuests extends AppCompatActivity {
-    String quests[] = {"Meta-Quest", "Audi-Quest", "Aurora-Quest"};
+    String quests[] = {"Meta-Quest     Author: John Smith", "Audi-Quest     Author: John Smith", "Aurora-Quest     Author: John Smith"};
     int questsimage[] = {R.drawable.metaforum, R.drawable.auditorium, R.drawable.aurora};
 
     ListView listView;
