@@ -24,10 +24,5 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
         });
 
-        joinQuestBtn.setOnClickListener(v -> {
-            //See list of avaliable quests
-            startActivity(new Intent(getApplicationContext(), ListOfQuests.class));
-        });
-
     }
 }

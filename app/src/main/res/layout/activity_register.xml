@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/geo_green"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_welcome"
+        android:text="@string/create_account"
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="@color/black"
@@ -22,8 +22,8 @@
 
     <ImageView
         android:id="@+id/Login_Logo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:contentDescription="@string/logo"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="@+id/textView"
@@ -41,8 +41,7 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="@color/black"
-        android:textColorHint="#004D40"
-        app:layout_constraintBottom_toTopOf="@id/Login_Btn"
+        app:layout_constraintBottom_toTopOf="@id/Login_Password_Again"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/Login_Username" />
@@ -57,44 +56,64 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/black"
-        android:textColorHint="#004D40"
         app:layout_constraintBottom_toTopOf="@+id/Login_Password"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <Button
-        android:id="@+id/Login_Btn"
+    <EditText
+        android:id="@+id/Login_Password_Again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/geo_green_darker"
-        android:text="@string/login"
+        android:autofillHints="Password"
+        android:ems="10"
+        android:hint="@string/password_again"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/Register_Btn"
+        app:layout_constraintBottom_toTopOf="@id/Signup_Btn"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/Login_Password" />
+        app:layout_constraintTop_toBottomOf="@+id/Login_Username" />
+
 
     <Button
-        android:id="@+id/Register_Btn"
+        android:id="@+id/Signup_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:backgroundTint="@color/geo_green_darker"
-        android:text="@string/register"
+        android:ems="8"
+        android:text="@string/signup"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/Login_Btn"
-        app:layout_constraintTop_toBottomOf="@+id/Login_Password" />
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/Login_Password_Again" />
+
+    <ImageButton
+        android:id="@+id/Back_To_Login_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:contentDescription="@string/back"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
-        android:id="@+id/ErrorTextLogin"
+        android:id="@+id/ErrorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
-        app:layout_constraintTop_toBottomOf="@+id/Login_Password"
-        app:layout_constraintStart_toStartOf="@+id/Login_Password"
-        app:layout_constraintEnd_toEndOf="@+id/Login_Password" />
+        app:layout_constraintTop_toBottomOf="@+id/Login_Password_Again"
+        app:layout_constraintStart_toStartOf="@+id/Login_Password_Again"
+        app:layout_constraintEnd_toEndOf="@+id/Login_Password_Again"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

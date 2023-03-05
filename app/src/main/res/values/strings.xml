@@ -14,5 +14,4 @@
     <string name="submitQuest">Submit Quest</string>
     <string name="questDescription">Quest Description</string>
     <string name="questHint">Quest Hint (optional)</string>
-    <string name="myText">My Text</string>
 </resources>
