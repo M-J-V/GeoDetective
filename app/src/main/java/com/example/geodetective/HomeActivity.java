@@ -27,8 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
         profileBtn.setOnClickListener(v -> {
             // Start profile activity
-            // TODO: Change to proper profile activity once added
-            startActivity(new Intent(getApplicationContext(), EditDetailsActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         });
 
     }
