@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -15,9 +16,9 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // Get buttons from activity
-        ImageButton profileBtn = findViewById(R.id.Profile_Btn);
         Button createQuestBtn = findViewById(R.id.Create_Quest_Btn);
         Button joinQuestBtn = findViewById(R.id.Play_Quest_Btn);
+        ImageButton returnBtn = findViewById(R.id.Profile_Btn);
 
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
@@ -25,10 +26,14 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
         });
 
-        profileBtn.setOnClickListener(v -> {
-            // Start profile activity
-            // TODO: Change to proper profile activity once added
-            startActivity(new Intent(getApplicationContext(), EditDetailsActivity.class));
+        returnBtn.setOnClickListener(v -> {
+            // Start create profile activity
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        });
+
+        joinQuestBtn.setOnClickListener(v -> {
+            // Start create profile activity
+            startActivity(new Intent(getApplicationContext(), ListOfQuests.class));
         });
 
     }

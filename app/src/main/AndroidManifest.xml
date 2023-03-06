@@ -13,10 +13,19 @@
         android:theme="@style/Theme.GeoDetective"
         tools:targetApi="31">
         <activity
-            android:name=".Profile"
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListOfQuests"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateQuestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
@@ -25,7 +34,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".CreateQuestActivity" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -39,8 +47,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".CreateQuestActivity" />
-        <activity android:name=".EditDetailsActivity" />
     </application>
 
 </manifest>

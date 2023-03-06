@@ -23,8 +23,7 @@ public class EditDetailsActivity extends AppCompatActivity {
         //Set on click listeners
         returnBtn.setOnClickListener(v -> {
             // Start create profile activity
-            // TODO: Change to proper profile activity once added
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         });
 
     }

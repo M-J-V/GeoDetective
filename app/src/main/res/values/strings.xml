@@ -1,33 +1,32 @@
 <resources>
     <string name="app_name">GeoDetective</string>
     <string name="app_welcome">Welcome to GeoDetective!</string>
-    <string name="create_account">Create an account</string>
     <string name="logo">GeoDetective</string>
     <string name="password">Password</string>
-    <string name="password_again">Password Again</string>
     <string name="username">Username</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
-    <string name="signup">Sign up</string>
     <string name="settings">Settings</string>
-    <string name="back">Back</string>
     <string name="createQuest">Create a Quest!</string>
     <string name="goOnQuest">Go on a Quest!</string>
     <string name="chooseQuest">Choose Image</string>
     <string name="questName">Quest Name</string>
     <string name="submitQuest">Submit Quest</string>
     <string name="questDescription">Quest Description</string>
-    <string name="questHint">Quest Hint (Optional)</string>
-    <string name="changeUsername">Change Username</string>
-    <string name="inputNewUsername">Input New Username</string>
-    <string name="applyNewUsername">Apply New Username</string>
-    <string name="changePass">Change Password</string>
-    <string name="enterOldPass">Enter Old Password</string>
-    <string name="enterNewPass">Enter New Password</string>
-    <string name="oldPass">Old Password</string>
-    <string name="newPass">New Password</string>
-    <string name="applyNewPass">Apply New Password</string>
+    <string name="questHint">Quest Hint (optional)</string>
     <string name="Back">Back</string>
-
+    <string name="myText">myText</string>
+    <string name="changeUsername">Create Account</string>
+    <string name="inputNewUsername">Create Account</string>
+    <string name="applyNewUsername">Create Account</string>
+    <string name="changePass">Create Account</string>
+    <string name="enterOldPass">Create Account</string>
+    <string name="enterNewPass">Create Account</string>
+    <string name="oldPass">Create Account</string>
+    <string name="newPass">Create Account</string>
+    <string name="signup">Create Account</string>
+    <string name="applyNewPass">Create Account</string>
+    <string name="create_account">Create Account</string>
+    <string name="password_again">Create Account</string>
 
 </resources>
