@@ -16,6 +16,9 @@
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".ListOfQuests"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
