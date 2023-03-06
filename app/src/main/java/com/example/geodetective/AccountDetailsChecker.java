@@ -37,6 +37,7 @@ public class AccountDetailsChecker {
      */
     public boolean checkDetails(String username, String password,
                                 String passwordAgain) throws IllegalArgumentException{
+
         return (checkUsername(username) && checkPassword(password, passwordAgain));
     }
 
@@ -115,6 +116,10 @@ public class AccountDetailsChecker {
     }
 
     private boolean usernameInDatabase(String username) {
+        if (username.length() == 0) {
+            throw new IllegalArgumentException("Please enter the username.");
+        }
+
         return false;
     }
 
