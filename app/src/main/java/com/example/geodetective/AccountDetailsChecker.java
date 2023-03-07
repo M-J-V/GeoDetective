@@ -115,7 +115,7 @@ public class AccountDetailsChecker {
     }
 
     private boolean usernameInDatabase(String username) {
-        return false;
+        return true;
     }
 
 }
