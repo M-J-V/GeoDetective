@@ -79,6 +79,9 @@ public class CreateQuestActivity extends AppCompatActivity {
         //Get current location
         updateLocation();
 
+        //Get username
+        String creatorName = getIntent().getExtras().getString("username");
+
         //TODO save quest to database
 //        submitQuestBtn.setOnClickListener(view -> {
 //            Database.saveQuest(creatorName,
