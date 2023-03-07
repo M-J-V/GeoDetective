@@ -28,5 +28,6 @@
     <string name="applyNewPass">Create Account</string>
     <string name="create_account">Create Account</string>
     <string name="password_again">Create Account</string>
+    <string name="imageClue"><i>Image Clue:</i></string>
 
 </resources>

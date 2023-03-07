@@ -104,6 +104,7 @@ public class CreateQuestActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+
         //Get current location
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, new CancellationToken() {
             @SuppressWarnings("ConstantConditions")

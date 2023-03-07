@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/geo_green"
+    tools:context=".HomeActivity">
+
+    <TextView
+        android:id="@+id/quest_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Test title"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/image_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/imageClue"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/Quest_Image"
+        app:layout_constraintBottom_toTopOf="@id/Quest_Image" />
+
+    <ImageView
+        android:id="@+id/Quest_Image"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:ignore="ImageContrastCheck"
+        app:layout_constraintBottom_toTopOf="@+id/join_quest_btn"
+        app:layout_constraintEnd_toEndOf="@+id/quest_name"
+        app:layout_constraintStart_toStartOf="@+id/quest_name" />
+
+    <Button
+        android:id="@+id/join_quest_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/geo_green_darker"
+        android:minHeight="50dp"
+        android:text="@string/joinQuest"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="398dp" />
+
+    <ImageButton
+        android:id="@+id/BackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:contentDescription="@string/Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="?attr/homeAsUpIndicator"
+        tools:ignore="ImageContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
