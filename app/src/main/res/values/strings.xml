@@ -14,4 +14,19 @@
     <string name="submitQuest">Submit Quest</string>
     <string name="questDescription">Quest Description</string>
     <string name="questHint">Quest Hint (optional)</string>
+    <string name="Back">Back</string>
+    <string name="myText">myText</string>
+    <string name="changeUsername">Create Account</string>
+    <string name="inputNewUsername">Create Account</string>
+    <string name="applyNewUsername">Create Account</string>
+    <string name="changePass">Create Account</string>
+    <string name="enterOldPass">Create Account</string>
+    <string name="enterNewPass">Create Account</string>
+    <string name="oldPass">Create Account</string>
+    <string name="newPass">Create Account</string>
+    <string name="signup">Create Account</string>
+    <string name="applyNewPass">Create Account</string>
+    <string name="create_account">Create Account</string>
+    <string name="password_again">Create Account</string>
+
 </resources>

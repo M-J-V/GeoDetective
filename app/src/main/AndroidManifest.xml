@@ -27,6 +27,9 @@
             android:name=".CreateQuestActivity"
             android:exported="false" />
         <activity
+            android:name=".QuestOverviewActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditDetailsActivity"
             android:exported="false" />
         <activity

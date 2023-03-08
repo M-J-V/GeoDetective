@@ -79,6 +79,9 @@ public class CreateQuestActivity extends AppCompatActivity {
         //Get current location
         updateLocation();
 
+        //Get username
+        String creatorName = getIntent().getExtras().getString("username");
+
         //TODO save quest to database
 //        submitQuestBtn.setOnClickListener(view -> {
 //            Database.saveQuest(creatorName,
@@ -101,6 +104,7 @@ public class CreateQuestActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+
         //Get current location
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, new CancellationToken() {
             @SuppressWarnings("ConstantConditions")
