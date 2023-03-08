@@ -119,8 +119,7 @@ public class AccountDetailsChecker {
         if (username.length() == 0) {
             throw new IllegalArgumentException("Please enter the username.");
         }
-
-        return false;
+        return true;
     }
 
 }
