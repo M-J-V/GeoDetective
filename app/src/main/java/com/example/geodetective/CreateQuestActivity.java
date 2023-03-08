@@ -64,7 +64,7 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         // get text inputs from activity
         EditText questName = findViewById(R.id.quest_name_input);
-        EditText questDescription = findViewById(R.id.quest_description_input);
+        Button questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
 
         // Set back button functionality
@@ -127,19 +127,16 @@ public class CreateQuestActivity extends AppCompatActivity {
 
     // Select image from gallery or take a photo.
     private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery"};
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateQuestActivity.this);
         builder.setTitle("Choose picture!");
         builder.setItems(options, (dialog, item) -> {
-            if (options[item].equals("Take Photo"))
-            {
+            if (options[item].equals("Take Photo")) {
                 //Take photo
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 //noinspection deprecation
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-            else if (options[item].equals("Choose from Gallery"))
-            {
+            } else if (options[item].equals("Choose from Gallery")) {
                 //Pick from gallery
                 Intent i = new Intent();
                 i.setType("image/*");
