@@ -20,5 +20,7 @@ public class ListOfQuests extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.customListView);
         CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), quests, questsimage);
         listView.setAdapter(customBaseAdapter);
+
+        //TODO start QuestOverviewActivity when a quest is clicked (and pass along some information like a quest ID to load the quest information)
     }
 }

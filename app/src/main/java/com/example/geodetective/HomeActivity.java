@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
             // Start create quest activity
-            startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
+            startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class).putExtra("username", getIntent().getExtras().getString("username")));
         });
 
         returnBtn.setOnClickListener(v -> {

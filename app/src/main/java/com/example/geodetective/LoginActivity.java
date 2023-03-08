@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameWidget = findViewById(R.id.Login_Username);
         EditText passwordWidget = findViewById(R.id.Login_Password);
 
-        // Get error text fiels
+        // Get error text fields
         TextView errorText = findViewById(R.id.ErrorTextLogin);
 
         loginBtn.setOnClickListener(v -> {
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
             try {
                 checker.checkLogin(username, password);
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class).putExtra("username", usernameWidget.getText().toString()));
             } catch (IllegalArgumentException e) {
                 errorText.setText(e.getMessage());
             }
