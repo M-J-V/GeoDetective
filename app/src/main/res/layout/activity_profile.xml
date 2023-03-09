@@ -16,7 +16,7 @@
         android:textSize="25sp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/passwordTxt"
+        app:layout_constraintBottom_toTopOf="@id/usernameTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,27 +26,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/password"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/usernameTxt"
-        app:layout_constraintEnd_toStartOf="@+id/passwordInfo"
-        app:layout_constraintHorizontal_bias="0.623"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_profile_info"
-        app:layout_constraintVertical_bias="0.218" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_history"
+        app:layout_constraintEnd_toEndOf="@+id/usernameTxt"
+        app:layout_constraintStart_toStartOf="@+id/usernameTxt"
+        app:layout_constraintTop_toBottomOf="@id/usernameTxt" />
 
     <TextView
         android:id="@+id/passwordInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/blank"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/passwordTxt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/passwordTxt"
-        app:layout_constraintStart_toEndOf="@id/passwordTxt"/>
+        app:layout_constraintEnd_toEndOf="@+id/usernameInfo"
+        app:layout_constraintStart_toStartOf="@+id/usernameInfo"
+        app:layout_constraintTop_toTopOf="@+id/passwordTxt" />
 
     <TextView
         android:id="@+id/usernameTxt"
@@ -55,10 +53,10 @@
         android:text="@string/username"
         android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/button_history"
+        app:layout_constraintBottom_toTopOf="@id/passwordTxt"
         app:layout_constraintEnd_toStartOf="@+id/usernameInfo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/passwordTxt" />
+        app:layout_constraintTop_toBottomOf="@id/text_profile_info" />
 
     <TextView
         android:id="@+id/usernameInfo"
@@ -94,10 +92,9 @@
         android:text="@string/history"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_edit_profile"
-        app:layout_constraintHorizontal_bias="0.261"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTxt"
-        app:layout_constraintVertical_bias="0.889" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTxt"
+ />
 
     <ImageButton
         android:id="@+id/BackBtn"

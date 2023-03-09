@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     DbConnection db = DbConnection.getInstance();
+    AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupBtn.setOnClickListener(v -> {
             // Start home activity
-            AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
             DbConnection db = DbConnection.getInstance();
             String username = usernameWidget.getText().toString();
             String password = passwordWidget.getText().toString();
@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (User.exists()) {
                         errorMsg = "Username already in use";
                     } else {
-                        addUserToDb(username, password);
+                        db.createNewUser(username, password);
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     }
                 } else {
@@ -83,15 +83,5 @@ public class RegisterActivity extends AppCompatActivity {
                 errorText.setText(errorMsg);
             }
         });
-    }
-
-    private void addUserToDb (String username, String password) {
-            // Create a new user with username and password
-            Map<String, Object> user = new HashMap<>();
-            user.put("Username", username);
-            user.put("Password", password);
-
-            // Add new user to database
-            db.users.document(username).set(user);
     }
 }
