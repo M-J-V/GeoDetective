@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "372493676070",
+    "firebase_url": "https://geodetective-db-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "geodetective-db",
+    "storage_bucket": "geodetective-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372493676070:android:9de2ead67f6621c5afc0e7",
+        "android_client_info": {
+          "package_name": "com.example.geodetective"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372493676070-9r049k6e4rfedp01rv09ght8g9s9ncu9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXwBc_MK8oHz34atSlMevIHhv2AICoc1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372493676070-9r049k6e4rfedp01rv09ght8g9s9ncu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
