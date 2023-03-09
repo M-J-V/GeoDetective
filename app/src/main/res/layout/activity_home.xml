@@ -56,5 +56,17 @@
         app:srcCompat="@android:drawable/ic_menu_preferences"
         tools:ignore="ImageContrastCheck" />
 
+    <Button
+        android:id="@+id/Logout_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
+        android:backgroundTint="@color/geo_green_darker"
+        android:textColor="@color/black"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

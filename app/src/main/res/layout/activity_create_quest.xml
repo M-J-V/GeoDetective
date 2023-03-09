@@ -49,14 +49,13 @@
         app:layout_constraintStart_toStartOf="@+id/choose_Quest_Image_Btn"
         app:layout_constraintTop_toBottomOf="@id/choose_Quest_Image_Btn" />
 
-    <EditText
+    <Button
         android:id="@+id/quest_description_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:hint="@string/questDescription"
         android:importantForAutofill="no"
-        android:inputType="text"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/quest_hint_input"
         app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"
