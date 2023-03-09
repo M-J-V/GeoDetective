@@ -64,13 +64,13 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         // get text inputs from activity
         EditText questName = findViewById(R.id.quest_name_input);
-        Button questDescription = findViewById(R.id.quest_description_input);
+        EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
 
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
             // return to home activity
-            finish();
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
 
         // Select image from gallery or take a photo.
@@ -80,7 +80,8 @@ public class CreateQuestActivity extends AppCompatActivity {
         updateLocation();
 
         //Get username
-        String creatorName = getIntent().getExtras().getString("username");
+        // TODO use the currentUser Variable to get creator details
+        //String creatorName = getIntent().getExtras().getString("username");
 
         //TODO save quest to database
 //        submitQuestBtn.setOnClickListener(view -> {

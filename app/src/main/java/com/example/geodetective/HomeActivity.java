@@ -25,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
             // Start create quest activity
-            startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class).putExtra("username", getIntent().getExtras().getString("username")));
+            startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
         });
 
         returnBtn.setOnClickListener(v -> {

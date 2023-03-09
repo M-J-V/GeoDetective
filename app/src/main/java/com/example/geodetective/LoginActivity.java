@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class LoginActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
+    ActiveUser user = ActiveUser.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                     DocumentSnapshot User = task.getResult();
                     if (User.exists()) {
                         if (password.equals(User.get("Password"))) {
+                            // User succesfully logs in
+                            user.setUsername(username);
+                            user.setPassword(password);
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {
                            errorMsg = "Incorrect Password";
