@@ -40,7 +40,7 @@ public class AccountDetailsChecker {
         return (checkUsername(username) && checkPassword(password, passwordAgain));
     }
 
-    public boolean checkUsername(String username) throws IllegalArgumentException {
+    boolean checkUsername(String username) throws IllegalArgumentException {
 
         if (username.length() < 4) {
             throw new IllegalArgumentException("The username length should be at least 4");
@@ -49,7 +49,7 @@ public class AccountDetailsChecker {
         return true;
     }
 
-    private boolean checkPassword(String password, String passwordAgain) throws IllegalArgumentException{
+    boolean checkPassword(String password, String passwordAgain) throws IllegalArgumentException{
         if (password.length() <= 5) {
             throw new IllegalArgumentException("The password should have more than 5 characters.");
         }

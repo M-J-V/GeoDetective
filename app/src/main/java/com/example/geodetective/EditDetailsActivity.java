@@ -54,6 +54,50 @@ public class EditDetailsActivity extends AppCompatActivity {
             updateUsername(oldUsername, newUsername, userMsg);
         });
 
+        updatePassBtn.setOnClickListener(v -> {
+            String oldPassword = oldPassInputEditText.getText().toString();
+            String newPassword = newPassInputEditText.getText().toString();
+
+            updatePassword(oldPassword, newPassword, passMsg);
+        });
+
+    }
+
+    private void updatePassword(String oldPass, String newPass, TextView msg) {
+        msg.setTextColor(Color.RED);
+        try{
+            // Check that is valid password
+            checker.checkPassword(newPass, newPass);
+
+            if (oldPass == null) {
+                throw new IllegalArgumentException("Please enter Old password");
+            }
+
+            // Check if oldPassword is the same as the actual password
+            if(oldPass.equals(user.getPassword())){
+                db.users.document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String Msg = "";
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot User = task.getResult();
+                            if (User.exists()) {
+                                replaceUser(user.getUsername(), user.getUsername(), newPass, msg);
+                            } else {
+                                Msg = "Username is not in Database";
+                            }
+                        } else {
+                            Msg = "Error getting data from Database";
+                        }
+                        msg.setText(Msg);
+                    }
+                });
+            } else {
+                throw new IllegalArgumentException("Old password is incorrect");
+            }
+        } catch (IllegalArgumentException e) {
+            msg.setText(e.getMessage());
+        }
     }
 
     private void updateUsername(String oldUsername, String newUsername, TextView msg) {
@@ -72,7 +116,7 @@ public class EditDetailsActivity extends AppCompatActivity {
                             Msg = "Username is already in use";
                         } else {
                             // Username can be used
-                            deleteUser(oldUsername, newUsername, msg);
+                            replaceUser(oldUsername, newUsername, user.getPassword(), msg);
                         }
                     } else {
                         Msg = "Error getting data from Database";
@@ -86,13 +130,14 @@ public class EditDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void deleteUser(String oldUsername, String newUsername, TextView msg) {
-        db.users.document(oldUsername).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+    private void replaceUser(String deletedUser, String newUsername, String newPassword, TextView msg) {
+        db.users.document(deletedUser).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        db.createNewUser(newUsername, user.getPassword());
+                        db.createNewUser(newUsername, newPassword);
                         user.setUsername(newUsername);
-                        msg.setText("Username updated succesfully");
+                        user.setPassword(newPassword);
+                        msg.setText("Profile updated succesfully");
                         msg.setTextColor(Color.BLACK);
 
                     }
