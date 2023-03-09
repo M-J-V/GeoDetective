@@ -19,6 +19,7 @@ public class HomeActivity extends AppCompatActivity {
         // Get buttons from activity
         Button createQuestBtn = findViewById(R.id.Create_Quest_Btn);
         Button joinQuestBtn = findViewById(R.id.Play_Quest_Btn);
+        Button logoutBtn = findViewById(R.id.Logout_btn);
         ImageButton returnBtn = findViewById(R.id.Profile_Btn);
 
         //Set on click listeners
@@ -35,6 +36,11 @@ public class HomeActivity extends AppCompatActivity {
         joinQuestBtn.setOnClickListener(v -> {
             // Start create profile activity
             startActivity(new Intent(getApplicationContext(), ListOfQuests.class));
+        });
+
+        logoutBtn.setOnClickListener(v -> {
+            // Start create profile activity
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         });
 
     }
