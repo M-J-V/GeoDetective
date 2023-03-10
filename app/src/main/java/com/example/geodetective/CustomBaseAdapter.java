@@ -13,12 +13,14 @@ public class CustomBaseAdapter extends BaseAdapter {
 
     Context context;
     String listQuest[];
+    String listAuthors[];
     int listQuestImages[];
     LayoutInflater inflater;
 
-    public CustomBaseAdapter(Context ctx, String [] quests, int [] images) {
+    public CustomBaseAdapter(Context ctx, String [] quests, String [] authors, int [] images) {
         this.context = ctx;
         this.listQuest = quests;
+        this.listAuthors = authors;
         this.listQuestImages = images;
         inflater = LayoutInflater.from(ctx);
     }
@@ -41,8 +43,10 @@ public class CustomBaseAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.activity_custom_list_view, null);
         TextView txtView = (TextView) view.findViewById(R.id.textView);
+        TextView txtViewAuthor = (TextView) view.findViewById(R.id.textDesc);
         ImageView buildingImg = (ImageView) view.findViewById(R.id.imageIcon);
         txtView.setText(listQuest[position]);
+        txtViewAuthor.setText(listAuthors[position]);
         buildingImg.setImageResource(listQuestImages[position]);
         return view;
     }

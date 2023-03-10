@@ -12,7 +12,8 @@ import android.widget.TextView;
 
 
 public class ListOfQuests extends AppCompatActivity {
-    String quests[] = {"Meta-Quest     Author: John Smith", "Audi-Quest     Author: John Smith", "Aurora-Quest     Author: John Smith"};
+    String quests[] = {"Meta-Quest", "Audi-Quest", "Aurora-Quest"};
+    String authors[] = {"Author: John Smith", "Author: John Smith", "Author: John Smith"};
     int questsimage[] = {R.drawable.metaforum, R.drawable.auditorium, R.drawable.aurora};
 
     ListView listView;
@@ -21,7 +22,7 @@ public class ListOfQuests extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_quests);
         listView = (ListView) findViewById(R.id.customListView);
-        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), quests, questsimage);
+        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), quests, authors, questsimage);
         listView.setAdapter(customBaseAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
