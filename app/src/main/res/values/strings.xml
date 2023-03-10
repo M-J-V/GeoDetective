@@ -31,5 +31,5 @@
     <string name="imageClue"><i>Image Clue:</i></string>
     <string name="hintQuest">Get Hint</string>
     <string name="joinQuest">Start Quest</string>
-
+    <string name="applyChange">Apply Change</string>
 </resources>
