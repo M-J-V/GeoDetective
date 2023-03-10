@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -16,7 +17,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quest_overview);
 
         // Get buttons from activity
-        Button startQuestButton = findViewById(R.id.join_quest_btn);
+        Button submitQuestButton = findViewById(R.id.check_result_btn);
         Button hintButton = findViewById(R.id.reveal_hint_btn);
         ImageButton backButton = findViewById(R.id.BackBtn);
 
@@ -40,6 +41,12 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         questName.setText(questNameValue);
         questDescription.setText(questDescriptionValue);
+
+        //Set on click listeners
+        backButton.setOnClickListener(v -> {
+            // Start list of quests activity
+            finish();
+        });
 
 
     }
