@@ -28,5 +28,10 @@
     <string name="applyNewPass">Create Account</string>
     <string name="create_account">Create Account</string>
     <string name="password_again">Create Account</string>
+    <string name="imageClue">Image Clue</string>
+    <string name="hintQuest">Hint Quest</string>
+    <string name="joinQuest">Join Quest</string>
+
+
 
 </resources>
