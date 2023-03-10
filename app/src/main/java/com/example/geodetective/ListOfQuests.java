@@ -27,7 +27,7 @@ public class ListOfQuests extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                startActivity(new Intent(getApplicationContext(), QuestOverviewActivity.class));
+                //startActivity(new Intent(getApplicationContext(), QuestOverviewActivity.class));
 
                 if (position == 0) {
                     String questName = "Meta-Quest";

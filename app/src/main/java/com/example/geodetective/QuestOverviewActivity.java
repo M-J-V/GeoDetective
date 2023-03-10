@@ -2,11 +2,13 @@ package com.example.geodetective;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class QuestOverviewActivity extends AppCompatActivity {
@@ -45,10 +47,12 @@ public class QuestOverviewActivity extends AppCompatActivity {
         //Set on click listeners
         backButton.setOnClickListener(v -> {
             // Start list of quests activity
-            finish();
+            navigateBack();
         });
-
 
     }
 
+    public void navigateBack() {
+        super.onBackPressed();
+    }
 }
