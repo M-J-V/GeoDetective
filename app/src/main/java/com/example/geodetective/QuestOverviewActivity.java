@@ -1,16 +1,14 @@
 package com.example.geodetective;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+//TODO change name, since we merged the join activity and the joined quest activity quest overview activity is not a good name anymore.
 public class QuestOverviewActivity extends AppCompatActivity {
 
     @Override
@@ -24,25 +22,19 @@ public class QuestOverviewActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.BackBtn);
 
         // Get ImageView from activity
-        ImageView bitmap = findViewById(R.id.Quest_Image);
+        ImageView questImage = findViewById(R.id.Quest_Image);
 
         // Get text fields from activity
         TextView imageClue = findViewById(R.id.image_hint);
         TextView questDescription = findViewById(R.id.quest_description);
         TextView questName = findViewById(R.id.quest_name);
-        ImageView questImage = findViewById(R.id.Quest_Image);
 
         String questNameValue = getIntent().getStringExtra("questName");
         String questDescriptionValue = getIntent().getStringExtra("questDescription");
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            int res_image = bundle.getInt("questImage");
-            questImage.setImageResource(res_image);
-        }
-
         questName.setText(questNameValue);
         questDescription.setText(questDescriptionValue);
+        questImage.setImageResource(getIntent().getExtras().getInt("questImage"));
 
         //Set on click listeners
         backButton.setOnClickListener(v -> {
