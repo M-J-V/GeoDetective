@@ -32,4 +32,10 @@
     <string name="hintQuest">Get Hint</string>
     <string name="joinQuest">Start Quest</string>
     <string name="applyChange">Apply Change</string>
+    <string name="profInfo">Profile Info</string>
+    <string name="blank"> </string>
+    <string name="editProf">Edit Profile</string>
+    <string name="history">History</string>
+
+
 </resources>
