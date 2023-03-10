@@ -1,16 +1,28 @@
 package com.example.geodetective;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterActivity extends AppCompatActivity {
+    DbConnection db = DbConnection.getInstance();
+    AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +42,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupBtn.setOnClickListener(v -> {
             // Start home activity
-            AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
+            DbConnection db = DbConnection.getInstance();
             String username = usernameWidget.getText().toString();
             String password = passwordWidget.getText().toString();
             String passwordAgain = passwordAgainWidget.getText().toString();
 
             try {
                 if (checker.checkDetails(username, password, passwordAgain)) {
-                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    registerUser(username, password, ErrorText);
                 }
             } catch (IllegalArgumentException e) {
                 ErrorText.setText(e.getMessage());
@@ -50,5 +62,26 @@ public class RegisterActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         });
 
+    }
+
+    private void registerUser (String username, String password, TextView errorText) throws IllegalArgumentException {
+        db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                String errorMsg = "";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot User = task.getResult();
+                    if (User.exists()) {
+                        errorMsg = "Username already in use";
+                    } else {
+                        db.createNewUser(username, password);
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                    }
+                } else {
+                    errorMsg = "Error getting data from Database";
+                }
+                errorText.setText(errorMsg);
+            }
+        });
     }
 }

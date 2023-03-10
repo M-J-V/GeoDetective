@@ -70,7 +70,7 @@ public class CreateQuestActivity extends AppCompatActivity {
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
             // return to home activity
-            finish();
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
 
         // Select image from gallery or take a photo.
@@ -80,7 +80,8 @@ public class CreateQuestActivity extends AppCompatActivity {
         updateLocation();
 
         //Get username
-        String creatorName = getIntent().getExtras().getString("username");
+        // TODO use the currentUser Variable to get creator details
+        //String creatorName = getIntent().getExtras().getString("username");
 
         //TODO save quest to database
 //        submitQuestBtn.setOnClickListener(view -> {
@@ -127,19 +128,16 @@ public class CreateQuestActivity extends AppCompatActivity {
 
     // Select image from gallery or take a photo.
     private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery"};
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateQuestActivity.this);
         builder.setTitle("Choose picture!");
         builder.setItems(options, (dialog, item) -> {
-            if (options[item].equals("Take Photo"))
-            {
+            if (options[item].equals("Take Photo")) {
                 //Take photo
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 //noinspection deprecation
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-            else if (options[item].equals("Choose from Gallery"))
-            {
+            } else if (options[item].equals("Choose from Gallery")) {
                 //Pick from gallery
                 Intent i = new Intent();
                 i.setType("image/*");

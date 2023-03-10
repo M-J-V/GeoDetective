@@ -8,6 +8,7 @@
     >
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:background="@color/geo_green_darker"
@@ -36,7 +37,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="@string/inputNewUsername"
+        android:hint="@string/inputNewUsername"
         app:layout_constraintBottom_toTopOf="@id/changeUsernameBtn"
         app:layout_constraintEnd_toEndOf="@+id/changeUsernameTxt"
         app:layout_constraintStart_toStartOf="@+id/changeUsernameTxt"
@@ -49,7 +50,7 @@
         android:id="@+id/changeUsernameBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/applyNewUsername"
+        android:text="@string/applyChange"
         app:layout_constraintBottom_toTopOf="@+id/changePasswordTxt"
         app:layout_constraintEnd_toEndOf="@+id/newUsernameEditTxt"
         app:layout_constraintStart_toStartOf="@+id/newUsernameEditTxt"
@@ -128,7 +129,7 @@
         android:id="@+id/changePasswordBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/applyNewPass"
+        android:text="@string/applyChange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/changeUsernameBtn"
         app:layout_constraintStart_toStartOf="@+id/changeUsernameBtn"
@@ -144,9 +145,28 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/geo_green_darker"
         android:contentDescription="@string/Back"
+        android:minHeight="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?attr/homeAsUpIndicator"
         tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/MsgUsernameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="@+id/newUsernameEditTxt"
+        app:layout_constraintStart_toStartOf="@+id/newUsernameEditTxt"
+        app:layout_constraintTop_toBottomOf="@+id/newUsernameEditTxt" />
+
+    <TextView
+        android:id="@+id/MsgPasswordTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="@+id/newPasswordTxt"
+        app:layout_constraintStart_toStartOf="@+id/newPasswordEditTxt"
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordEditTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

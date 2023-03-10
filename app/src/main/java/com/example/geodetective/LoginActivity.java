@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,8 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 public class LoginActivity extends AppCompatActivity {
 
+    DbConnection db = DbConnection.getInstance();
+    ActiveUser user = ActiveUser.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,11 +40,9 @@ public class LoginActivity extends AppCompatActivity {
             String username = usernameWidget.getText().toString();
             String password = passwordWidget.getText().toString();
 
-            AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
             try {
-                checker.checkLogin(username, password);
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class).putExtra("username", usernameWidget.getText().toString()));
-            } catch (IllegalArgumentException e) {
+                loginUser(username,password,errorText);
+            } catch (Throwable e) {
                 errorText.setText(e.getMessage());
             }
 
@@ -49,5 +54,35 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void loginUser (String username, String password, TextView errorText) throws IllegalArgumentException {
+        if (username.equals("") || password.equals("")) {
+            throw new IllegalArgumentException("Please fill in both Username and Password");
+        }
+
+        db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                String errorMsg = "";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot User = task.getResult();
+                    if (User.exists()) {
+                        if (password.equals(User.get("Password"))) {
+                            // User succesfully logs in
+                            user.setUsername(username);
+                            user.setPassword(password);
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        } else {
+                           errorMsg = "Incorrect Password";
+                        }
+                    } else {
+                       errorMsg = "Username not found in Database";
+                    }
+                } else {
+                    errorMsg = "Error getting data from Database";
+                }
+                errorText.setText(errorMsg);
+            }
+        });
+    }
 
 }

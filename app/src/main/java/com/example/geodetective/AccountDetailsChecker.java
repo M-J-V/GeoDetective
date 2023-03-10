@@ -40,41 +40,18 @@ public class AccountDetailsChecker {
         return (checkUsername(username) && checkPassword(password, passwordAgain));
     }
 
-    /**
-     * This method checks that the inputted account details correspond to an
-     *
-     * @param username input string
-     * @param password input string
-     * @return true if and only if the account details match an account stored in the database.
-     */
-    public boolean checkLogin(String username, String password) {
-        if (usernameInDatabase(username) && passwordCorrespondsToUsername(username, password)) {
-            return true;
-        } else {
-            throw new IllegalArgumentException("The username or the password is wrong.");
-        }
-    }
-
-    private boolean passwordCorrespondsToUsername(String username, String password) {
-        return true;
-    }
-
-    private boolean checkUsername(String username) throws IllegalArgumentException {
+    boolean checkUsername(String username) throws IllegalArgumentException {
 
         if (username.length() < 4) {
             throw new IllegalArgumentException("The username length should be at least 4");
         }
 
-        if (usernameInDatabase(username)) {
-            throw new IllegalArgumentException("The username is not available.");
-        }
-
         return true;
     }
 
-    private boolean checkPassword(String password, String passwordAgain) throws IllegalArgumentException{
-        if (password.length() <= 10) {
-            throw new IllegalArgumentException("The password should have more than 10 characters.");
+    boolean checkPassword(String password, String passwordAgain) throws IllegalArgumentException{
+        if (password.length() <= 5) {
+            throw new IllegalArgumentException("The password should have more than 5 characters.");
         }
 
         String specialCharacters = "@#$%&*.,?!";
@@ -111,10 +88,6 @@ public class AccountDetailsChecker {
             throw new IllegalArgumentException("The two passwords do not match.");
         }
 
-        return true;
-    }
-
-    private boolean usernameInDatabase(String username) {
         return true;
     }
 
