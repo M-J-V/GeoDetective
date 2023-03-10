@@ -38,12 +38,12 @@ public class CustomBaseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int position, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.activity_custom_list_view, null);
         TextView txtView = (TextView) view.findViewById(R.id.textView);
         ImageView buildingImg = (ImageView) view.findViewById(R.id.imageIcon);
-        txtView.setText(listQuest[i]);
-        buildingImg.setImageResource(listQuestImages[i]);
+        txtView.setText(listQuest[position]);
+        buildingImg.setImageResource(listQuestImages[position]);
         return view;
     }
 }

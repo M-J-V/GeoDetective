@@ -26,6 +26,22 @@ public class QuestOverviewActivity extends AppCompatActivity {
         // Get text fields from activity
         TextView imageClue = findViewById(R.id.image_hint);
         TextView questDescription = findViewById(R.id.quest_description);
+        TextView questName = findViewById(R.id.quest_name);
+        ImageView questImage = findViewById(R.id.Quest_Image);
+
+        String questNameValue = getIntent().getStringExtra("questName");
+        String questDescriptionValue = getIntent().getStringExtra("questDescription");
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            int res_image = bundle.getInt("questImage");
+            questImage.setImageResource(res_image);
+        }
+
+        questName.setText(questNameValue);
+        questDescription.setText(questDescriptionValue);
+
+
     }
 
 }

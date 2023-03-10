@@ -36,6 +36,10 @@
     <string name="blank"> </string>
     <string name="editProf">Edit Profile</string>
     <string name="history">History</string>
+    <string name="metaQuest">Meta-Quest</string>
+    <string name="audiQuest">Audi-Quest</string>
+    <string name="atlasQuest">Aurora-Quest</string>
+
 
 
 </resources>
