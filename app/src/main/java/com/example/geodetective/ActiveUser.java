@@ -33,4 +33,10 @@ public class ActiveUser {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void disconnectUser() {
+        this.User = null;
+        this.username = "";
+        this.password = "";
+    }
 }
