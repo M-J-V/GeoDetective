@@ -1,34 +1,22 @@
 package com.example.geodetective;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,12 +24,9 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class CreateQuestActivity extends AppCompatActivity {
+public class EditQuestActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
@@ -67,6 +52,11 @@ public class CreateQuestActivity extends AppCompatActivity {
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
 
+        questName.setText(ActiveQuest.getQuest().getName());
+        questDescription.setText(ActiveQuest.getQuest().getDescription());
+        questHint.setText(ActiveQuest.getQuest().getHint());
+        questImage.setImageBitmap(ActiveQuest.getQuest().getImage());
+
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
             // return to home activity
@@ -74,10 +64,14 @@ public class CreateQuestActivity extends AppCompatActivity {
         });
 
         // Select image from gallery or take a photo.
-        chooseImageBtn.setOnClickListener(v -> selectImage());
+        chooseImageBtn.setOnClickListener(v -> {
+            selectImage();
+            //Get current location
+            updateLocation();
+        });
 
-        //Get current location
-        updateLocation();
+//        //Get current location
+//        updateLocation();
 
         //Get username
         // TODO use the currentUser Variable to get creator details
@@ -129,7 +123,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     // Select image from gallery or take a photo.
     private void selectImage() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateQuestActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditQuestActivity.this);
         builder.setTitle("Choose picture!");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {

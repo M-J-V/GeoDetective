@@ -28,23 +28,27 @@ public class ListOfQuests extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //startActivity(new Intent(getApplicationContext(), QuestOverviewActivity.class));
 
                 if (position == 0) {
                     String questName = "Meta-Quest";
                     String questDescription = "Find the plane";
+                    String creator = "Test";
                     Intent intent = new Intent (ListOfQuests.this, QuestOverviewActivity.class);
                     intent.putExtra("questName", questName);
+                    intent.putExtra("creator", creator);
                     intent.putExtra("questDescription", questDescription);
                     intent.putExtra("questImage", R.drawable.metaforum);
+
                     startActivity(intent);
                 }
 
                 if (position == 1) {
                     String questName = "Audi-Quest";
                     String questDescription = "Find the organ";
+                    String creator = "Test";
                     Intent intent = new Intent (ListOfQuests.this, QuestOverviewActivity.class);
                     intent.putExtra("questName", questName);
+                    intent.putExtra("creator", creator);
                     intent.putExtra("questDescription", questDescription);
                     intent.putExtra("questImage", R.drawable.auditorium);
                     startActivity(intent);
@@ -53,8 +57,10 @@ public class ListOfQuests extends AppCompatActivity {
                 if (position == 2) {
                     String questName = "Aurora-Quest";
                     String questDescription = "Find room 511";
+                    String creator = "Test";
                     Intent intent = new Intent (ListOfQuests.this, QuestOverviewActivity.class);
                     intent.putExtra("questName", questName);
+                    intent.putExtra("creator", creator);
                     intent.putExtra("questDescription", questDescription);
                     intent.putExtra("questImage", R.drawable.aurora);
                     startActivity(intent);

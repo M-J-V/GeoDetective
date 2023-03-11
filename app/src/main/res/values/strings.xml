@@ -12,6 +12,7 @@
     <string name="chooseQuest">Choose Image</string>
     <string name="questName">Quest Name</string>
     <string name="submitQuest">Submit Quest</string>
+    <string name="saveQuest">Save Quest</string>
     <string name="questDescription">Quest Description</string>
     <string name="questHint">Quest Hint (optional)</string>
     <string name="Back">Back</string>
@@ -39,7 +40,6 @@
     <string name="metaQuest">Meta-Quest</string>
     <string name="audiQuest">Audi-Quest</string>
     <string name="atlasQuest">Aurora-Quest</string>
-
 
 
 </resources>
