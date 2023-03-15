@@ -58,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         if (username.equals("") || password.equals("")) {
             throw new IllegalArgumentException("Please fill in both Username and Password");
         }
-
         db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){

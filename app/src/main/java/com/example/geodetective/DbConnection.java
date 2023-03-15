@@ -1,6 +1,13 @@
 package com.example.geodetective;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,13 +39,13 @@ public class DbConnection {
     FirebaseFirestore db;
     CollectionReference users;
     CollectionReference quests;
-    CollectionReference attempted;
+    CollectionReference attempts;
 
     private DbConnection() {
         this.db = FirebaseFirestore.getInstance();
         this.users = db.collection("Users");
         this.quests = db.collection("Quests");
-        this.attempted = db.collection("Attempted");
+        this.attempts = db.collection("Attempted");
     }
 
     /**
@@ -60,4 +71,36 @@ public class DbConnection {
         users.document(username).set(user);
     }
 
+    public void createNewQuest(String title, String description, String hint, String creatorUser, byte[] bitmapData, double longitude, double latitude, Context context){
+        // Create a new user with username and password
+        Map<String, Object> quest = new HashMap<>();
+        quest.put("Title", title);
+        quest.put("Description", description);
+        quest.put("Hint", hint);
+        quest.put("Creator",creatorUser);
+        quest.put("longitude",longitude);
+        quest.put("latitude",latitude);
+
+        // Add new user to database
+        quests.document(title).set(quest);
+
+        // Upload image to storage
+        uploadBitmap(title, bitmapData, context);
+    }
+
+    private void uploadBitmap(String title, byte[] data, Context context) {
+        StorageReference storRef = FirebaseStorage.getInstance().getReference().child("questImages").child(title);
+        UploadTask uploadTask = storRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(context, "Quest uploaded!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

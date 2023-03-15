@@ -1,8 +1,6 @@
 package com.example.geodetective;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,24 +9,18 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -36,10 +28,8 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class CreateQuestActivity extends AppCompatActivity {
 
@@ -49,6 +39,10 @@ public class CreateQuestActivity extends AppCompatActivity {
     private double longitude = 0;
     private double latitude = 0;
 
+    private Uri imageUri = null;
+
+    DbConnection db = DbConnection.getInstance();
+    ActiveUser user = ActiveUser.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +50,7 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
+        questImage.setDrawingCacheEnabled(true);
 
         // Get buttons from activity
         Button chooseImageBtn = findViewById(R.id.choose_Quest_Image_Btn);
@@ -79,20 +74,23 @@ public class CreateQuestActivity extends AppCompatActivity {
         //Get current location
         updateLocation();
 
-        //Get username
-        // TODO use the currentUser Variable to get creator details
-        //String creatorName = getIntent().getExtras().getString("username");
+        submitQuestBtn.setOnClickListener(view -> {
 
-        //TODO save quest to database
-//        submitQuestBtn.setOnClickListener(view -> {
-//            Database.saveQuest(creatorName,
-//                    longitude,
-//                    latitude,
-//                    questName.getText().toString(),
-//                    questDescription.getText().toString(),
-//                    questHint.getText().toString(),
-//                    getBitmapFromDrawable(questImage.getDrawable()));
-//        });
+                Toast.makeText(this, "Starting upload", Toast.LENGTH_SHORT).show();
+                String title = questName.getText().toString();
+                String desc = questDescription.getText().toString();
+                String hint = questHint.getText().toString();
+                String creator = user.getUsername();
+
+                Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                db.createNewQuest(title, desc, hint, creator, data, longitude, latitude,this);
+
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        });
     }
 
     private void updateLocation() {

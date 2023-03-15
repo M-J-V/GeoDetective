@@ -7,8 +7,8 @@ public class ActiveUser {
     private static ActiveUser User = null;
 
     private ActiveUser() {
-        this.username = "";
-        this.password = "";
+        this.username = null;
+        this.password = null;
     }
 
     public static ActiveUser getInstance() {
