@@ -52,11 +52,12 @@ public class QuestOverviewActivity extends AppCompatActivity {
                 questDescriptionValue, questHintValue,
                 getBitmapFromDrawable(questImage.getDrawable()));
 
-        ActiveQuest.setQuest(activeQuest);
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+        activeQuestInstance.setQuest(activeQuest);
 
         editButton.setOnClickListener(v -> {
             String nameOfUser = ActiveUser.getInstance().getUsername();
-            String nameOfCreator = ActiveQuest.getQuest().getCreator();
+            String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
                 startActivity(new Intent(getApplicationContext(), EditQuestActivity.class));
             }
@@ -86,7 +87,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActiveQuest.setQuest(null);
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+        activeQuestInstance.setQuest(null);
     }
 
     public void navigateBack() {

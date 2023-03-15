@@ -4,17 +4,28 @@ import android.widget.ImageView;
 
 public class ActiveQuest {
 
+    private static ActiveQuest instance = null;
+
     private static Quest quest = null;
 
-    public static boolean isNull() {
+    private ActiveQuest(){ }
+
+    public static ActiveQuest getInstance() {
+        if (instance == null) {
+            instance = new ActiveQuest();
+        }
+        return instance;
+    }
+
+    public boolean isNull() {
         return (quest == null);
     }
 
-    public static Quest getQuest() {
+    public Quest getQuest() {
         return quest;
     }
 
-    public static void setQuest(Quest quest1) {
+    public void setQuest(Quest quest1) {
         quest = quest1;
     }
 
