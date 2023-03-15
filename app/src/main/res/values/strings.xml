@@ -12,6 +12,7 @@
     <string name="chooseQuest">Choose Image</string>
     <string name="questName">Quest Name</string>
     <string name="submitQuest">Submit Quest</string>
+    <string name="saveQuest">Save Quest</string>
     <string name="questDescription">Quest Description</string>
     <string name="questHint">Quest Hint (optional)</string>
     <string name="Back">Back</string>
@@ -30,7 +31,7 @@
     <string name="password_again">Create Account</string>
     <string name="imageClue"><i>Image Clue:</i></string>
     <string name="hintQuest">Get Hint</string>
-    <string name="checkResult">Start quest</string>
+    <string name="checkResult">Complete quest</string>
     <string name="applyChange">Apply Change</string>
     <string name="profInfo">Profile Info</string>
     <string name="blank"> </string>
@@ -39,7 +40,6 @@
     <string name="metaQuest">Meta-Quest</string>
     <string name="audiQuest">Audi-Quest</string>
     <string name="atlasQuest">Aurora-Quest</string>
-
 
 
 </resources>

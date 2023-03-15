@@ -1,5 +1,10 @@
 package com.example.geodetective;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,11 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -26,23 +26,13 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 import java.io.IOException;
 
-public class CreateQuestActivity extends AppCompatActivity {
+public class EditQuestActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
     private double longitude = 0;
     private double latitude = 0;
-
-    // Convert drawable to bitmap
-    @NonNull
-    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +52,13 @@ public class CreateQuestActivity extends AppCompatActivity {
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
 
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+
+        questName.setText(activeQuestInstance.getQuest().getName());
+        questDescription.setText(activeQuestInstance.getQuest().getDescription());
+        questHint.setText(activeQuestInstance.getQuest().getHint());
+        questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
+
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
             // return to home activity
@@ -69,10 +66,14 @@ public class CreateQuestActivity extends AppCompatActivity {
         });
 
         // Select image from gallery or take a photo.
-        chooseImageBtn.setOnClickListener(v -> selectImage());
+        chooseImageBtn.setOnClickListener(v -> {
+            selectImage();
+            //Get current location
+            updateLocation();
+        });
 
-        //Get current location
-        updateLocation();
+//        //Get current location
+//        updateLocation();
 
         //Get username
         // TODO use the currentUser Variable to get creator details
@@ -124,7 +125,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     // Select image from gallery or take a photo.
     private void selectImage() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateQuestActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditQuestActivity.this);
         builder.setTitle("Choose picture!");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
@@ -165,6 +166,16 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
             questImage.setImageBitmap(photo);
         }
+    }
+
+    // Convert drawable to bitmap
+    @NonNull
+    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
     }
 
     // Handle permission request result
