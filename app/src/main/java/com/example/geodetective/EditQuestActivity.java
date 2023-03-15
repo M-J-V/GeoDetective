@@ -52,10 +52,12 @@ public class EditQuestActivity extends AppCompatActivity {
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
 
-        questName.setText(ActiveQuest.getQuest().getName());
-        questDescription.setText(ActiveQuest.getQuest().getDescription());
-        questHint.setText(ActiveQuest.getQuest().getHint());
-        questImage.setImageBitmap(ActiveQuest.getQuest().getImage());
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+
+        questName.setText(activeQuestInstance.getQuest().getName());
+        questDescription.setText(activeQuestInstance.getQuest().getDescription());
+        questHint.setText(activeQuestInstance.getQuest().getHint());
+        questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
 
         // Set back button functionality
         backBtn.setOnClickListener(v -> {

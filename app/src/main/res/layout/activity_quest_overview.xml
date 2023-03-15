@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/quest_overview_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/geo_green"
@@ -26,20 +27,20 @@
         android:layout_height="wrap_content"
         android:text="@string/imageClue"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/Quest_Image"
-        app:layout_constraintBottom_toTopOf="@id/Quest_Image" />
+        app:layout_constraintBottom_toTopOf="@id/Quest_Image"
+        app:layout_constraintStart_toStartOf="@id/Quest_Image" />
 
     <ImageView
         android:id="@+id/Quest_Image"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:contentDescription="@string/logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_launcher"
-        tools:ignore="ImageContrastCheck"
         app:layout_constraintBottom_toTopOf="@+id/check_result_btn"
         app:layout_constraintEnd_toEndOf="@+id/quest_name"
-        app:layout_constraintStart_toStartOf="@+id/quest_name" />
+        app:layout_constraintStart_toStartOf="@+id/quest_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/quest_description"
