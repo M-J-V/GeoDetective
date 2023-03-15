@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.widget.Button;
@@ -16,8 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +32,8 @@ import java.util.Locale;
 
 //TODO change name, since we merged the join activity and the joined quest activity quest overview activity is not a good name anymore.
 //TODO make page scrollable, longer descriptions will not fit on the screen.
+//TODO hint button should be implemented
+//TODO implement edit button
 //TODO ask permissions first!
 public class QuestOverviewActivity extends AppCompatActivity {
 
@@ -48,6 +48,16 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     private TextView timer;
 
+    // Convert drawable to bitmap
+    @NonNull
+    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,17 +70,18 @@ public class QuestOverviewActivity extends AppCompatActivity {
         ImageButton editButton = findViewById(R.id.EditBtn);
 
         // Get ImageView from activity
-        ImageView bitmap = findViewById(R.id.Quest_Image);
+        ImageView questImage = findViewById(R.id.Quest_Image);
 
         // Get text fields from activity
         TextView imageClue = findViewById(R.id.image_hint);
         TextView questDescription = findViewById(R.id.quest_description);
         TextView questName = findViewById(R.id.quest_name);
-        ImageView questImage = findViewById(R.id.Quest_Image);
 
         String questNameValue = getIntent().getStringExtra("questName");
         String questDescriptionValue = getIntent().getStringExtra("questDescription");
         String questCreatorValue = getIntent().getStringExtra("creator");
+        questLongitude = getIntent().getDoubleExtra("longitude", 0);
+        questLatitude = getIntent().getDoubleExtra("latitude", 0);
         String questHintValue = "";
 
         Bundle bundle = getIntent().getExtras();
@@ -114,9 +125,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void endQuest() {
-        //TODO end the quest
-
         updateLocation();
 
         float[] results = new float[1];
@@ -149,7 +159,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
             Button startQuestButton = findViewById(R.id.check_result_btn);
             startQuestButton.setText("Start Quest");
-        }else{
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quest not finished!");
             builder.setMessage("You have not completed the quest successfully.");
@@ -179,13 +189,13 @@ public class QuestOverviewActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void startQuest() {
         isQuestStarted = true;
 
         addTimer();
         Button startQuestButton = findViewById(R.id.check_result_btn);
         startQuestButton.setText("Finish Quest");
-
     }
 
     private void updateLocation() {
@@ -219,6 +229,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void addTimer() {
         ConstraintLayout layout = findViewById(R.id.quest_overview_layout);
 
@@ -267,17 +278,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
             }
         };
         handler.postDelayed(runnable, 1000);
-    }
-
-
-    // Convert drawable to bitmap
-    @NonNull
-    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
     }
 
     @Override
