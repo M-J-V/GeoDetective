@@ -40,7 +40,12 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), EditDetailsActivity.class));
         });
 
-        //add link to history when history is created
+        //link to history page
+
+        history_button.setOnClickListener(v -> {
+            // go to edit account page
+            startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
+        });
 
     }
 }
