@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -118,6 +119,11 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         float[] results = new float[1];
         Location.distanceBetween(latitude, longitude, questLatitude, questLongitude, results);
+        Log.d("WOAH","lat: " + latitude);
+        Log.d("WOAH","long: " + longitude);
+        Log.d("WOAH","questLat: " + questLatitude);
+        Log.d("WOAH","questLong: " + questLongitude);
+
         float distance = results[0];
 
         if(distance < 100) {
