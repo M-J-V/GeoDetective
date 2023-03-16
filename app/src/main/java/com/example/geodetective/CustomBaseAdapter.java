@@ -1,7 +1,9 @@
 package com.example.geodetective;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,24 +11,26 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class CustomBaseAdapter extends BaseAdapter {
 
     Context context;
-    String listQuest[];
-    String listAuthors[];
-    int listQuestImages[];
+    ArrayList<String> titles;
+    ArrayList<String> creators;
+    ArrayList<Bitmap> questImages;
     LayoutInflater inflater;
 
-    public CustomBaseAdapter(Context ctx, String [] quests, String [] authors, int [] images) {
+    public CustomBaseAdapter(Context ctx, ArrayList<String> quests, ArrayList<String> authors, ArrayList<Bitmap> images) {
         this.context = ctx;
-        this.listQuest = quests;
-        this.listAuthors = authors;
-        this.listQuestImages = images;
+        this.titles = quests;
+        this.creators = authors;
+        this.questImages = images;
         inflater = LayoutInflater.from(ctx);
     }
     @Override
     public int getCount() {
-        return listQuest.length; //number of row is same as number of input
+        return titles.size(); //number of row is same as number of input
     }
 
     @Override
@@ -45,9 +49,9 @@ public class CustomBaseAdapter extends BaseAdapter {
         TextView txtView = (TextView) view.findViewById(R.id.textView);
         TextView txtViewAuthor = (TextView) view.findViewById(R.id.textDesc);
         ImageView buildingImg = (ImageView) view.findViewById(R.id.imageIcon);
-        txtView.setText(listQuest[position]);
-        txtViewAuthor.setText(listAuthors[position]);
-        buildingImg.setImageResource(listQuestImages[position]);
+        txtView.setText(titles.get(position));
+        txtViewAuthor.setText(creators.get(position));
+        buildingImg.setImageBitmap(questImages.get(position));
         return view;
     }
 }

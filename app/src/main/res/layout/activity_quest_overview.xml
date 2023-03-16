@@ -50,6 +50,7 @@
         android:text="@string/questDescription"
         android:textColor="@color/black"
         android:textSize="30sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@id/Quest_Image"
         app:layout_constraintStart_toStartOf="@id/Quest_Image"
         app:layout_constraintTop_toBottomOf="@id/Quest_Image" />

@@ -36,7 +36,7 @@ import java.util.Locale;
 //TODO implement edit button
 //TODO ask permissions first!
 public class QuestOverviewActivity extends AppCompatActivity {
-
+    ActiveQuest activeQuest = ActiveQuest.getInstance();
     private boolean isQuestStarted = false;
     private boolean isQuestCompleted = false;
 
@@ -84,22 +84,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
         questLatitude = getIntent().getDoubleExtra("latitude", 0);
         String questHintValue = "";
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            int res_image = bundle.getInt("questImage");
-            questImage.setImageResource(res_image);
-        }
-
-        Quest activeQuest = new Quest(questNameValue, questCreatorValue,
-                questDescriptionValue, questHintValue,
-                getBitmapFromDrawable(questImage.getDrawable()));
-
-        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-        activeQuestInstance.setQuest(activeQuest);
-
         editButton.setOnClickListener(v -> {
             String nameOfUser = ActiveUser.getInstance().getUsername();
-            String nameOfCreator = activeQuestInstance.getQuest().getCreator();
+            String nameOfCreator = activeQuest.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
                 startActivity(new Intent(getApplicationContext(), EditQuestActivity.class));
             }
@@ -107,7 +94,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         questName.setText(questNameValue);
         questDescription.setText(questDescriptionValue);
-        questImage.setImageResource(getIntent().getExtras().getInt("questImage"));
+        questImage.setImageBitmap(activeQuest.getQuest().getImage());
 
         //Set on click listeners
         backButton.setOnClickListener(v -> {

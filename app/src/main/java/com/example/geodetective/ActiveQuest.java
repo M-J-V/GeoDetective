@@ -17,16 +17,12 @@ public class ActiveQuest {
         return instance;
     }
 
-    public boolean isNull() {
-        return (quest == null);
-    }
-
     public Quest getQuest() {
         return quest;
     }
 
-    public void setQuest(Quest quest1) {
-        quest = quest1;
+    public void setQuest(Quest setterQuest) {
+        quest = setterQuest;
     }
 
 }
