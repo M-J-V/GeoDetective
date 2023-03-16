@@ -26,6 +26,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
+    questImages imgs = questImages.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +126,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadQuestListActivity(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages) {
         Intent questList = new Intent(getApplicationContext(), ListOfQuests.class);
-        questList.putParcelableArrayListExtra("images",questImages); // Passing Bitmaps like this is not very memory efficient
+        //questList.putParcelableArrayListExtra("images",questImages); // Passing Bitmaps like this is not very memory efficient
+        imgs.setImages(questImages);
         questList.putStringArrayListExtra("titles", titles);
         questList.putStringArrayListExtra("creators", creators);
         startActivity(questList);

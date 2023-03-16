@@ -24,13 +24,14 @@ public class ListOfQuests extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveQuest activeQuest = ActiveQuest.getInstance();
+    questImages imgs = questImages.getInstance();
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_quests);
         listView = (ListView) findViewById(R.id.customListView);
-        ArrayList<Bitmap> questImages = getIntent().getParcelableArrayListExtra("images");
+        ArrayList<Bitmap> questImages = imgs.getImages();
         ArrayList<String> titles = getIntent().getStringArrayListExtra("titles");
         ArrayList<String> creators = getIntent().getStringArrayListExtra("creators");
         CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);

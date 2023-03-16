@@ -36,6 +36,8 @@ import java.util.Locale;
 //TODO hint button should be implemented
 //TODO implement edit button
 //TODO ask permissions first!
+
+// TODO Bug when uploading image for quest from gallery
 public class QuestOverviewActivity extends AppCompatActivity {
     ActiveQuest activeQuest = ActiveQuest.getInstance();
     private boolean isQuestStarted = false;
