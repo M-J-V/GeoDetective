@@ -35,6 +35,12 @@ import java.io.IOException;
 
 public class EditQuestActivity extends AppCompatActivity {
 
+
+    // TODO: When going to edit quest activity and change the picture
+    // after changing the picture, if you go back from edit quest screen to
+    // quest overview screen, the image will not change and and
+    // you will not be able to go back to edit mode,
+    // TODO: thus implement onResume or someting
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
