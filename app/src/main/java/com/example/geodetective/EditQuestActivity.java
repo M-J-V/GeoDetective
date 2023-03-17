@@ -1,16 +1,10 @@
 package com.example.geodetective;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,6 +15,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,10 +43,20 @@ public class EditQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private Location location = new Location();
+    private Location location = new Location(this);
     private ActiveUser activeUser = ActiveUser.getInstance();
     private ActiveQuest activeQuest = ActiveQuest.getInstance();
     private DbConnection db = DbConnection.getInstance();
+
+    // Convert drawable to bitmap
+    @NonNull
+    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,16 +213,6 @@ public class EditQuestActivity extends AppCompatActivity {
             }
             questImage.setImageBitmap(photo);
         }
-    }
-
-    // Convert drawable to bitmap
-    @NonNull
-    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
     }
 
     private void replaceQuest(String deletedQuest, String newQuest, String newDescription,

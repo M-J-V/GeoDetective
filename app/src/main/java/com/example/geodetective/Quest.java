@@ -1,7 +1,6 @@
 package com.example.geodetective;
 
 import android.graphics.Bitmap;
-import android.widget.ImageView;
 
 public class Quest {
     private String name;
@@ -24,43 +23,44 @@ public class Quest {
         return this.name;
     }
 
-    public String getCreator() {
-        return this.creator;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getHint() {
-        return this.hint;
-    }
-
-    public Bitmap getImage() {
-        return this.image;
-    }
-
-    public Location getLocation() { return this.location; }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCreator() {
+        return this.creator;
     }
 
     public void setCreator(String creator) {
         this.creator = creator;
     }
 
+    public String getDescription() {
+        return this.description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getHint() {
+        return this.hint;
     }
 
     public void setHint(String hint) {
         this.hint = hint;
     }
 
+    public Bitmap getImage() {
+        return this.image;
+    }
+
     public void setImage(Bitmap image) {
         this.image = image;
     }
 
+    public Location getLocation() { return this.location; }
+
     public void setLocation(Location location) { this.location = location; }
+
 }
