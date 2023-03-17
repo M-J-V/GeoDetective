@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class ProfileActivity extends AppCompatActivity {
 
     ActiveUser user = ActiveUser.getInstance();
+    DbConnection db = DbConnection.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +20,7 @@ public class ProfileActivity extends AppCompatActivity {
         //get buttons from activity
         Button history_button = findViewById(R.id.button_history);
         Button edit_profile_button = findViewById(R.id.button_edit_profile);
+        Button delete_button = findViewById(R.id.button_delete);
         ImageButton returnBtn = findViewById(R.id.BackBtn);
 
         //get user details textView
@@ -40,11 +42,20 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), EditDetailsActivity.class));
         });
 
-        //link to history page
-
         history_button.setOnClickListener(v -> {
-            // go to edit account page
+            // go to history page
             startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
+        });
+
+        delete_button.setOnClickListener(v -> {
+            // delete current user
+            db.deleteUserAndQuests(user.getUsername(), user.getPassword());
+
+            // Go back to login page
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
+            // remove current active user
+            user.disconnectUser();
         });
 
     }

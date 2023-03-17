@@ -132,22 +132,22 @@ public class EditDetailsActivity extends AppCompatActivity {
 
     private void replaceUser(String deletedUser, String newUsername, String newPassword, TextView msg) {
         db.users.document(deletedUser).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        db.createNewUser(newUsername, newPassword);
-                        user.setUsername(newUsername);
-                        user.setPassword(newPassword);
-                        msg.setText("Profile updated succesfully");
-                        msg.setTextColor(Color.BLACK);
+            @Override
+            public void onSuccess(Void aVoid) {
+                db.createNewUser(newUsername, newPassword);
+                user.setUsername(newUsername);
+                user.setPassword(newPassword);
+                msg.setText("Profile updated succesfully");
+                msg.setTextColor(Color.BLACK);
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        String Msg = "Error when removing old Username";
-                        msg.setText(Msg);
-                    }
-                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String Msg = "Error when removing old Username";
+                msg.setText(Msg);
+            }
+        });
     }
 }

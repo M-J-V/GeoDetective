@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +31,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.w3c.dom.Text;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -111,42 +115,14 @@ public class DbConnection {
                     Map<String, Object> questTitles = new HashMap<>();
                     questTitles.put("quests", titles);
                     questNames.document("questsID").set(questTitles);
+
                 }
-            }
-        });
-    }
-    public void displayAllQuests(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> images, Context context){
-        // Get all titles
-            // Get all creators of quests
-                getImages(titles, creators, images, context);
-    }
-
-//    private void loadQuestList(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> images, Context context) {
-//        Intent questList = new Intent(context, ListOfQuests.class);
-//        questList.putParcelableArrayListExtra("images",images); // Passing Bitmaps like this is not very memory efficient
-//        questList.putStringArrayListExtra("titles", titles);
-//        questList.putStringArrayListExtra("creators", creators);
-//        startActivity(context, questList);
-//    }
-
-    public void getImages(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> images, Context context) {
-        StorageReference storRef = FirebaseStorage.getInstance().getReference().child("questImages").child("Vertigo Quest");
-
-        final long ONE_MEGABYTE = 1024*1024;
-        storRef.getBytes(ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
-            @Override
-            public void onComplete(@NonNull Task<byte[]> task) {
-                byte[] bytes = task.getResult();
-                Bitmap temp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                images.add(temp);
-                Log.d("WOAH","completed dbConnection: " + images.get(0).toString());
-                //loadQuestList(titles, creators, images, context);
             }
         });
     }
 
     private void uploadBitmap(String title, byte[] data, Context context) {
-        StorageReference storRef = FirebaseStorage.getInstance().getReference().child("questImages").child(title);
+        StorageReference storRef = storage.child("questImages").child(title);
         UploadTask uploadTask = storRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -160,4 +136,69 @@ public class DbConnection {
             }
         });
     }
+
+    private void getAndDeleteCreatedQuests (String username, ArrayList<String> questsCreated) {
+        Query createdQuests = quests.whereEqualTo("Creator", username);
+        createdQuests.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        questsCreated.add(doc.get("Title").toString());
+                    }
+
+                    // Delete all quests from Quests collection
+                    deleteQuests(questsCreated);
+                    // Delete all quest images from storage
+                    deleteQuestImages(questsCreated);
+                    // Delete user from Users collection
+                    deleteUser(username);
+                }
+            }
+        });
+    }
+
+    private void deleteQuestImages(ArrayList<String> questList){
+        StorageReference storRef = storage.child("questImages");
+        StorageReference image;
+        for (String title: questList) {
+            image = storRef.child(title);
+            image.delete();
+        }
+    }
+
+    private void deleteUser(String username){
+        users.document(username).delete();
+    }
+
+    private void deleteQuests(ArrayList<String> questList) {
+        for (String title : questList) {
+            quests.document(title).delete();
+            deleteFromAllQuestsList(title);
+        }
+    }
+
+    private void deleteFromAllQuestsList(String title) {
+        questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    List<String> titles = (List<String>) doc.get("quests");
+                    titles.remove(title);
+                    Map<String, Object> questTitles = new HashMap<>();
+                    questTitles.put("quests", titles);
+                    questNames.document("questsID").set(questTitles);
+                }
+            }
+        });
+    }
+
+
+    public void deleteUserAndQuests(String username, String password){
+        // Get all quest titles created by the user
+        ArrayList<String> questsCreated = new ArrayList<String>();
+        getAndDeleteCreatedQuests(username, questsCreated);
+    };
+
 }

@@ -1,6 +1,9 @@
 package com.example.geodetective;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -93,14 +96,15 @@ public class CreateQuestActivity extends AppCompatActivity {
             String creator = user.getUsername();
 
             String err = "";
-            Boolean validImageAndDesc = false;
+            boolean validImageAndDesc = false;
+            boolean emptyStrings = desc.equals("") || title.equals("");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (questImage.getDrawable() instanceof  AdaptiveIconDrawable) {
-                    err = "Please take a photo for your quest.";
+                    err = "Please take add a photo to your Quest.";
                 } else {
-                    if (desc.equals("")) {
-                        err = "Please enter a quest description";
+                    if (emptyStrings) {
+                        err = "Please enter a Quest Description and Title";
                     } else {
                         validImageAndDesc = true;
                     }
@@ -115,31 +119,35 @@ public class CreateQuestActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
 
-                db.quests.document(title).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                        String err = "";
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot User = task.getResult();
-                            if (User.exists()) {
-                                err = "Quest Title already in use";
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
-                                db.createNewQuest(title, desc, hint, creator, data, longitude, latitude,getApplicationContext());
-                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            }
-                        } else {
-                            err = "Error getting data from Database";
-                        }
-                        errorMsg.setText(err);
-                    }
-                });
-
-
+                addQuest(title, desc, hint, creator, data, longitude, latitude, errorMsg);
             }
 
             errorMsg.setText(err);
 
+        });
+    }
+
+
+    // TODO use quest class instead of multiple parameters
+    public void addQuest(String title, String desc, String hint, String creator, byte[] bitmapData, double longitude, double latitude, TextView errorMsg) {
+        db.quests.document(title).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                String err = "";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot User = task.getResult();
+                    if (User.exists()) {
+                        err = "Quest Title already in use";
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
+                        db.createNewQuest(title, desc, hint, creator, bitmapData, longitude, latitude,getApplicationContext());
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                } else {
+                    err = "Error getting data from Database";
+                }
+                errorMsg.setText(err);
+            }
         });
     }
 
