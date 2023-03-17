@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,13 +19,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class EditQuestActivity extends AppCompatActivity {
@@ -31,16 +38,20 @@ public class EditQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private double longitude = 0;
-    private double latitude = 0;
+    private Location location = new Location();
+    private ActiveUser activeUser = ActiveUser.getInstance();
+    private ActiveQuest activeQuest = ActiveQuest.getInstance();
+    private DbConnection db = DbConnection.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_quest);
+        setContentView(R.layout.activity_edit_quest);
 
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
+
+        this.location = ActiveQuest.getInstance().getQuest().getLocation();
 
         // Get buttons from activity
         Button chooseImageBtn = findViewById(R.id.choose_Quest_Image_Btn);
@@ -51,6 +62,7 @@ public class EditQuestActivity extends AppCompatActivity {
         EditText questName = findViewById(R.id.quest_name_input);
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
+        TextView errorMessage = findViewById(R.id.MsgTitle);
 
         ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
 
@@ -80,15 +92,33 @@ public class EditQuestActivity extends AppCompatActivity {
         //String creatorName = getIntent().getExtras().getString("username");
 
         //TODO save quest to database
-//        submitQuestBtn.setOnClickListener(view -> {
-//            Database.saveQuest(creatorName,
-//                    longitude,
-//                    latitude,
-//                    questName.getText().toString(),
-//                    questDescription.getText().toString(),
-//                    questHint.getText().toString(),
-//                    getBitmapFromDrawable(questImage.getDrawable()));
-//        });
+        submitQuestBtn.setOnClickListener(view -> {
+            Toast.makeText(this, "Starting upload", Toast.LENGTH_SHORT).show();
+
+            Quest previousActiveQuest = ActiveQuest.getInstance().getQuest();
+            String previousTitle = previousActiveQuest.getName();
+            String previousDescription = previousActiveQuest.getDescription();
+            String previousHint = previousActiveQuest.getHint();
+            Location previousLocation = previousActiveQuest.getLocation();
+
+            String title = questName.getText().toString();
+            String desc = questDescription.getText().toString();
+            String hint = questHint.getText().toString();
+            String creator = ActiveUser.getInstance().getUsername();
+
+            if (title.isEmpty()) {
+                errorMessage.setText("The title cannot be empty");
+            } else {
+                Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                replaceQuest(previousTitle, title, desc, hint, data, location, errorMessage);
+            }
+
+
+        });
     }
 
     private void updateLocation() {
@@ -117,8 +147,9 @@ public class EditQuestActivity extends AppCompatActivity {
             }
         }).addOnSuccessListener(location -> {
             //Set longitude and latitude
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            this.location.setLongitude(location.getLongitude());
+            this.location.setLatitude(location.getLatitude());
+
         });
     }
 
@@ -176,6 +207,30 @@ public class EditQuestActivity extends AppCompatActivity {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bmp;
+    }
+
+    private void replaceQuest(String deletedQuest, String newQuest, String newDescription,
+                              String newHint, byte[] bitmapImage, Location location, TextView msg) {
+        db.quests.document(deletedQuest).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        db.createNewQuest(newQuest, newDescription, newHint,
+                                activeUser.getUsername(), bitmapImage, location, getApplicationContext());
+
+                        Quest quest = new Quest(newQuest, newDescription, newHint,
+                                activeUser.getUsername(), getBitmapFromDrawable(questImage.getDrawable()),
+                                location);
+                        activeQuest.setQuest(quest);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        String Msg = "Error when removing old Quest";
+                        msg.setText(Msg);
+                    }
+                });
     }
 
     // Handle permission request result

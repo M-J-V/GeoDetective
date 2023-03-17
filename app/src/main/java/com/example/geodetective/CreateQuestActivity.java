@@ -1,7 +1,5 @@
 package com.example.geodetective;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -47,8 +45,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private double longitude = 0;
-    private double latitude = 0;
+    private Location location = new Location();
 
     private Uri imageUri = null;
 
@@ -177,8 +174,8 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
         }).addOnSuccessListener(location -> {
             //Set longitude and latitude
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            this.location.setLongitude(location.getLongitude());
+            this.location.setLatitude(location.getLatitude());
         });
     }
 
