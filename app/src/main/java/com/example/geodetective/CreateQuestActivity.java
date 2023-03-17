@@ -36,7 +36,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private Location location;
+    private Location location = new Location();
 
     private Uri imageUri = null;
 

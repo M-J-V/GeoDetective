@@ -38,7 +38,7 @@ public class EditQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private Location location;
+    private Location location = new Location();
     private ActiveUser activeUser = ActiveUser.getInstance();
     private ActiveQuest activeQuest = ActiveQuest.getInstance();
     private DbConnection db = DbConnection.getInstance();
@@ -46,10 +46,12 @@ public class EditQuestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_quest);
+        setContentView(R.layout.activity_edit_quest);
 
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
+
+        this.location = ActiveQuest.getInstance().getQuest().getLocation();
 
         // Get buttons from activity
         Button chooseImageBtn = findViewById(R.id.choose_Quest_Image_Btn);
@@ -60,6 +62,7 @@ public class EditQuestActivity extends AppCompatActivity {
         EditText questName = findViewById(R.id.quest_name_input);
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
+        TextView errorMessage = findViewById(R.id.MsgTitle);
 
         ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
 
@@ -91,17 +94,29 @@ public class EditQuestActivity extends AppCompatActivity {
         //TODO save quest to database
         submitQuestBtn.setOnClickListener(view -> {
             Toast.makeText(this, "Starting upload", Toast.LENGTH_SHORT).show();
+
+            Quest previousActiveQuest = ActiveQuest.getInstance().getQuest();
+            String previousTitle = previousActiveQuest.getName();
+            String previousDescription = previousActiveQuest.getDescription();
+            String previousHint = previousActiveQuest.getHint();
+            Location previousLocation = previousActiveQuest.getLocation();
+
             String title = questName.getText().toString();
             String desc = questDescription.getText().toString();
             String hint = questHint.getText().toString();
             String creator = ActiveUser.getInstance().getUsername();
 
-            Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
+            if (title.isEmpty()) {
+                errorMessage.setText("The title cannot be empty");
+            } else {
+                Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
 
-            db.createNewQuest(title, desc, hint, creator, data, location,this);
+                replaceQuest(previousTitle, title, desc, hint, data, location, errorMessage);
+            }
+
 
         });
     }
@@ -206,8 +221,6 @@ public class EditQuestActivity extends AppCompatActivity {
                                 activeUser.getUsername(), getBitmapFromDrawable(questImage.getDrawable()),
                                 location);
                         activeQuest.setQuest(quest);
-                        msg.setText("Profile updated succesfully");
-                        msg.setTextColor(Color.BLACK);
 
                     }
                 })
