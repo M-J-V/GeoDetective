@@ -9,6 +9,7 @@ public class Quest {
     private String hint;
     private Bitmap image;
     private Location location;
+    private boolean isStarted = false;
 
     public Quest(String name, String creator, String description, String hint, Bitmap image, Location location) {
         this.name = name;
@@ -62,5 +63,17 @@ public class Quest {
     public Location getLocation() { return this.location; }
 
     public void setLocation(Location location) { this.location = location; }
+
+    public void start() {
+        this.isStarted = true;
+    }
+
+    public void stop() {
+        this.isStarted = false;
+    }
+
+    public boolean isStarted() {
+        return this.isStarted;
+    }
 
 }

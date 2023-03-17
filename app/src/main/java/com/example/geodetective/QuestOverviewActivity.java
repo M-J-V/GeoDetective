@@ -2,11 +2,8 @@ package com.example.geodetective;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,9 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
-import java.util.Locale;
 
 //TODO change name, since we merged the join activity and the joined quest activity quest overview activity is not a good name anymore.
 //TODO make page scrollable, longer descriptions will not fit on the screen.
@@ -28,11 +22,9 @@ import java.util.Locale;
 
 // TODO Bug when uploading image for quest from gallery
 public class QuestOverviewActivity extends AppCompatActivity {
-    private boolean isQuestStarted = false;
-    private boolean isQuestCompleted = false;
     private Location location;
 
-    private TextView timer;
+    private Timer timer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +67,12 @@ public class QuestOverviewActivity extends AppCompatActivity {
         //Set on click listeners
         backButton.setOnClickListener(v -> {
             // Start list of quests activity
-            navigateBack();
+            timer.stop();
+            finish();
         });
 
         submitQuestButton.setOnClickListener(v -> {
-            if(!isQuestStarted){
+            if(!activeQuestInstance.getQuest().isStarted()){
                 startQuest();
             }else{
                 endQuest();
@@ -105,8 +98,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         if(location.distanceTo(new Location(questLatitude, questLongitude)) < 100) {
             // Stop timer
-            isQuestCompleted = true;
-            isQuestStarted = false;
+            ActiveQuest.getInstance().getQuest().stop();
+            timer.stop();
 
             //TODO submit quest to server
 //            Database.questCompleted(
@@ -118,14 +111,13 @@ public class QuestOverviewActivity extends AppCompatActivity {
             // Show success message
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Congratulations!");
-            builder.setMessage("You have completed the quest successfully in " + timer.getText().toString() + "!");
+            builder.setMessage("You have completed the quest successfully in " + timer.getTime().toString() + "!");
             builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
             AlertDialog dialog = builder.create();
             dialog.show();
 
             // Remove timer
-            ConstraintLayout layout = findViewById(R.id.quest_overview_layout);
-            layout.removeView(timer);
+            timer.remove();
 
             Button startQuestButton = findViewById(R.id.check_result_btn);
             startQuestButton.setText("Start Quest");
@@ -143,11 +135,11 @@ public class QuestOverviewActivity extends AppCompatActivity {
     //                  false);
 
                 // Stop timer
-                isQuestCompleted = true;
+                ActiveQuest.getInstance().getQuest().stop();
+                timer.stop();
 
                 // Remove timer
-                ConstraintLayout layout = findViewById(R.id.quest_overview_layout);
-                layout.removeView(timer);
+                timer.remove();
 
                 Button startQuestButton = findViewById(R.id.check_result_btn);
                 startQuestButton.setText("Start Quest");
@@ -161,62 +153,12 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void startQuest() {
-        isQuestStarted = true;
+        ActiveQuest.getInstance().getQuest().start();
 
-        addTimer();
+        timer = new Timer(this, findViewById(R.id.quest_overview_layout));
+        timer.add();
         Button startQuestButton = findViewById(R.id.check_result_btn);
         startQuestButton.setText("Finish Quest");
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void addTimer() {
-        ConstraintLayout layout = findViewById(R.id.quest_overview_layout);
-
-        timer = new TextView(this);
-        timer.setText("00:00:00");
-        timer.setTextColor(Color.BLACK);
-        timer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-        );
-        params.topToBottom = R.id.check_result_btn; // set the text view below the start button
-        params.startToStart = R.id.check_result_btn;
-        params.endToEnd = R.id.check_result_btn;
-        params.topMargin = 16; // set top margin to 16dp
-
-        timer.setLayoutParams(params);
-
-        layout.addView(timer);
-
-        // Start timer
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            int seconds = 0;
-            int minutes = 0;
-            int hours = 0;
-            @Override
-            public void run() {
-                seconds++;
-                if (seconds == 60) {
-                    seconds = 0;
-                    minutes++;
-                }
-                if (minutes == 60) {
-                    minutes = 0;
-                    hours++;
-                }
-                timer.setText(String.format(Locale.getDefault(),"%02d:%02d:%02d", hours, minutes, seconds));
-                if (isQuestCompleted) {
-                    isQuestCompleted = false;
-                    handler.removeCallbacks(this);
-                } else {
-                    handler.postDelayed(this, 1000);
-                }
-            }
-        };
-        handler.postDelayed(runnable, 1000);
     }
 
     @Override
@@ -226,7 +168,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
         activeQuestInstance.setQuest(null);
     }
 
-    public void navigateBack() {
+    @Override
+    public void onBackPressed() {
+        timer.stop();
         super.onBackPressed();
     }
 
