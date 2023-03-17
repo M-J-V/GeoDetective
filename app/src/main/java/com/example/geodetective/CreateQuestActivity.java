@@ -36,8 +36,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private double longitude = 0;
-    private double latitude = 0;
+    private Location location;
 
     private Uri imageUri = null;
 
@@ -87,7 +86,7 @@ public class CreateQuestActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
 
-                db.createNewQuest(title, desc, hint, creator, data, longitude, latitude,this);
+                db.createNewQuest(title, desc, hint, creator, data, location,this);
 
                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
@@ -119,8 +118,8 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
         }).addOnSuccessListener(location -> {
             //Set longitude and latitude
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            this.location.setLongitude(location.getLongitude());
+            this.location.setLatitude(location.getLatitude());
         });
     }
 

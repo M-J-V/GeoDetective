@@ -80,15 +80,15 @@ public class DbConnection {
         users.document(username).set(user);
     }
 
-    public void createNewQuest(String title, String description, String hint, String creatorUser, byte[] bitmapData, double longitude, double latitude, Context context){
+    public void createNewQuest(String title, String description, String hint, String creatorUser, byte[] bitmapData, Location location, Context context){
         // Create a new user with username and password
         Map<String, Object> quest = new HashMap<>();
         quest.put("Title", title);
         quest.put("Description", description);
         quest.put("Hint", hint);
         quest.put("Creator",creatorUser);
-        quest.put("longitude",longitude);
-        quest.put("latitude",latitude);
+        quest.put("longitude",location.getLongitude());
+        quest.put("latitude",location.getLatitude());
 
         // Add new user to database
         quests.document(title).set(quest);
