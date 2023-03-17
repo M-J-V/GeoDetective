@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
 
+//TODO Use scroll layout instead of constraint, because long descriptions/titles/images don't fit on screen.
 public class CreateQuestActivity extends AppCompatActivity {
     private final Location location = new Location(this);
     private final ImageInput imageInput = new ImageInput(this);

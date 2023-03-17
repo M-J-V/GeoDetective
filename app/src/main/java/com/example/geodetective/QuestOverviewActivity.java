@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+//TODO implement scroll layout to account for long description/titles/images.
 public class QuestOverviewActivity extends AppCompatActivity {
     private Location location;
 
