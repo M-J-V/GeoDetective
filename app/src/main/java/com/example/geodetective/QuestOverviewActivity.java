@@ -13,14 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-//TODO change name, since we merged the join activity and the joined quest activity quest overview activity is not a good name anymore.
-//TODO make page scrollable, longer descriptions will not fit on the screen.
-//TODO hint button should be implemented
-//TODO implement edit button
-//TODO ask permissions first!
-
-
-// TODO Bug when uploading image for quest from gallery
 public class QuestOverviewActivity extends AppCompatActivity {
     private Location location;
 
@@ -77,6 +69,14 @@ public class QuestOverviewActivity extends AppCompatActivity {
             }else{
                 endQuest();
             }
+        });
+
+        hintButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Hint");
+            builder.setMessage(activeQuestInstance.getQuest().getHint());
+            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+            builder.show();
         });
 
     }
@@ -170,7 +170,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        timer.stop();
+        if(timer != null) {
+            timer.stop();
+        }
         super.onBackPressed();
     }
 

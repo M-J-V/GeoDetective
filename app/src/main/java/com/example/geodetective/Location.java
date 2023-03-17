@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 public class Location {
+    public static final int PERMISSIONS_REQUEST = 1;
     private Activity activity;
     private double latitude;
     private double longitude;
@@ -84,7 +85,7 @@ public class Location {
         //Check if permission is granted
         if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Send permissions request
-            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST);
         }
     }
 
@@ -124,7 +125,7 @@ public class Location {
             throw new IllegalStateException("Activity is not set");
         }
 
-        if (requestCode == 1) {
+        if (requestCode == PERMISSIONS_REQUEST) {
             if (!(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 // permission not granted, show a message to the user and disable the feature
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);

@@ -1,13 +1,11 @@
 package com.example.geodetective;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,19 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class CreateQuestActivity extends AppCompatActivity {
-
-    private static final int CAMERA_REQUEST = 1888;
-    private static final int SELECT_PICTURE = 200;
     private final Location location = new Location(this);
+    private final ImageInput imageInput = new ImageInput(this);
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
     private ImageView questImage;
@@ -62,7 +56,7 @@ public class CreateQuestActivity extends AppCompatActivity {
         });
 
         // Select image from gallery or take a photo.
-        chooseImageBtn.setOnClickListener(v -> selectImage());
+        chooseImageBtn.setOnClickListener(v -> imageInput.selectImage());
 
         // Request location permissions
         location.requestPermissions();
@@ -129,57 +123,19 @@ public class CreateQuestActivity extends AppCompatActivity {
         });
     }
 
-    // Select image from gallery or take a photo.
-    private void selectImage() {
-        final CharSequence[] options = {"Take Photo", "Choose from Gallery"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(CreateQuestActivity.this);
-        builder.setTitle("Choose picture!");
-        builder.setItems(options, (dialog, item) -> {
-            if (options[item].equals("Take Photo")) {
-                //Take photo
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //noinspection deprecation
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            } else if (options[item].equals("Choose from Gallery")) {
-                //Pick from gallery
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-
-                // pass the constant to compare it
-                // with the returned requestCode
-                //noinspection deprecation
-                startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
-            }
-        });
-        builder.show();
-    }
-
     // Get image from camera or gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            questImage.setImageBitmap(photo);
-        }
-
-        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
-            Bitmap photo;
-            try {
-                photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-            questImage.setImageBitmap(photo);
-        }
+        imageInput.onActivityResult(requestCode, resultCode, data, questImage);
     }
 
     // Handle permission request result
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        location.onRequestPermissionsResult(requestCode, grantResults);
+        if(requestCode == Location.PERMISSIONS_REQUEST){
+            location.onRequestPermissionsResult(requestCode, grantResults);
+        }
     }
 
 }
