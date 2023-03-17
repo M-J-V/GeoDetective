@@ -3,12 +3,14 @@ package com.example.geodetective;
 public class ActiveUser {
     private String username;
     private String password;
+    private boolean trusted;
 
     private static ActiveUser User = null;
 
     private ActiveUser() {
         this.username = null;
         this.password = null;
+        this.trusted = false;
     }
 
     public static ActiveUser getInstance() {

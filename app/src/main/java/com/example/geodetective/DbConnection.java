@@ -79,6 +79,7 @@ public class DbConnection {
         Map<String, Object> user = new HashMap<>();
         user.put("Username", username);
         user.put("Password", password);
+        user.put("Trusted", false);
 
         // Add new user to database
         users.document(username).set(user);
@@ -149,6 +150,8 @@ public class DbConnection {
 
                     // Delete all quests from Quests collection
                     deleteQuests(questsCreated);
+                    // Delete all quests from list of existing quests
+                    deleteFromAllQuestsListMultiple(questsCreated);
                     // Delete all quest images from storage
                     deleteQuestImages(questsCreated);
                     // Delete user from Users collection
@@ -174,8 +177,25 @@ public class DbConnection {
     private void deleteQuests(ArrayList<String> questList) {
         for (String title : questList) {
             quests.document(title).delete();
-            deleteFromAllQuestsList(title);
         }
+    }
+
+    private void deleteFromAllQuestsListMultiple(ArrayList<String> questTitles) {
+        questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    List<String> titles = (List<String>) doc.get("quests");
+                    for (String title : questTitles) {
+                        titles.remove(title);
+                    }
+                    Map<String, Object> questTitles = new HashMap<>();
+                    questTitles.put("quests", titles);
+                    questNames.document("questsID").set(questTitles);
+                }
+            }
+        });
     }
 
     private void deleteFromAllQuestsList(String title) {

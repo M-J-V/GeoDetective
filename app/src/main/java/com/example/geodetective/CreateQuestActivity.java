@@ -116,7 +116,7 @@ public class CreateQuestActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
 
-                addQuest(title, desc, hint, creator, data, longitude, latitude, errorMsg);
+                addQuest(title, desc, hint, creator, data, location, errorMsg);
             }
 
             errorMsg.setText(err);
@@ -126,7 +126,7 @@ public class CreateQuestActivity extends AppCompatActivity {
 
 
     // TODO use quest class instead of multiple parameters
-    public void addQuest(String title, String desc, String hint, String creator, byte[] bitmapData, double longitude, double latitude, TextView errorMsg) {
+    public void addQuest(String title, String desc, String hint, String creator, byte[] bitmapData, Location location, TextView errorMsg) {
         db.quests.document(title).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){
@@ -137,7 +137,7 @@ public class CreateQuestActivity extends AppCompatActivity {
                         err = "Quest Title already in use";
                     } else {
                         Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
-                        db.createNewQuest(title, desc, hint, creator, bitmapData, longitude, latitude,getApplicationContext());
+                        db.createNewQuest(title, desc, hint, creator, bitmapData, location,getApplicationContext());
                         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     }
                 } else {
