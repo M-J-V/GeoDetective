@@ -35,6 +35,7 @@ import java.util.Locale;
 //TODO hint button should be implemented
 //TODO implement edit button
 //TODO ask permissions first!
+
 public class QuestOverviewActivity extends AppCompatActivity {
 
     private boolean isQuestStarted = false;
