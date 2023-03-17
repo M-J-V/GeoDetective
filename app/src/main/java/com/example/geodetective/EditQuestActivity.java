@@ -91,7 +91,7 @@ public class EditQuestActivity extends AppCompatActivity {
         // TODO use the currentUser Variable to get creator details
         //String creatorName = getIntent().getExtras().getString("username");
 
-        //TODO save quest to database
+        //TODO authenticate that the quest is valid, title not already used, non empty desc
         submitQuestBtn.setOnClickListener(view -> {
             Toast.makeText(this, "Starting upload", Toast.LENGTH_SHORT).show();
 
@@ -145,11 +145,12 @@ public class EditQuestActivity extends AppCompatActivity {
             public boolean isCancellationRequested() {
                 return false;
             }
-        }).addOnSuccessListener(location -> {
-            //Set longitude and latitude
-            this.location.setLongitude(location.getLongitude());
-            this.location.setLatitude(location.getLatitude());
-
+        }).addOnSuccessListener(new OnSuccessListener<android.location.Location>() {
+            @Override
+            public void onSuccess(android.location.Location newLocation) {
+                location.setLongitude(newLocation.getLongitude());
+                location.setLatitude(newLocation.getLatitude());
+            }
         });
     }
 
@@ -214,8 +215,7 @@ public class EditQuestActivity extends AppCompatActivity {
         db.quests.document(deletedQuest).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        db.createNewQuest(newQuest, newDescription, newHint,
-                                activeUser.getUsername(), bitmapImage, location, getApplicationContext());
+                        db.updateQuestListAndCreate(deletedQuest, newQuest, newDescription, newHint, activeUser.getUsername(), getApplicationContext() ,bitmapImage, location, msg);
 
                         Quest quest = new Quest(newQuest, newDescription, newHint,
                                 activeUser.getUsername(), getBitmapFromDrawable(questImage.getDrawable()),
