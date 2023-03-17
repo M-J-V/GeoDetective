@@ -1,17 +1,25 @@
 package com.example.geodetective;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,8 +30,14 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import org.w3c.dom.Text;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class CreateQuestActivity extends AppCompatActivity {
@@ -31,19 +45,12 @@ public class CreateQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private double longitude = 0;
-    private double latitude = 0;
+    private Location location = new Location();
 
-    // Convert drawable to bitmap
-    @NonNull
-    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
-    }
+    private Uri imageUri = null;
 
+    DbConnection db = DbConnection.getInstance();
+    ActiveUser user = ActiveUser.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +58,7 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
+        questImage.setDrawingCacheEnabled(true);
 
         // Get buttons from activity
         Button chooseImageBtn = findViewById(R.id.choose_Quest_Image_Btn);
@@ -61,6 +69,9 @@ public class CreateQuestActivity extends AppCompatActivity {
         EditText questName = findViewById(R.id.quest_name_input);
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
+
+        // get error text view from activity
+        TextView errorMsg = findViewById(R.id.errorText);
 
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
@@ -74,20 +85,67 @@ public class CreateQuestActivity extends AppCompatActivity {
         //Get current location
         updateLocation();
 
-        //Get username
-        // TODO use the currentUser Variable to get creator details
-        //String creatorName = getIntent().getExtras().getString("username");
+        submitQuestBtn.setOnClickListener(view -> {
 
-        //TODO save quest to database
-//        submitQuestBtn.setOnClickListener(view -> {
-//            Database.saveQuest(creatorName,
-//                    longitude,
-//                    latitude,
-//                    questName.getText().toString(),
-//                    questDescription.getText().toString(),
-//                    questHint.getText().toString(),
-//                    getBitmapFromDrawable(questImage.getDrawable()));
-//        });
+            String title = questName.getText().toString();
+            String desc = questDescription.getText().toString();
+            String hint = questHint.getText().toString();
+            String creator = user.getUsername();
+
+            String err = "";
+            boolean validImageAndDesc = false;
+            boolean emptyStrings = desc.equals("") || title.equals("");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (questImage.getDrawable() instanceof  AdaptiveIconDrawable) {
+                    err = "Please take add a photo to your Quest.";
+                } else {
+                    if (emptyStrings) {
+                        err = "Please enter a Quest Description and Title";
+                    } else {
+                        validImageAndDesc = true;
+                    }
+                }
+            } else {
+                err = "Invalid Build Version SDK";
+            }
+
+            if(validImageAndDesc) {
+                Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                addQuest(title, desc, hint, creator, data, location, errorMsg);
+            }
+
+            errorMsg.setText(err);
+
+        });
+    }
+
+
+    // TODO use quest class instead of multiple parameters
+    public void addQuest(String title, String desc, String hint, String creator, byte[] bitmapData, Location location, TextView errorMsg) {
+        db.quests.document(title).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                String err = "";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot User = task.getResult();
+                    if (User.exists()) {
+                        err = "Quest Title already in use";
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
+                        db.createNewQuest(title, desc, hint, creator, bitmapData, location,getApplicationContext());
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    }
+                } else {
+                    err = "Error getting data from Database";
+                }
+                errorMsg.setText(err);
+            }
+        });
     }
 
     private void updateLocation() {
@@ -116,8 +174,8 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
         }).addOnSuccessListener(location -> {
             //Set longitude and latitude
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
+            this.location.setLongitude(location.getLongitude());
+            this.location.setLatitude(location.getLatitude());
         });
     }
 
@@ -165,6 +223,16 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
             questImage.setImageBitmap(photo);
         }
+    }
+
+    // Convert drawable to bitmap
+    @NonNull
+    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
     }
 
     // Handle permission request result

@@ -36,8 +36,10 @@ import java.util.Locale;
 //TODO implement edit button
 //TODO ask permissions first!
 
-public class QuestOverviewActivity extends AppCompatActivity {
 
+// TODO Bug when uploading image for quest from gallery
+public class QuestOverviewActivity extends AppCompatActivity {
+    ActiveQuest activeQuest = ActiveQuest.getInstance();
     private boolean isQuestStarted = false;
     private boolean isQuestCompleted = false;
 
@@ -100,7 +102,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         editButton.setOnClickListener(v -> {
             String nameOfUser = ActiveUser.getInstance().getUsername();
-            String nameOfCreator = activeQuestInstance.getQuest().getCreator();
+            String nameOfCreator = activeQuest.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
                 startActivity(new Intent(getApplicationContext(), EditQuestActivity.class));
             }
@@ -108,7 +110,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         questName.setText(questNameValue);
         questDescription.setText(questDescriptionValue);
-        questImage.setImageResource(getIntent().getExtras().getInt("questImage"));
+        questImage.setImageBitmap(activeQuest.getQuest().getImage());
 
         //Set on click listeners
         backButton.setOnClickListener(v -> {
@@ -132,6 +134,11 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         float[] results = new float[1];
         Location.distanceBetween(latitude, longitude, questLatitude, questLongitude, results);
+        Log.d("WOAH","lat: " + latitude);
+        Log.d("WOAH","long: " + longitude);
+        Log.d("WOAH","questLat: " + questLatitude);
+        Log.d("WOAH","questLong: " + questLongitude);
+
         float distance = results[0];
 
         if(distance < 100) {

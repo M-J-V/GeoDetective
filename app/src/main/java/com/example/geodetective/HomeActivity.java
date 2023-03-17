@@ -1,17 +1,32 @@
 package com.example.geodetective;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeActivity extends AppCompatActivity {
 
+    DbConnection db = DbConnection.getInstance();
+    questImages imgs = questImages.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,21 +45,91 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         returnBtn.setOnClickListener(v -> {
-            // Start create profile activity
+            // Start profile activity
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         });
 
         joinQuestBtn.setOnClickListener(v -> {
-            // Start create profile activity
-            startActivity(new Intent(getApplicationContext(), ListOfQuests.class));
+            // Prepare information to load list of all quests
+            getQuests();
         });
 
         logoutBtn.setOnClickListener(v -> {
-            // Start create profile activity
+            // Start login activity
             ActiveUser user = ActiveUser.getInstance();
             user.disconnectUser();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         });
 
+    }
+
+    private void getQuests() {
+        db.questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    List<String> questTitles = (List<String>) doc.get("quests");
+                    ArrayList<String> titles = new ArrayList<String>(questTitles);
+                    ArrayList <String> creators = new ArrayList<String>();
+                    getCreators(titles, creators, 0);
+                }
+            }
+        });
+    }
+
+    // The function uses recursion rather than a for loop to ensure there are no timing issues since get() is asynchronous
+    private void getCreators(ArrayList<String> titles, ArrayList<String> creators, int pos) {
+        int numQuests = titles.size();
+        db.quests.document(titles.get(pos)).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    String creatorUser = doc.get("Creator").toString();
+                    creators.add(creatorUser);
+                    if ( pos == numQuests - 1 ) {
+                        ArrayList<Bitmap> questImages = new ArrayList<Bitmap>();
+                        getImages(titles, creators, questImages,0);
+                    } else {
+                        getCreators(titles, creators, pos + 1);
+                    }
+                }
+            }
+        });
+    }
+
+    // The function uses recursion rather than a for loop to ensure there are no timing issues since get() is asynchronous
+    private void getImages(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages, int pos) {
+        final long ONE_MEGABYTE = 1024*1024;
+        int numQuests = titles.size();
+
+        StorageReference storRef = db.storage.child("questImages").child(titles.get(pos));
+        storRef.getBytes(ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
+            @Override
+            public void onComplete(@NonNull Task<byte[]> task) {
+                if (task.isSuccessful()) {
+                    byte[] bytes = task.getResult();
+                    Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    questImages.add(image);
+                    if ( pos == numQuests - 1 ) {
+                        loadQuestListActivity(titles, creators, questImages);
+                    } else {
+                        getImages(titles, creators, questImages, pos + 1);
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    private void loadQuestListActivity(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages) {
+        Intent questList = new Intent(getApplicationContext(), ListOfQuests.class);
+        //questList.putParcelableArrayListExtra("images",questImages); // Passing Bitmaps like this is not very memory efficient
+        imgs.setImages(questImages);
+        questList.putStringArrayListExtra("titles", titles);
+        questList.putStringArrayListExtra("creators", creators);
+        startActivity(questList);
     }
 }

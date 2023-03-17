@@ -9,13 +9,15 @@ public class Quest {
     private String description;
     private String hint;
     private Bitmap image;
+    private Location location;
 
-    public Quest(String name, String creator, String description, String hint, Bitmap image) {
+    public Quest(String name, String creator, String description, String hint, Bitmap image, Location location) {
         this.name = name;
         this.creator = creator;
         this.hint = hint;
         this.description = description;
         this.image = image;
+        this.location = location;
     }
 
     public String getName() {
@@ -38,6 +40,8 @@ public class Quest {
         return this.image;
     }
 
+    public Location getLocation() { return this.location; }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -57,4 +61,6 @@ public class Quest {
     public void setImage(Bitmap image) {
         this.image = image;
     }
+
+    public void setLocation(Location location) { this.location = location; }
 }
