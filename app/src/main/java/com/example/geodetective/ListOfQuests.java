@@ -1,17 +1,15 @@
 package com.example.geodetective;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +24,7 @@ public class ListOfQuests extends AppCompatActivity {
     ActiveQuest activeQuest = ActiveQuest.getInstance();
     questImages imgs = questImages.getInstance();
     ListView listView;
+    Activity activity = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,7 @@ public class ListOfQuests extends AppCompatActivity {
                             String questHint = doc.get("Hint").toString();
                             double questLat = (double) doc.get("latitude");
                             double questLong = (double) doc.get("longitude");
-                            Location location = new Location(questLat, questLong);
+                            Location location = new Location(questLat, questLong, activity);
                             activeQuest.setQuest(new Quest(questName, creator, questDesc, questHint, imageBitmap, location));
                             loadQuestOverview();
                         }

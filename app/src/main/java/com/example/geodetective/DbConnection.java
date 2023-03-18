@@ -198,20 +198,28 @@ public class DbConnection {
         });
     }
 
-    private void deleteFromAllQuestsList(String title) {
+    private void deleteFromAllQuestsList(String deletedQuest, String newQuest, String newDescription,
+                                         String newHint, String creator, byte[] bitmapImage, Location location,  Context context, TextView msg) {
         questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot doc = task.getResult();
                     List<String> titles = (List<String>) doc.get("quests");
-                    titles.remove(title);
+                    titles.remove(deletedQuest);
                     Map<String, Object> questTitles = new HashMap<>();
                     questTitles.put("quests", titles);
                     questNames.document("questsID").set(questTitles);
+
+                    createNewQuest(newQuest, newDescription, newHint,
+                            creator, bitmapImage, location, context);
                 }
             }
         });
+    }
+
+    public void updateQuestListAndCreate(String deletedQuest, String newQuest, String newDescription, String newHint, String creator, Context context, byte[] bitmapImage, Location location, TextView msg) {
+        deleteFromAllQuestsList(deletedQuest, newQuest, newDescription, newHint, creator, bitmapImage, location, context, msg);
     }
 
 

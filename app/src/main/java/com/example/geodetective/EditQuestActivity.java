@@ -1,16 +1,10 @@
 package com.example.geodetective;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,6 +15,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -47,10 +46,20 @@ public class EditQuestActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
-    private Location location = new Location();
+    private Location location = new Location(this);
     private ActiveUser activeUser = ActiveUser.getInstance();
     private ActiveQuest activeQuest = ActiveQuest.getInstance();
     private DbConnection db = DbConnection.getInstance();
+
+    // Convert drawable to bitmap
+    @NonNull
+    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +109,7 @@ public class EditQuestActivity extends AppCompatActivity {
         // TODO use the currentUser Variable to get creator details
         //String creatorName = getIntent().getExtras().getString("username");
 
-        //TODO save quest to database
+        //TODO authenticate that the quest is valid, title not already used, non empty desc
         submitQuestBtn.setOnClickListener(view -> {
             Toast.makeText(this, "Starting upload", Toast.LENGTH_SHORT).show();
 
@@ -154,11 +163,12 @@ public class EditQuestActivity extends AppCompatActivity {
             public boolean isCancellationRequested() {
                 return false;
             }
-        }).addOnSuccessListener(location -> {
-            //Set longitude and latitude
-            this.location.setLongitude(location.getLongitude());
-            this.location.setLatitude(location.getLatitude());
-
+        }).addOnSuccessListener(new OnSuccessListener<android.location.Location>() {
+            @Override
+            public void onSuccess(android.location.Location newLocation) {
+                location.setLongitude(newLocation.getLongitude());
+                location.setLatitude(newLocation.getLatitude());
+            }
         });
     }
 
@@ -208,23 +218,12 @@ public class EditQuestActivity extends AppCompatActivity {
         }
     }
 
-    // Convert drawable to bitmap
-    @NonNull
-    static private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
-    }
-
     private void replaceQuest(String deletedQuest, String newQuest, String newDescription,
                               String newHint, byte[] bitmapImage, Location location, TextView msg) {
         db.quests.document(deletedQuest).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        db.createNewQuest(newQuest, newDescription, newHint,
-                                activeUser.getUsername(), bitmapImage, location, getApplicationContext());
+                        db.updateQuestListAndCreate(deletedQuest, newQuest, newDescription, newHint, activeUser.getUsername(), getApplicationContext() ,bitmapImage, location, msg);
 
                         Quest quest = new Quest(newQuest, newDescription, newHint,
                                 activeUser.getUsername(), getBitmapFromDrawable(questImage.getDrawable()),
