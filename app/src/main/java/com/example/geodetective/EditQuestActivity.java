@@ -41,6 +41,9 @@ public class EditQuestActivity extends AppCompatActivity {
     // quest overview screen, the image will not change and and
     // you will not be able to go back to edit mode,
     // TODO: thus implement onResume or someting
+
+    // TODO: probably when clicking choose image, the location will be updated
+    //  without actually selecting a new picture
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
