@@ -35,14 +35,9 @@ import java.io.IOException;
 public class EditQuestActivity extends AppCompatActivity {
 
 
-    // TODO: When going to edit quest activity and change the picture
-    // after changing the picture, if you go back from edit quest screen to
-    // quest overview screen, the image will not change and and
-    // you will not be able to go back to edit mode,
-    // TODO: thus implement onResume or someting
-
-    // TODO: probably when clicking choose image, the location will be updated
-    //  without actually selecting a new picture
+    // TODO: When going back from edit to overview, the info will be updated
+    //  but when going again from overview to list, the info will not be updated.
+    //  so list needs onResume, but we need to DECIDE how to do that.
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
     private ImageView questImage;
@@ -225,8 +220,8 @@ public class EditQuestActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         db.updateQuestListAndCreate(deletedQuest, newQuest, newDescription, newHint, activeUser.getUsername(), getApplicationContext() ,bitmapImage, location, msg);
 
-                        Quest quest = new Quest(newQuest, newDescription, newHint,
-                                activeUser.getUsername(), getBitmapFromDrawable(questImage.getDrawable()),
+                        Quest quest = new Quest(newQuest, activeUser.getUsername(), newDescription, newHint,
+                                getBitmapFromDrawable(questImage.getDrawable()),
                                 location);
                         activeQuest.setQuest(quest);
 

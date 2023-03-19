@@ -13,10 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+// TODO: there are still some time-related issues when updating location.
+//  if you press finish quest before the method updateCurrentLocation in onResume has
+//  finished executing, you will get a wrong location of the user.
+
 //TODO implement scroll layout to account for long description/titles/images.
 public class QuestOverviewActivity extends AppCompatActivity {
     private Location location;
-
     private Timer timer = null;
 
     @Override
@@ -60,7 +63,10 @@ public class QuestOverviewActivity extends AppCompatActivity {
         //Set on click listeners
         backButton.setOnClickListener(v -> {
             // Start list of quests activity
-            timer.stop();
+            if (timer != null) {
+                timer.stop();
+            }
+
             finish();
         });
 
@@ -101,6 +107,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
             // Stop timer
             ActiveQuest.getInstance().getQuest().stop();
             timer.stop();
+            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude)));
+
 
             //TODO submit quest to server
 //            Database.questCompleted(
@@ -123,6 +131,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
             Button startQuestButton = findViewById(R.id.check_result_btn);
             startQuestButton.setText("Start Quest");
         } else {
+            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude)));
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quest not finished!");
             builder.setMessage("You have not completed the quest successfully.");
@@ -160,6 +169,25 @@ public class QuestOverviewActivity extends AppCompatActivity {
         timer.add();
         Button startQuestButton = findViewById(R.id.check_result_btn);
         startQuestButton.setText("Finish Quest");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Get ImageView from activity
+        ImageView questImage = findViewById(R.id.Quest_Image);
+
+        // Get text fields from activity
+        TextView questDescription = findViewById(R.id.quest_description);
+        TextView questName = findViewById(R.id.quest_name);
+
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+
+        // Update UI
+        questName.setText(activeQuestInstance.getQuest().getName());
+        questDescription.setText(activeQuestInstance.getQuest().getDescription());
+        questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
+        location.updateCurrentLocation();
     }
 
     @Override

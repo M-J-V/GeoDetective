@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -67,7 +68,7 @@ public class Location {
 
     public float distanceTo(Location location) {
         float[] results = new float[3];
-        android.location.Location.distanceBetween(this.latitude, this.longitude,
+        android.location.Location.distanceBetween(latitude, longitude,
                 location.getLatitude(), location.getLongitude(), results);
         return results[0];
     }
