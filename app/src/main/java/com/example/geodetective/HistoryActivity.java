@@ -1,10 +1,13 @@
 package com.example.geodetective;
 
+import static com.example.geodetective.R.id.customListView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class HistoryActivity extends AppCompatActivity {
@@ -24,6 +27,8 @@ public class HistoryActivity extends AppCompatActivity {
             // Start profile activity
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         });
+
+
     }
 
 
