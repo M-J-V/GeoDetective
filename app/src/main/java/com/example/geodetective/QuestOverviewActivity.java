@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 //  if you press finish quest before the method updateCurrentLocation in onResume has
 //  finished executing, you will get a wrong location of the user.
 
-//TODO implement scroll layout to account for long description/titles/images.
 public class QuestOverviewActivity extends AppCompatActivity {
     private Location location;
     private Timer timer = null;
@@ -53,7 +52,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
             String nameOfUser = ActiveUser.getInstance().getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
-                startActivity(new Intent(getApplicationContext(), EditQuestActivity.class));
+                startActivity((new Intent(getApplicationContext(), CreateQuestActivity.class)).putExtra("replace", true));
             }
         });
 

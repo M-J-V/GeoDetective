@@ -20,13 +20,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
 
-//TODO Use scroll layout instead of constraint, because long descriptions/titles/images don't fit on screen.
 public class CreateQuestActivity extends AppCompatActivity {
     private final Location location = new Location(this);
     private final ImageInput imageInput = new ImageInput(this);
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
     private ImageView questImage;
+    private EditText questName;
+    private EditText questDescription;
+    private EditText questHint;
+    private TextView errorMsg;
+    private boolean shouldReplaceQuest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +47,12 @@ public class CreateQuestActivity extends AppCompatActivity {
         ImageButton backBtn = findViewById(R.id.BackBtn);
 
         // get text inputs from activity
-        EditText questName = findViewById(R.id.quest_name_input);
-        EditText questDescription = findViewById(R.id.quest_description_input);
-        EditText questHint = findViewById(R.id.quest_hint_input);
+        questName = findViewById(R.id.quest_name_input);
+        questDescription = findViewById(R.id.quest_description_input);
+        questHint = findViewById(R.id.quest_hint_input);
 
         // get error text view from activity
-        TextView errorMsg = findViewById(R.id.errorText);
+        errorMsg = findViewById(R.id.errorText);
 
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
@@ -65,48 +69,64 @@ public class CreateQuestActivity extends AppCompatActivity {
         // Get current location
         location.updateCurrentLocation();
 
-        submitQuestBtn.setOnClickListener(view -> {
+        shouldReplaceQuest = getIntent().getExtras().getBoolean("replace");
 
-            String title = questName.getText().toString();
-            String desc = questDescription.getText().toString();
-            String hint = questHint.getText().toString();
-            String creator = user.getUsername();
+        if(shouldReplaceQuest) {
+            fillInputFields(ActiveQuest.getInstance());
+        }
 
-            String err = "";
-            boolean validImageAndDesc = false;
-            boolean emptyStrings = desc.equals("") || title.equals("");
+        submitQuestBtn.setOnClickListener(view -> uploadQuest());
+    }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (questImage.getDrawable() instanceof  AdaptiveIconDrawable) {
-                    err = "Please take or add a photo to your Quest.";
-                } else {
-                    if (emptyStrings) {
-                        err = "Please enter a Quest Description and Title";
-                    } else {
-                        validImageAndDesc = true;
-                    }
-                }
+    //TODO authenticate that the quest is valid, title not already used, non empty desc
+    private void uploadQuest() {
+        String title = questName.getText().toString();
+        String desc = questDescription.getText().toString();
+        String hint = questHint.getText().toString();
+        String creator = user.getUsername();
+
+        String err = "";
+        boolean validImageAndDesc = false;
+        boolean emptyStrings = desc.equals("") || title.equals("");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (questImage.getDrawable() instanceof  AdaptiveIconDrawable) {
+                err = "Please take or add a photo to your Quest.";
             } else {
-                err = "Invalid Build Version SDK";
+                if (emptyStrings) {
+                    err = "Please enter a Quest Description and Title";
+                } else {
+                    validImageAndDesc = true;
+                }
             }
+        } else {
+            err = "Invalid Build Version SDK";
+        }
 
-            if(validImageAndDesc) {
-                Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
-                ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bAOS);
-                byte[] data = bAOS.toByteArray();
+        if(validImageAndDesc) {
+            Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
+            Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
 
-                addQuest(title, desc, hint, creator, data, location, errorMsg);
+            if(shouldReplaceQuest) {
+                replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
+            }else {
+                addQuest(newQuest);
             }
+        }
 
-            errorMsg.setText(err);
+        errorMsg.setText(err);
+    }
 
-        });
+    private void fillInputFields(ActiveQuest quest) {
+        questName.setText(quest.getQuest().getName());
+        questDescription.setText(quest.getQuest().getDescription());
+        questHint.setText(quest.getQuest().getHint());
+        questImage.setImageBitmap(quest.getQuest().getImage());
     }
 
     // TODO use quest class instead of multiple parameters
-    public void addQuest(String title, String desc, String hint, String creator, byte[] bitmapData, Location location, TextView errorMsg) {
-        db.quests.document(title).get().addOnCompleteListener(task -> {
+    public void addQuest(Quest newQuest) {
+        db.quests.document(newQuest.getName()).get().addOnCompleteListener(task -> {
             String err = "";
             if (task.isSuccessful()) {
                 DocumentSnapshot User = task.getResult();
@@ -114,7 +134,11 @@ public class CreateQuestActivity extends AppCompatActivity {
                     err = "Quest Title already in use";
                 } else {
                     Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
-                    db.createNewQuest(title, desc, hint, creator, bitmapData, location,getApplicationContext());
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    db.createNewQuest(newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), user.getUsername(), data, location,getApplicationContext());
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 }
             } else {
@@ -122,6 +146,23 @@ public class CreateQuestActivity extends AppCompatActivity {
             }
             errorMsg.setText(err);
         });
+    }
+
+    private void replaceQuest(Quest previousQuest, Quest newQuest) {
+        db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] data = baos.toByteArray();
+
+                    db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
+
+                    ActiveQuest.getInstance().setQuest(newQuest);
+
+                })
+                .addOnFailureListener(e -> {
+                    String Msg = "Error when removing old Quest";
+                    errorMsg.setText(Msg);
+                });
     }
 
     // Get image from camera or gallery

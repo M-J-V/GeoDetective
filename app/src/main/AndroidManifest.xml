@@ -22,9 +22,6 @@
             android:name=".HistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".EditQuestActivity"
-            android:exported="false" />
-        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
