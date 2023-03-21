@@ -78,7 +78,7 @@ public class CreateQuestActivity extends AppCompatActivity {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (questImage.getDrawable() instanceof  AdaptiveIconDrawable) {
-                    err = "Please take add a photo to your Quest.";
+                    err = "Please take or add a photo to your Quest.";
                 } else {
                     if (emptyStrings) {
                         err = "Please enter a Quest Description and Title";

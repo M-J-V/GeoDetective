@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/quest_overview_layout"
+    android:id="@+id/quest_overview_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/geo_green"
+    android:fillViewport="true"
     tools:context=".QuestOverviewActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/quest_overview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/geo_green">
 
     <TextView
         android:id="@+id/quest_name"
@@ -34,11 +41,12 @@
         android:id="@+id/Quest_Image"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:layout_marginTop="45dp"
         android:contentDescription="@string/logo"
-        app:layout_constraintBottom_toTopOf="@+id/check_result_btn"
+        app:layout_constraintBottom_toTopOf="@+id/quest_description"
         app:layout_constraintEnd_toEndOf="@+id/quest_name"
         app:layout_constraintStart_toStartOf="@+id/quest_name"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quest_name"
         app:srcCompat="@mipmap/ic_launcher"
         tools:ignore="ImageContrastCheck" />
 
@@ -47,10 +55,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:gravity="center"
         android:text="@string/questDescription"
         android:textColor="@color/black"
         android:textSize="30sp"
-        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@id/Quest_Image"
         app:layout_constraintStart_toStartOf="@id/Quest_Image"
         app:layout_constraintTop_toBottomOf="@id/Quest_Image" />
@@ -83,20 +91,20 @@
         app:layout_constraintStart_toStartOf="@id/reveal_hint_btn"
         app:layout_constraintTop_toBottomOf="@id/reveal_hint_btn" />
 
-    <ImageButton
-        android:id="@+id/BackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/geo_green_darker"
-        android:contentDescription="@string/Back"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/homeAsUpIndicator"
-        tools:ignore="ImageContrastCheck" />
+        <ImageButton
+            android:id="@+id/BackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:contentDescription="@string/Back"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator"
+            tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
 
     <ImageButton
         android:id="@+id/EditBtn"
@@ -113,4 +121,5 @@
         app:srcCompat="@android:drawable/ic_menu_edit"
         tools:ignore="ImageContrastCheck" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

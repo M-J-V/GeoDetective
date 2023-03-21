@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,8 +26,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 import java.io.ByteArrayOutputStream;
@@ -40,11 +39,11 @@ public class EditQuestActivity extends AppCompatActivity {
     //  so list needs onResume, but we need to DECIDE how to do that.
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_PICTURE = 200;
+    private final ActiveUser activeUser = ActiveUser.getInstance();
+    private final ActiveQuest activeQuest = ActiveQuest.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
     private ImageView questImage;
     private Location location = new Location(this);
-    private ActiveUser activeUser = ActiveUser.getInstance();
-    private ActiveQuest activeQuest = ActiveQuest.getInstance();
-    private DbConnection db = DbConnection.getInstance();
 
     // Convert drawable to bitmap
     @NonNull
@@ -56,6 +55,7 @@ public class EditQuestActivity extends AppCompatActivity {
         return bmp;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class EditQuestActivity extends AppCompatActivity {
         EditText questName = findViewById(R.id.quest_name_input);
         EditText questDescription = findViewById(R.id.quest_description_input);
         EditText questHint = findViewById(R.id.quest_hint_input);
-        TextView errorMessage = findViewById(R.id.MsgTitle);
+        TextView errorMessage = findViewById(R.id.errorText);
 
         ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
 
@@ -158,12 +158,9 @@ public class EditQuestActivity extends AppCompatActivity {
             public boolean isCancellationRequested() {
                 return false;
             }
-        }).addOnSuccessListener(new OnSuccessListener<android.location.Location>() {
-            @Override
-            public void onSuccess(android.location.Location newLocation) {
-                location.setLongitude(newLocation.getLongitude());
-                location.setLatitude(newLocation.getLatitude());
-            }
+        }).addOnSuccessListener(newLocation -> {
+            location.setLongitude(newLocation.getLongitude());
+            location.setLatitude(newLocation.getLatitude());
         });
     }
 
@@ -215,24 +212,18 @@ public class EditQuestActivity extends AppCompatActivity {
 
     private void replaceQuest(String deletedQuest, String newQuest, String newDescription,
                               String newHint, byte[] bitmapImage, Location location, TextView msg) {
-        db.quests.document(deletedQuest).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        db.updateQuestListAndCreate(deletedQuest, newQuest, newDescription, newHint, activeUser.getUsername(), getApplicationContext() ,bitmapImage, location, msg);
+        db.quests.document(deletedQuest).delete().addOnSuccessListener(aVoid -> {
+            db.updateQuestListAndCreate(deletedQuest, newQuest, newDescription, newHint, activeUser.getUsername(), getApplicationContext() ,bitmapImage, location, msg);
 
-                        Quest quest = new Quest(newQuest, activeUser.getUsername(), newDescription, newHint,
-                                getBitmapFromDrawable(questImage.getDrawable()),
-                                location);
-                        activeQuest.setQuest(quest);
+            Quest quest = new Quest(newQuest, activeUser.getUsername(), newDescription, newHint,
+                    getBitmapFromDrawable(questImage.getDrawable()),
+                    location);
+            activeQuest.setQuest(quest);
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        String Msg = "Error when removing old Quest";
-                        msg.setText(Msg);
-                    }
+        })
+                .addOnFailureListener(e -> {
+                    String Msg = "Error when removing old Quest";
+                    msg.setText(Msg);
                 });
     }
 
