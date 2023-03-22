@@ -1,12 +1,27 @@
 package com.example.geodetective;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -53,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         history_button.setOnClickListener(v -> {
             // go to history page
-            startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
+            getAttempts();
         });
 
         request_button.setOnClickListener(v -> {
@@ -79,5 +94,52 @@ public class ProfileActivity extends AppCompatActivity {
             user.disconnectUser();
         });
 
+    }
+
+    private void getAttempts() {
+        Query userAttempts = db.attempts.whereEqualTo("Username", user.getUsername());
+        ArrayList<String> titles = new ArrayList<String>();
+        ArrayList<String> times = new ArrayList<String>();
+        // Boolean Arraylists don't play nice being passed through intents
+        ArrayList<Integer> outcomes = new ArrayList<Integer>();
+        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        titles.add(doc.get("Quest").toString());
+
+                        times.add(formatDate(doc.get("Time Completed").toString()));
+
+                        if((Boolean)doc.get("Success")) {
+                            outcomes.add(1);
+                        } else {
+                            outcomes.add(0);
+                        }
+                    }
+                    loadHistoryActivity(titles,times,outcomes);
+                }
+            }
+        });
+    }
+
+    private String formatDate(String strDate) {
+        Date date;
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        SimpleDateFormat outputDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        try {
+            date = df.parse(strDate);
+        } catch (ParseException e) {
+            throw new RuntimeException("Failed to parse date: ", e);
+        }
+        return outputDate.format(date);
+    }
+
+    private void loadHistoryActivity(ArrayList<String> titles, ArrayList<String> times, ArrayList<Integer> outcomes) {
+        Intent historyIntent = new Intent(getApplicationContext(), HistoryActivity.class);
+        historyIntent.putStringArrayListExtra("titles", titles);
+        historyIntent.putStringArrayListExtra("timesCompleted", times);
+        historyIntent.putIntegerArrayListExtra("outcomes",outcomes);
+        startActivity(historyIntent);
     }
 }

@@ -67,15 +67,4 @@ public class ListOfQuests extends AppCompatActivity {
             }
         });
     }
-
-    private void loadQuestOverview() {
-        Intent intent = new Intent (ListOfQuests.this, QuestOverviewActivity.class);
-        intent.putExtra("questName", activeQuest.getQuest().getName());
-        intent.putExtra("creator", activeQuest.getQuest().getCreator());
-        intent.putExtra("questDescription", activeQuest.getQuest().getDescription());
-        intent.putExtra("questImage", activeQuest.getQuest().getImage());
-        intent.putExtra("longitude", activeQuest.getQuest().getLocation().getLongitude());
-        intent.putExtra("latitude", activeQuest.getQuest().getLocation().getLatitude());
-        startActivity(intent);
-    }
 }

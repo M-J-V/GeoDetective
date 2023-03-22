@@ -4,39 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CustomHistoryActivity">
+    tools:context=".CustomHistoryAdapter">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:contentDescription="@string/chooseQuest"
-        android:id="@+id/imageHistory"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+<!--    <ImageView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:contentDescription="@string/chooseQuest"-->
+<!--        android:id="@+id/imageHistory"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"/>-->
 
     <TextView
         android:id="@+id/textTitle"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="36dp"
         android:text="Title"
-        app:layout_constraintStart_toEndOf="@+id/imageHistory"
+        app:layout_constraintBottom_toTopOf="@+id/textTime"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textResult"
+        android:id="@+id/textTime"
         style="@style/TextAppearance.AppCompat.SearchResult.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="228dp"
-        android:layout_toRightOf="@+id/imageHistory"
-        android:maxLength="50"
+        android:text="Time"
+        app:layout_constraintEnd_toEndOf="@+id/textTitle"
+        app:layout_constraintStart_toStartOf="@+id/textTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+    <TextView
+        android:id="@+id/textResult"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Result"
-        app:layout_constraintStart_toEndOf="@+id/imageHistory"
-        tools:layout_editor_absoluteY="38dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/textTitle"
         tools:ignore="MissingConstraints" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50121653" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
