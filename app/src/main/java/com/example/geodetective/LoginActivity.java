@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                             // User succesfully logs in
                             user.setUsername(username);
                             user.setPassword(hashPass);
+                            user.setTrusted((boolean)User.get("Trusted"));
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {
                            errorMsg = "Incorrect Password";

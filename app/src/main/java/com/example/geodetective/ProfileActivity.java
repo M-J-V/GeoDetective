@@ -21,15 +21,24 @@ public class ProfileActivity extends AppCompatActivity {
         Button history_button = findViewById(R.id.button_history);
         Button edit_profile_button = findViewById(R.id.button_edit_profile);
         Button delete_button = findViewById(R.id.button_delete);
+        Button request_button = findViewById(R.id.button_permission);
         ImageButton returnBtn = findViewById(R.id.BackBtn);
 
         //get user details textView
         TextView usernameTxt = findViewById(R.id.usernameInfo);
-        TextView passwordTxt = findViewById(R.id.passwordInfo);
+        TextView trustTxt = findViewById(R.id.trustedInfo);
+        TextView permissionTxt = findViewById(R.id.Text);
 
         //update user details
         usernameTxt.setText(user.getUsername());
-        passwordTxt.setText(user.getPassword());
+
+        String permission;
+        if(user.getTrusted()) {
+            permission = "Yes";
+        } else {
+            permission = "No";
+        }
+        trustTxt.setText(permission);
 
         //Set on click listeners
         returnBtn.setOnClickListener(v -> {
@@ -45,6 +54,18 @@ public class ProfileActivity extends AppCompatActivity {
         history_button.setOnClickListener(v -> {
             // go to history page
             startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
+        });
+
+        request_button.setOnClickListener(v -> {
+            // send request to database
+
+            if(!user.getTrusted()) {
+                db.sendRequest(user.getUsername());
+                permissionTxt.setText("Creator Permission Request sent to admins");
+            } else {
+                permissionTxt.setText("You already have permission to create quests");
+            }
+
         });
 
         delete_button.setOnClickListener(v -> {

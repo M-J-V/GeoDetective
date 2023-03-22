@@ -68,5 +68,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/ErrorTextHome1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="@+id/Create_Quest_Btn"
+        app:layout_constraintStart_toStartOf="@+id/Create_Quest_Btn"
+        app:layout_constraintTop_toBottomOf="@+id/Play_Quest_Btn"
+        app:layout_constraintBottom_toTopOf="@+id/ErrorTextHome2"/>
+    <TextView
+        android:id="@+id/ErrorTextHome2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="@+id/Create_Quest_Btn"
+        app:layout_constraintStart_toStartOf="@+id/Create_Quest_Btn"
+        app:layout_constraintTop_toBottomOf="@+id/ErrorTextHome1"
+        app:layout_constraintBottom_toTopOf="@+id/Create_Quest_Btn"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -69,11 +69,11 @@ public class CreateQuestActivity extends AppCompatActivity {
         // Get current location
         location.updateCurrentLocation();
 
-        shouldReplaceQuest = getIntent().getExtras().getBoolean("replace");
+//        shouldReplaceQuest = getIntent().getExtras().getBoolean("replace");
 
-        if(shouldReplaceQuest) {
-            fillInputFields(ActiveQuest.getInstance());
-        }
+//        if(shouldReplaceQuest) {
+//            fillInputFields(ActiveQuest.getInstance());
+//        }
 
         submitQuestBtn.setOnClickListener(view -> uploadQuest());
     }
@@ -107,22 +107,23 @@ public class CreateQuestActivity extends AppCompatActivity {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
 
-            if(shouldReplaceQuest) {
-                replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
-            }else {
-                addQuest(newQuest);
-            }
+            addQuest(newQuest);
+//            if(shouldReplaceQuest) {
+//                replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
+//            }else {
+//                addQuest(newQuest);
+//            }
         }
 
         errorMsg.setText(err);
     }
 
-    private void fillInputFields(ActiveQuest quest) {
-        questName.setText(quest.getQuest().getName());
-        questDescription.setText(quest.getQuest().getDescription());
-        questHint.setText(quest.getQuest().getHint());
-        questImage.setImageBitmap(quest.getQuest().getImage());
-    }
+//    private void fillInputFields(ActiveQuest quest) {
+//        questName.setText(quest.getQuest().getName());
+//        questDescription.setText(quest.getQuest().getDescription());
+//        questHint.setText(quest.getQuest().getHint());
+//        questImage.setImageBitmap(quest.getQuest().getImage());
+//    }
 
     // TODO use quest class instead of multiple parameters
     public void addQuest(Quest newQuest) {
@@ -148,22 +149,22 @@ public class CreateQuestActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceQuest(Quest previousQuest, Quest newQuest) {
-        db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
-
-                    db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
-
-                    ActiveQuest.getInstance().setQuest(newQuest);
-
-                })
-                .addOnFailureListener(e -> {
-                    String Msg = "Error when removing old Quest";
-                    errorMsg.setText(Msg);
-                });
-    }
+//    private void replaceQuest(Quest previousQuest, Quest newQuest) {
+//        db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                    byte[] data = baos.toByteArray();
+//
+//                    db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
+//
+//                    ActiveQuest.getInstance().setQuest(newQuest);
+//
+//                })
+//                .addOnFailureListener(e -> {
+//                    String Msg = "Error when removing old Quest";
+//                    errorMsg.setText(Msg);
+//                });
+//    }
 
     // Get image from camera or gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
