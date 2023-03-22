@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class QuestOverviewActivity extends AppCompatActivity {
     private Location location;
     private Timer timer = null;
+    ActiveUser user = ActiveUser.getInstance();
+    ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+    DbConnection db = DbConnection.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +44,13 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         location = new Location(this);
 
-        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-
         // Update UI
         questName.setText(activeQuestInstance.getQuest().getName());
         questDescription.setText(activeQuestInstance.getQuest().getDescription());
         questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
 
         editButton.setOnClickListener(v -> {
-            String nameOfUser = ActiveUser.getInstance().getUsername();
+            String nameOfUser = user.getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
                 startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)).putExtra("replace", true));
@@ -102,19 +103,14 @@ public class QuestOverviewActivity extends AppCompatActivity {
         Log.d("WOAH","questLat: " + questLatitude);
         Log.d("WOAH","questLong: " + questLongitude);
 
-        if(location.distanceTo(new Location(questLatitude, questLongitude)) < 100) {
+        if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
             // Stop timer
             ActiveQuest.getInstance().getQuest().stop();
             timer.stop();
-            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude)));
+            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude, this)));
 
-
-            //TODO submit quest to server
-//            Database.questCompleted(
-//                    getIntent().getExtras().getString("username"),
-//                    getIntent().getExtras().getString("questName"),
-//                    timer.getText().toString(),
-//                    true);
+            // Submit attempt to database
+            db.createAttempt(user.getUsername(), activeQuestInstance.getQuest().getName(), true);
 
             // Show success message
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -130,18 +126,14 @@ public class QuestOverviewActivity extends AppCompatActivity {
             Button startQuestButton = findViewById(R.id.check_result_btn);
             startQuestButton.setText("Start Quest");
         } else {
-            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude)));
+            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude, this)));
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quest not finished!");
             builder.setMessage("You have not completed the quest successfully.");
             builder.setPositiveButton("Continue quest", (dialog, which) -> dialog.dismiss());
             builder.setNegativeButton("Abort quest", (dialog, which) -> {
-                //TODO submit quest to server
-    //          Database.questCompleted(
-    //                  getIntent().getExtras().getString("username"),
-    //                  getIntent().getExtras().getString("questName"),
-    //                  timer.getText().toString(),
-    //                  false);
+                // Submit attempt to database
+                db.createAttempt(user.getUsername(), activeQuestInstance.getQuest().getName(), false);
 
                 // Stop timer
                 ActiveQuest.getInstance().getQuest().stop();

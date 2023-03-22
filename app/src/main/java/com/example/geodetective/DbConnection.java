@@ -35,9 +35,12 @@ import com.google.firebase.storage.UploadTask;
 import org.w3c.dom.Text;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -81,6 +84,19 @@ public class DbConnection {
         request.put("Username", username);
         request.put("Request", username + " has requested permission to create quests");
         requests.document(username).set(request);
+    }
+
+    public void createAttempt(String username, String quest, boolean win) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        String timeCompleted = sdf.format(new Date());
+
+        Map<String, Object> attempt = new HashMap<>();
+        attempt.put("Username", username);
+        attempt.put("Quest", quest);
+        attempt.put("Time Completed", timeCompleted);
+        attempt.put("Success", win);
+
+        attempts.document(username+"_"+quest+"_"+timeCompleted).set(attempt);
     }
 
     public void createNewUser(String username, String password) {
