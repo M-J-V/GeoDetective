@@ -1,18 +1,13 @@
 package com.example.geodetective;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class LoginActivity extends AppCompatActivity {
@@ -23,6 +18,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (!ConnectivityChecker.hasInternetConnection(this))
+            ConnectivityChecker.createDialog(this);
 
         // Get buttons from activity
         Button loginBtn = findViewById(R.id.Login_Btn);
@@ -59,30 +57,27 @@ public class LoginActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Please fill in both Username and Password");
         }
         String hashPass = LoginEncoder.hashWord(password);
-        db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                String errorMsg = "";
-                if (task.isSuccessful()) {
-                    DocumentSnapshot User = task.getResult();
-                    if (User.exists()) {
-                        if (hashPass.equals(User.get("Password"))) {
-                            // User succesfully logs in
-                            user.setUsername(username);
-                            user.setPassword(hashPass);
-                            user.setTrusted((boolean)User.get("Trusted"));
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        } else {
-                           errorMsg = "Incorrect Password";
-                        }
+        db.users.document(username).get().addOnCompleteListener(task -> {
+            String errorMsg = "";
+            if (task.isSuccessful()) {
+                DocumentSnapshot User = task.getResult();
+                if (User.exists()) {
+                    if (hashPass.equals(User.get("Password"))) {
+                        // User successfully logs in
+                        user.setUsername(username);
+                        user.setPassword(hashPass);
+                        user.setTrusted((boolean)User.get("Trusted"));
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     } else {
-                       errorMsg = "Username not found in Database";
+                       errorMsg = "Incorrect Password";
                     }
                 } else {
-                    errorMsg = "Error getting data from Database";
+                   errorMsg = "Username not found in Database";
                 }
-                errorText.setText(errorMsg);
+            } else {
+                errorMsg = "Error getting data from Database";
             }
+            errorText.setText(errorMsg);
         });
     }
 
