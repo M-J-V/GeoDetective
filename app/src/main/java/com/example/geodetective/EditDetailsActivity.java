@@ -73,8 +73,10 @@ public class EditDetailsActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("Please enter Old password");
             }
 
+            String hashOldPass = LoginEncoder.hashWord(oldPass);
+            String hashNewPass = LoginEncoder.hashWord(newPass);
             // Check if oldPassword is the same as the actual password
-            if(oldPass.equals(user.getPassword())){
+            if(hashOldPass.equals(user.getPassword())){
                 db.users.document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -82,7 +84,7 @@ public class EditDetailsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot User = task.getResult();
                             if (User.exists()) {
-                                replaceUser(user.getUsername(), user.getUsername(), newPass, msg);
+                                replaceUser(user.getUsername(), user.getUsername(), hashNewPass, msg);
                             } else {
                                 Msg = "Username is not in Database";
                             }

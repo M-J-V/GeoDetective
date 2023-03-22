@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         if (username.equals("") || password.equals("")) {
             throw new IllegalArgumentException("Please fill in both Username and Password");
         }
+        String hashPass = LoginEncoder.hashWord(password);
         db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){
@@ -65,10 +66,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot User = task.getResult();
                     if (User.exists()) {
-                        if (password.equals(User.get("Password"))) {
+                        if (hashPass.equals(User.get("Password"))) {
                             // User succesfully logs in
                             user.setUsername(username);
-                            user.setPassword(password);
+                            user.setPassword(hashPass);
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         } else {
                            errorMsg = "Incorrect Password";

@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             try {
                 if (checker.checkDetails(username, password, passwordAgain)) {
-                    registerUser(username, password, ErrorText);
+                    registerUser(username, LoginEncoder.hashWord(password), ErrorText);
                 }
             } catch (IllegalArgumentException e) {
                 ErrorText.setText(e.getMessage());
@@ -65,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser (String username, String password, TextView errorText) throws IllegalArgumentException {
+
         db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task){
