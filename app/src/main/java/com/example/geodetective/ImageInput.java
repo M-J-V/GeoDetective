@@ -34,8 +34,7 @@ public class ImageInput {
 
         final CharSequence[] options = {"Give both gallery and camera permissions", "Give camera permissions", "Give gallery permissions", "Don't give permissions"};
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Permissions");
-        builder.setMessage("We need permissions to access your camera and gallery to add images to your quests.");
+        builder.setTitle("Camera Permissions");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Give both gallery and camera permissions")) {
                 //Give both permissions

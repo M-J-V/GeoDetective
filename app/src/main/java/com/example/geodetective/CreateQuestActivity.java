@@ -21,8 +21,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.ByteArrayOutputStream;
 
 public class CreateQuestActivity extends AppCompatActivity {
-    private final Location location = new Location(this);
-    private final ImageInput imageInput = new ImageInput(this);
+    private Location location;
+    private ImageInput imageInput;
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
     private ImageView questImage;
@@ -37,6 +37,8 @@ public class CreateQuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quest);
 
+        location = new Location(this);
+        imageInput = new ImageInput(this);
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
         questImage.setDrawingCacheEnabled(true);
