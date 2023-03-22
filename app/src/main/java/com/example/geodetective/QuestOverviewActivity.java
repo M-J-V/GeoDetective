@@ -52,7 +52,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
             String nameOfUser = ActiveUser.getInstance().getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
-                startActivity((new Intent(getApplicationContext(), CreateQuestActivity.class)).putExtra("replace", true));
+                startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)).putExtra("replace", true));
             }
         });
 
