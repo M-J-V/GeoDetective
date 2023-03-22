@@ -51,6 +51,7 @@ public class DbConnection {
     CollectionReference quests;
     CollectionReference attempts;
     CollectionReference questNames;
+    CollectionReference requests;
     StorageReference storage;
 
     private DbConnection() {
@@ -59,6 +60,7 @@ public class DbConnection {
         this.quests = db.collection("Quests");
         this.attempts = db.collection("Attempted");
         this.questNames = db.collection("AllQuests");
+        this.requests = db.collection("Requests");
         this.storage = FirebaseStorage.getInstance().getReference();
     }
 
@@ -72,6 +74,13 @@ public class DbConnection {
             connection = new DbConnection();
         }
         return connection;
+    }
+
+    public void sendRequest(String username) {
+        Map<String, Object> request = new HashMap<>();
+        request.put("Username", username);
+        request.put("Request", username + " has requested permission to create quests");
+        requests.document(username).set(request);
     }
 
     public void createNewUser(String username, String password) {

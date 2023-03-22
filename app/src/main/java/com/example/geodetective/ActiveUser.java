@@ -28,6 +28,10 @@ public class ActiveUser {
         return password;
     }
 
+    public boolean getTrusted() {
+        return trusted;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -36,9 +40,15 @@ public class ActiveUser {
         this.password = password;
     }
 
+    public void setTrusted(boolean trust) {
+        this.trusted = trust;
+    }
+
     public void disconnectUser() {
         this.User = null;
         this.username = "";
         this.password = "";
+        this.trusted = false;
     }
+
 }

@@ -116,45 +116,21 @@ public class EditQuestActivity extends AppCompatActivity {
         questImage.setImageBitmap(quest.getQuest().getImage());
     }
 
-    // TODO use quest class instead of multiple parameters
-    public void addQuest(Quest newQuest) {
-        db.quests.document(newQuest.getName()).get().addOnCompleteListener(task -> {
-            String err = "";
-            if (task.isSuccessful()) {
-                DocumentSnapshot User = task.getResult();
-                if (User.exists()) {
-                    err = "Quest Title already in use";
-                } else {
-                    Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
-
-                    db.createNewQuest(newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), user.getUsername(), data, location,getApplicationContext());
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                }
-            } else {
-                err = "Error getting data from Database";
-            }
-            errorMsg.setText(err);
-        });
-    }
-
     private void replaceQuest(Quest previousQuest, Quest newQuest) {
         db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-                    db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
+            db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
 
-                    ActiveQuest.getInstance().setQuest(newQuest);
+            ActiveQuest.getInstance().setQuest(newQuest);
 
-                })
-                .addOnFailureListener(e -> {
-                    String Msg = "Error when removing old Quest";
-                    errorMsg.setText(Msg);
-                });
+        })
+        .addOnFailureListener(e -> {
+            String Msg = "Error when removing old Quest";
+            errorMsg.setText(Msg);
+        });
     }
 
     // Get image from camera or gallery

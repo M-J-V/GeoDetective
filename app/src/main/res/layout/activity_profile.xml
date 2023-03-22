@@ -22,10 +22,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/passwordTxt"
+        android:id="@+id/trustedTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/password"
+        android:text="@string/trusted"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/button_history"
@@ -34,17 +34,17 @@
         app:layout_constraintTop_toBottomOf="@id/usernameTxt" />
 
     <TextView
-        android:id="@+id/passwordInfo"
+        android:id="@+id/trustedInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/blank"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/passwordTxt"
+        app:layout_constraintBottom_toBottomOf="@+id/trustedTxt"
         app:layout_constraintEnd_toEndOf="@+id/usernameInfo"
         app:layout_constraintStart_toStartOf="@+id/usernameInfo"
-        app:layout_constraintTop_toTopOf="@+id/passwordTxt" />
+        app:layout_constraintTop_toTopOf="@+id/trustedTxt" />
 
     <TextView
         android:id="@+id/usernameTxt"
@@ -53,7 +53,7 @@
         android:text="@string/username"
         android:textSize="16sp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/passwordTxt"
+        app:layout_constraintBottom_toTopOf="@id/trustedTxt"
         app:layout_constraintEnd_toStartOf="@+id/usernameInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_profile_info" />
@@ -77,9 +77,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/editProf"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_delete"
+        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
+        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
         app:layout_constraintTop_toBottomOf="@+id/button_history" />
 
     <Button
@@ -88,11 +88,21 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/history"
+        app:layout_constraintBottom_toTopOf="@+id/button_delete"
+        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
+        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintTop_toBottomOf="@+id/trustedTxt" />
+
+    <Button
+        android:id="@+id/button_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/geo_green_darker"
+        android:text="@string/permission"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_delete"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTxt"
- />
+        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
+        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
 
     <ImageButton
         android:id="@+id/BackBtn"
@@ -112,12 +122,21 @@
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/delete"
         android:backgroundTint="@color/geo_green_darker"
-        app:layout_constraintBottom_toBottomOf="@+id/button_history"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_history"
-        app:layout_constraintTop_toTopOf="@+id/button_history" />
+        android:text="@string/delete"
+        app:layout_constraintBottom_toTopOf="@+id/button_permission"
+        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
+        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
+
+    <TextView
+        android:id="@+id/Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/button_permission"
+        app:layout_constraintStart_toStartOf="@+id/button_permission"
+        app:layout_constraintTop_toBottomOf="@+id/button_permission" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

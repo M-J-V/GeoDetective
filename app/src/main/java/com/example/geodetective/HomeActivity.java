@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 
@@ -20,11 +25,13 @@ import java.util.Objects;
 public class HomeActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
+    ActiveUser user = ActiveUser.getInstance();
     questImages images = questImages.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        updateTrust();
 
         // Get buttons from activity
         Button createQuestBtn = findViewById(R.id.Create_Quest_Btn);
@@ -32,10 +39,20 @@ public class HomeActivity extends AppCompatActivity {
         Button logoutBtn = findViewById(R.id.Logout_btn);
         ImageButton returnBtn = findViewById(R.id.Profile_Btn);
 
+        // Get Text from activity
+        TextView errorTxt1 = findViewById(R.id.ErrorTextHome1);
+        TextView errorTxt2 = findViewById(R.id.ErrorTextHome2);
+
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
-            // Start create quest activity
-            startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
+            if (user.getTrusted()) {
+                // Start create quest activity
+                startActivity(new Intent(getApplicationContext(), CreateQuestActivity.class));
+            } else {
+                errorTxt1.setText("You do not have permission to create quests.");
+                errorTxt2.setText("Ask to be granted creator role on your profile page!");
+            }
+
         });
 
         returnBtn.setOnClickListener(v -> {
@@ -75,6 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         db.quests.document(titles.get(pos)).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
+                Log.d("DEBUG", titles.get(pos).toString());
                 String creatorUser = Objects.requireNonNull(doc.get("Creator")).toString();
                 creators.add(creatorUser);
                 if ( pos == numQuests - 1 ) {
@@ -116,5 +134,20 @@ public class HomeActivity extends AppCompatActivity {
         questList.putStringArrayListExtra("titles", titles);
         questList.putStringArrayListExtra("creators", creators);
         startActivity(questList);
+    }
+
+    private void updateTrust() {
+        db.users.document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task){
+                String errorMsg = "";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot User = task.getResult();
+                    if (User.exists()) {
+                        user.setTrusted((boolean) User.get("Trusted"));
+                    }
+                }
+            }
+        });
     }
 }
