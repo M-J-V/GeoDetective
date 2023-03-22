@@ -2,11 +2,13 @@ package com.example.geodetective;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,26 +22,49 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 public class Location {
     public static final int PERMISSIONS_REQUEST = 1;
+    final LocationManager manager;
     private Activity activity;
     private double latitude;
     private double longitude;
 
-    public Location(double latitude, double longitude, Activity activity) {
+    public Location(double latitude, double longitude, @NonNull Activity activity) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = activity;
+        this.manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        checkLocationServices();
     }
 
     public Location (double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = null;
+        this.manager = null;
+        checkLocationServices();
     }
 
-    public Location(Activity activity) {
+    public Location(@NonNull Activity activity) {
         this.latitude = 0;
         this.longitude = 0;
         this.activity = activity;
+        this.manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        checkLocationServices();
+    }
+
+    public void checkLocationServices() {
+        if (manager == null)
+            throw new IllegalStateException("Location manager is not set");
+        if (activity == null)
+            throw new IllegalStateException("Activity is not set");
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Location services disabled");
+            builder.setMessage("Please enable location services to use this feature.");
+            builder.setPositiveButton("OK", (dialog, which) -> activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)));
+
+            builder.setNegativeButton("Cancel", this::onClick);
+        }
     }
 
     public double getLatitude() {
@@ -66,7 +91,7 @@ public class Location {
         this.activity = activity;
     }
 
-    public float distanceTo(Location location) {
+    public float distanceTo(@NonNull Location location) {
         float[] results = new float[3];
         android.location.Location.distanceBetween(latitude, longitude,
                 location.getLatitude(), location.getLongitude(), results);
@@ -90,13 +115,15 @@ public class Location {
         }
     }
 
-
     @SuppressLint("MissingPermission")
     public void updateCurrentLocation() throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
             throw new IllegalStateException("Activity is not set");
         }
+
+        //Check location services
+        checkLocationServices();
 
         //Create location client
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
@@ -120,6 +147,7 @@ public class Location {
             setLatitude(location.getLatitude());
         });
     }
+
     public void onRequestPermissionsResult(int requestCode, int[] grantResults) throws IllegalStateException{
         // Check if activity is set
         if (activityIsSet()) {
@@ -153,5 +181,10 @@ public class Location {
             }
 
         }
+    }
+
+    private void onClick(DialogInterface dialog, int which) {
+        dialog.cancel();
+        activity.finish();
     }
 }
