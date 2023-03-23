@@ -53,7 +53,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
             String nameOfUser = user.getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
-                startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)).putExtra("replace", true));
+                Log.d("DEBUG","1. Going into edit Quest");
+                startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)));
             }
         });
 
@@ -66,7 +67,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
             if (timer != null) {
                 timer.stop();
             }
-
+            activeQuestInstance.disconnectActiveQuest();
             finish();
         });
 

@@ -113,22 +113,11 @@ public class CreateQuestActivity extends AppCompatActivity {
             Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
 
             addQuest(newQuest);
-//            if(shouldReplaceQuest) {
-//                replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
-//            }else {
-//                addQuest(newQuest);
-//            }
         }
 
         errorMsg.setText(err);
     }
 
-//    private void fillInputFields(ActiveQuest quest) {
-//        questName.setText(quest.getQuest().getName());
-//        questDescription.setText(quest.getQuest().getDescription());
-//        questHint.setText(quest.getQuest().getHint());
-//        questImage.setImageBitmap(quest.getQuest().getImage());
-//    }
 
     // TODO use quest class instead of multiple parameters
     public void addQuest(Quest newQuest) {
@@ -140,11 +129,8 @@ public class CreateQuestActivity extends AppCompatActivity {
                     err = "Quest Title already in use";
                 } else {
                     Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] data = baos.toByteArray();
 
-                    db.createNewQuest(newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), user.getUsername(), data, location,getApplicationContext());
+                    db.createNewQuest(newQuest,getApplicationContext());
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 }
             } else {

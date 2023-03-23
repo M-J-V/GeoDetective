@@ -59,8 +59,7 @@ public class ListOfQuests extends AppCompatActivity {
                             double questLong = (double) doc.get("longitude");
                             Location location = new Location(questLat, questLong, activity);
                             activeQuest.setQuest(new Quest(questName, creator, questDesc, questHint, imageBitmap, location));
-                            //loadQuestOverview();
-                            startActivity(new Intent (ListOfQuests.this, QuestOverviewActivity.class));
+                            startActivity(new Intent (getApplicationContext(), QuestOverviewActivity.class));
                         }
                     }
                 });

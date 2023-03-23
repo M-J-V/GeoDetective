@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,24 +111,27 @@ public class DbConnection {
         users.document(username).set(user);
     }
 
-    public void createNewQuest(String title, String description, String hint, String creatorUser, byte[] bitmapData, Location location, Context context){
+    public void createNewQuest(Quest newQuest, Context context){
         // Create a new user with username and password
         Map<String, Object> quest = new HashMap<>();
-        quest.put("Title", title);
-        quest.put("Description", description);
-        quest.put("Hint", hint);
-        quest.put("Creator",creatorUser);
-        quest.put("longitude",location.getLongitude());
-        quest.put("latitude",location.getLatitude());
+        quest.put("Title", newQuest.getName());
+        quest.put("Description", newQuest.getDescription());
+        quest.put("Hint", newQuest.getHint());
+        quest.put("Creator",newQuest.getCreator());
+        quest.put("longitude", newQuest.getLocation().getLongitude());
+        quest.put("latitude",newQuest.getLocation().getLatitude());
 
         // Add new user to database
-        quests.document(title).set(quest);
+        quests.document(newQuest.getName()).set(quest);
 
         // Upload image to storage
-        uploadBitmap(title, bitmapData, context);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        uploadBitmap(newQuest.getName(), data, context);
 
-        // Due to the way firebase interacts with collecttions, we must keep a list of all quest names.
-        addToAllQuestsList(title);
+        // Due to the way firebase interacts with collections, we must keep a list of all quest names.
+        addToAllQuestsList(newQuest.getName());
     }
 
     private void addToAllQuestsList(String title) {
@@ -195,6 +199,11 @@ public class DbConnection {
         }
     }
 
+    private void deleteQuestImage(String questTitle){
+        StorageReference storRef = storage.child("questImages");
+        storRef.child(questTitle).delete();
+    }
+
     private void deleteUser(String username){
         users.document(username).delete();
     }
@@ -223,8 +232,7 @@ public class DbConnection {
         });
     }
 
-    private void deleteFromAllQuestsList(String deletedQuest, String newQuest, String newDescription,
-                                         String newHint, String creator, byte[] bitmapImage, Location location,  Context context, TextView msg) {
+    private void deleteFromAllQuestsList(String deletedQuest, Quest newQuest, Context context, boolean create) {
         questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -236,22 +244,30 @@ public class DbConnection {
                     questTitles.put("quests", titles);
                     questNames.document("questsID").set(questTitles);
 
-                    createNewQuest(newQuest, newDescription, newHint,
-                            creator, bitmapImage, location, context);
+                    if (create) {
+                        createNewQuest(newQuest, context);
+                    }
                 }
             }
         });
     }
 
-    public void updateQuestListAndCreate(String deletedQuest, String newQuest, String newDescription, String newHint, String creator, Context context, byte[] bitmapImage, Location location, TextView msg) {
-        deleteFromAllQuestsList(deletedQuest, newQuest, newDescription, newHint, creator, bitmapImage, location, context, msg);
+    public void updateQuestListAndCreate(String deletedQuest, Quest quest, Context context) {
+        deleteQuestImage(quest.getName());
+        deleteFromAllQuestsList(deletedQuest, quest, context, true);
     }
-
 
     public void deleteUserAndQuests(String username, String password){
         // Get all quest titles created by the user
         ArrayList<String> questsCreated = new ArrayList<String>();
         getAndDeleteCreatedQuests(username, questsCreated);
-    };
+    }
+
+    public void deleteQuest(Quest quest) {
+        quests.document(quest.getName()).delete().addOnSuccessListener(aVoid -> {
+            deleteFromAllQuestsList(quest.getName(),null, null,false);
+            deleteQuestImage(quest.getName());
+        });
+    }
 
 }
