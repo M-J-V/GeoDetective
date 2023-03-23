@@ -30,7 +30,6 @@ public class CreateQuestActivity extends AppCompatActivity {
     private EditText questDescription;
     private EditText questHint;
     private TextView errorMsg;
-    private boolean shouldReplaceQuest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,7 @@ public class CreateQuestActivity extends AppCompatActivity {
         location.requestPermissions();
 
         // Get current location
-        location.updateCurrentLocation();
+        //location.updateCurrentLocation();
 
 //        shouldReplaceQuest = getIntent().getExtras().getBoolean("replace");
 

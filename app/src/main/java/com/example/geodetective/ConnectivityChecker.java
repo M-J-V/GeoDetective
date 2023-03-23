@@ -3,6 +3,7 @@ package com.example.geodetective;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
 
@@ -16,8 +17,19 @@ public class ConnectivityChecker extends BroadcastReceiver {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
+    public static boolean hasGPSConnection(@NonNull Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return lm != null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
     public static void openNoInternetDialog(Context context) {
-        Intent i = new Intent(context, ConnectivityAlert.class);
+        Intent i = new Intent(context, InternetConnectivityAlert.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    public static void openNoGPSDialog(Context context) {
+        Intent i = new Intent(context, GPSConnectivityAlert.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
@@ -25,10 +37,13 @@ public class ConnectivityChecker extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
-            Toast.makeText(context, "Network state changed", Toast.LENGTH_SHORT).show();
             if (!hasInternetConnection(context)) {
-                Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show();
                 openNoInternetDialog(context);
+            }
+
+        } else if (intent.getAction().equals("android.location.PROVIDERS_CHANGED")) {
+            if (!hasGPSConnection(context)) {
+                openNoGPSDialog(context);
             }
         }
     }
