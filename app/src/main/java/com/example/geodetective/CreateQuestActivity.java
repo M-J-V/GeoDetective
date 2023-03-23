@@ -82,6 +82,9 @@ public class CreateQuestActivity extends AppCompatActivity {
 
     //TODO authenticate that the quest is valid, title not already used, non empty desc
     private void uploadQuest() {
+        // update location again
+        location.updateCurrentLocation();
+
         String title = questName.getText().toString();
         String desc = questDescription.getText().toString();
         String hint = questHint.getText().toString();
