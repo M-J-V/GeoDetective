@@ -36,7 +36,6 @@ public class EditQuestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("DEBUG","2. Inside of EditQuest");
         setContentView(R.layout.activity_edit_quest);
 
         location = new Location(this);

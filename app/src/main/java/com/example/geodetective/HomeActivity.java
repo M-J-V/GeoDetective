@@ -92,7 +92,6 @@ public class HomeActivity extends AppCompatActivity {
         db.quests.document(titles.get(pos)).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
-                Log.d("DEBUG", titles.get(pos).toString());
                 String creatorUser = Objects.requireNonNull(doc.get("Creator")).toString();
                 creators.add(creatorUser);
                 if ( pos == numQuests - 1 ) {

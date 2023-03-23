@@ -45,7 +45,6 @@ public class CustomBaseAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Log.d("DEBUG","z. Why are we here?");
         view = inflater.inflate(R.layout.activity_custom_list_view, null);
         TextView txtView = (TextView) view.findViewById(R.id.textView);
         TextView txtViewAuthor = (TextView) view.findViewById(R.id.textDesc);

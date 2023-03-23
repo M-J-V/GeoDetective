@@ -53,7 +53,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
             String nameOfUser = user.getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
             if(nameOfCreator.compareTo(nameOfUser) == 0) {
-                Log.d("DEBUG","1. Going into edit Quest");
                 startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)));
             }
         });
@@ -99,16 +98,10 @@ public class QuestOverviewActivity extends AppCompatActivity {
         double questLatitude = ActiveQuest.getInstance().getQuest().getLocation().getLatitude();
         double questLongitude = ActiveQuest.getInstance().getQuest().getLocation().getLongitude();
 
-        Log.d("WOAH","lat: " + latitude);
-        Log.d("WOAH","long: " + longitude);
-        Log.d("WOAH","questLat: " + questLatitude);
-        Log.d("WOAH","questLong: " + questLongitude);
-
         if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
             // Stop timer
             ActiveQuest.getInstance().getQuest().stop();
             timer.stop();
-            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude, this)));
 
             // Submit attempt to database
             db.createAttempt(user.getUsername(), activeQuestInstance.getQuest().getName(), true);
@@ -127,7 +120,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
             Button startQuestButton = findViewById(R.id.check_result_btn);
             startQuestButton.setText("Start Quest");
         } else {
-            Log.d("WOAH","distance: " + location.distanceTo(new Location(questLatitude, questLongitude, this)));
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quest not finished!");
             builder.setMessage("You have not completed the quest successfully.");
