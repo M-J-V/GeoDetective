@@ -1,6 +1,7 @@
 package com.example.geodetective;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,13 +15,20 @@ public class LoginActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
+    ConnectivityChecker connectivityChecker = new ConnectivityChecker();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Check connectivity and register a network state change listener.
         if (!ConnectivityChecker.hasInternetConnection(this))
-            ConnectivityChecker.createDialog(this);
+            ConnectivityChecker.openNoInternetDialog(this);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(connectivityChecker, filter);
 
         // Get buttons from activity
         Button loginBtn = findViewById(R.id.Login_Btn);
@@ -81,4 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(connectivityChecker);
+    }
 }

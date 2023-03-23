@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 public class ConnectivityChecker extends BroadcastReceiver {
 
@@ -16,39 +15,20 @@ public class ConnectivityChecker extends BroadcastReceiver {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
-    public static void createDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("No internet connection");
-        builder.setMessage("You need an internet connection to use this app.");
-
-        builder.setPositiveButton("Try again", (dialog, which) -> {
-            if (hasInternetConnection(context)) {
-                Toast.makeText(context, "Internet connection established", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            } else {
-                Toast.makeText(context, "Still no internet connection", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-                createDialog(context);
-            }
-        });
-        builder.setNegativeButton("Exit", (dialog, which) -> {
-            dialog.dismiss();
-            System.exit(0);
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
+    public static void openNoInternetDialog(Context context) {
+        Intent i = new Intent(context, ConnectivityAlert.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-//        Toast.makeText(context, "Network state changed", Toast.LENGTH_SHORT).show();
         if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
-            if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
-                createDialog(context);
+            Toast.makeText(context, "Network state changed", Toast.LENGTH_SHORT).show();
+            if (!hasInternetConnection(context)) {
+                Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show();
+                openNoInternetDialog(context);
             }
         }
     }
