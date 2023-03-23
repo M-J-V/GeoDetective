@@ -38,6 +38,9 @@
             android:name=".CreateQuestActivity"
             android:exported="false" />
         <activity
+            android:name=".ConnectivityAlert"
+            android:exported="false" />
+        <activity
             android:name=".QuestOverviewActivity"
             android:exported="false" />
         <activity
@@ -67,7 +70,8 @@
             android:name=".ConnectivityChecker"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
     </application>
