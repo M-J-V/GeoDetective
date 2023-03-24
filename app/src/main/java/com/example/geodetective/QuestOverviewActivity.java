@@ -13,6 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+
+import java.util.concurrent.TimeUnit;
+
 // TODO: there are still some time-related issues when updating location.
 //  if you press finish quest before the method updateCurrentLocation in onResume has
 //  finished executing, you will get a wrong location of the user.
@@ -90,13 +95,19 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void endQuest() {
-        location.updateCurrentLocation();
+        location.updateCurrentLocation((location) -> endQuestLambda(location));
+    }
 
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+    private void endQuestLambda(Location location) {
 
+        //location.compareToQuest(ActiveQuest.getInstance());
         double questLatitude = ActiveQuest.getInstance().getQuest().getLocation().getLatitude();
         double questLongitude = ActiveQuest.getInstance().getQuest().getLocation().getLongitude();
+
+        Log.d("WOAH", "Q: "+questLongitude);
+        Log.d("WOAH", "Q: "+questLatitude);
+        Log.d("WOAH", ""+location.getLongitude());
+        Log.d("WOAH", ""+location.getLatitude());
 
         if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
             // Stop timer
@@ -158,6 +169,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         // Get ImageView from activity
         ImageView questImage = findViewById(R.id.Quest_Image);
 
@@ -171,7 +183,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
         questName.setText(activeQuestInstance.getQuest().getName());
         questDescription.setText(activeQuestInstance.getQuest().getDescription());
         questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
-        location.updateCurrentLocation();
     }
 
     @Override

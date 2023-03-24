@@ -31,6 +31,8 @@ public class CreateQuestActivity extends AppCompatActivity {
     private EditText questHint;
     private TextView errorMsg;
 
+    private Quest questUpload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,23 +69,12 @@ public class CreateQuestActivity extends AppCompatActivity {
         // Request location permissions
         location.requestPermissions();
 
-        // Get current location
-        //location.updateCurrentLocation();
-
-//        shouldReplaceQuest = getIntent().getExtras().getBoolean("replace");
-
-//        if(shouldReplaceQuest) {
-//            fillInputFields(ActiveQuest.getInstance());
-//        }
-
         submitQuestBtn.setOnClickListener(view -> uploadQuest());
     }
 
     //TODO authenticate that the quest is valid, title not already used, non empty desc
     private void uploadQuest() {
         // update location again
-        location.updateCurrentLocation();
-
         String title = questName.getText().toString();
         String desc = questDescription.getText().toString();
         String hint = questHint.getText().toString();
@@ -109,18 +100,18 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         if(validImageAndDesc) {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
-            Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
+            questUpload = new Quest(title, creator, desc, hint, bitmap, location);
 
-            addQuest(newQuest);
+            location.updateCurrentLocation((location) -> addQuest(location));
         }
 
         errorMsg.setText(err);
     }
 
 
-    // TODO use quest class instead of multiple parameters
-    public void addQuest(Quest newQuest) {
-        db.quests.document(newQuest.getName()).get().addOnCompleteListener(task -> {
+    public void addQuest(Location location) {
+        questUpload.setLocation(location);
+        db.quests.document(questUpload.getName()).get().addOnCompleteListener(task -> {
             String err = "";
             if (task.isSuccessful()) {
                 DocumentSnapshot User = task.getResult();
@@ -129,7 +120,7 @@ public class CreateQuestActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "Starting upload", Toast.LENGTH_SHORT).show();
 
-                    db.createNewQuest(newQuest,getApplicationContext());
+                    db.createNewQuest(questUpload,getApplicationContext());
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 }
             } else {
@@ -138,23 +129,6 @@ public class CreateQuestActivity extends AppCompatActivity {
             errorMsg.setText(err);
         });
     }
-
-//    private void replaceQuest(Quest previousQuest, Quest newQuest) {
-//        db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                    byte[] data = baos.toByteArray();
-//
-//                    db.updateQuestListAndCreate(previousQuest.getName(), newQuest.getName(), newQuest.getDescription(), newQuest.getHint(), ActiveUser.getInstance().getUsername(), getApplicationContext() , data, location, errorMsg);
-//
-//                    ActiveQuest.getInstance().setQuest(newQuest);
-//
-//                })
-//                .addOnFailureListener(e -> {
-//                    String Msg = "Error when removing old Quest";
-//                    errorMsg.setText(Msg);
-//                });
-//    }
 
     // Get image from camera or gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

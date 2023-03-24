@@ -71,7 +71,7 @@ public class EditQuestActivity extends AppCompatActivity {
         location.requestPermissions();
 
         // Get current location
-        location.updateCurrentLocation();
+        //location.updateCurrentLocation();
 
 
         fillInputFields(ActiveQuest.getInstance());

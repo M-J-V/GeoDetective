@@ -21,13 +21,15 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
+interface LocFunction {
+    void run(Location location);
+}
 public class Location {
     public static final int PERMISSIONS_REQUEST = 1;
     final LocationManager manager;
     private Activity activity;
     private double latitude;
     private double longitude;
-
     public Location(double latitude, double longitude, @NonNull Activity activity) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -117,7 +119,7 @@ public class Location {
     }
 
     @SuppressLint("MissingPermission")
-    public void updateCurrentLocation() throws IllegalStateException {
+    public void updateCurrentLocation(LocFunction func) throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
             throw new IllegalStateException("Activity is not set");
@@ -125,6 +127,7 @@ public class Location {
 
         //Check location services
         checkLocationServices();
+
 
         //Create location client
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
@@ -146,6 +149,7 @@ public class Location {
             //Set longitude and latitude
             setLongitude(location.getLongitude());
             setLatitude(location.getLatitude());
+            func.run(this);
         });
     }
 
@@ -188,4 +192,5 @@ public class Location {
         dialog.cancel();
         activity.finish();
     }
+
 }
