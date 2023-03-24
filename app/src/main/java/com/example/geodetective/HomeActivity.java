@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
     questImages images = questImages.getInstance();
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class HomeActivity extends AppCompatActivity {
         // Get Text from activity
         TextView errorTxt1 = findViewById(R.id.ErrorTextHome1);
         TextView errorTxt2 = findViewById(R.id.ErrorTextHome2);
+
+        pd = new ProgressDialog(this);
 
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
@@ -75,6 +79,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getQuests() {
+        pd.setTitle("Loading Quests!");
+        pd.show();
         db.questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
@@ -132,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
         images.setImages(questImages);
         questList.putStringArrayListExtra("titles", titles);
         questList.putStringArrayListExtra("creators", creators);
+        pd.dismiss();
         startActivity(questList);
     }
 

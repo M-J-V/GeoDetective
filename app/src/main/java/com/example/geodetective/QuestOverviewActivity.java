@@ -1,6 +1,7 @@
 package com.example.geodetective;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -95,7 +96,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void endQuest() {
-        location.updateCurrentLocation((location) -> endQuestLambda(location));
+        location.updateCurrentLocation((location) -> endQuestLambda(location),this);
     }
 
     private void endQuestLambda(Location location) {
@@ -103,11 +104,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
         //location.compareToQuest(ActiveQuest.getInstance());
         double questLatitude = ActiveQuest.getInstance().getQuest().getLocation().getLatitude();
         double questLongitude = ActiveQuest.getInstance().getQuest().getLocation().getLongitude();
-
-        Log.d("WOAH", "Q: "+questLongitude);
-        Log.d("WOAH", "Q: "+questLatitude);
-        Log.d("WOAH", ""+location.getLongitude());
-        Log.d("WOAH", ""+location.getLatitude());
 
         if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
             // Stop timer

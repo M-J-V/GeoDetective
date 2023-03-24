@@ -102,7 +102,7 @@ public class CreateQuestActivity extends AppCompatActivity {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             questUpload = new Quest(title, creator, desc, hint, bitmap, location);
 
-            location.updateCurrentLocation((location) -> addQuest(location));
+            location.updateCurrentLocation((location) -> addQuest(location), this);
         }
 
         errorMsg.setText(err);
