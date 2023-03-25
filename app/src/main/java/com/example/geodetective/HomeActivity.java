@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
-    questImages images = questImages.getInstance();
+    QuestImages images = QuestImages.getInstance();
     ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +112,16 @@ public class HomeActivity extends AppCompatActivity {
 
     // The function uses recursion rather than a for loop to ensure there are no timing issues since get() is asynchronous
     private void getImages(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages, int pos) {
-        final long ONE_MEGABYTE = 1024*1024;
+        final long ONE_MEGABYTE = 1024*1024*10;
         int numQuests = titles.size();
 
         StorageReference storeRef = db.storage.child("questImages").child(titles.get(pos));
         storeRef.getBytes(ONE_MEGABYTE).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 byte[] bytes = task.getResult();
+
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Log.d("WOAH", pos + " bytes: " + image.getAllocationByteCount() );
                 questImages.add(image);
                 if ( pos == numQuests - 1 ) {
                     loadQuestListActivity(titles, creators, questImages);

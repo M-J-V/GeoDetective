@@ -22,17 +22,39 @@ public class ListOfQuests extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveQuest activeQuest = ActiveQuest.getInstance();
-    questImages imgs = questImages.getInstance();
+    QuestImages imgs = QuestImages.getInstance();
     ListView listView;
     Activity activity = this;
+    int positionPressed = -1;
+    ArrayList<Bitmap> questImages;
+    ArrayList<String> titles;
+    ArrayList<String> creators;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (positionPressed > -1) {
+            ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+            questImages.set(positionPressed, activeQuestInstance.getQuest().getImage());
+            titles.set(positionPressed, activeQuestInstance.getQuest().getName());
+            creators.set(positionPressed, activeQuestInstance.getQuest().getCreator());
+            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);
+            listView.setAdapter(customBaseAdapter);
+            activeQuestInstance.disconnectActiveQuest();
+            positionPressed = -1;
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_quests);
         listView = (ListView) findViewById(R.id.customListView);
-        ArrayList<Bitmap> questImages = imgs.getImages();
-        ArrayList<String> titles = getIntent().getStringArrayListExtra("titles");
-        ArrayList<String> creators = getIntent().getStringArrayListExtra("creators");
+        questImages = imgs.getImages();
+        titles = getIntent().getStringArrayListExtra("titles");
+        creators = getIntent().getStringArrayListExtra("creators");
         CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);
 
         listView.setAdapter(customBaseAdapter);
@@ -45,6 +67,7 @@ public class ListOfQuests extends AppCompatActivity {
                 String questName = titles.get(position);
                 String creator = creators.get(position);
                 Bitmap imageBitmap = questImages.get(position);
+                positionPressed = position;
 
 
                 // Remaining info comes from quest in database

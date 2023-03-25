@@ -126,7 +126,13 @@ public class DbConnection {
 
         // Upload image to storage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        Log.d("WOAH", "size is " + newQuest.getImage().getByteCount());
+        if (newQuest.getImage().getByteCount() > 190512) {
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        } else {
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        }
+
         byte[] data = baos.toByteArray();
         uploadBitmap(newQuest.getName(), data, context);
 

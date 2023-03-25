@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
@@ -38,7 +40,7 @@ public class EditQuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_quest);
 
-        location = new Location(this);
+        location = ActiveQuest.getInstance().getQuest().getLocation();
         imageInput = new ImageInput(this);
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
@@ -68,7 +70,7 @@ public class EditQuestActivity extends AppCompatActivity {
         chooseImageBtn.setOnClickListener(v -> imageInput.selectImage());
 
         // Request location permissions
-        location.requestPermissions();
+        //location.requestPermissions();
 
         // Get current location
         //location.updateCurrentLocation();
@@ -76,7 +78,7 @@ public class EditQuestActivity extends AppCompatActivity {
 
         fillInputFields(ActiveQuest.getInstance());
 
-        submitQuestBtn.setOnClickListener(view -> uploadQuest());
+        submitQuestBtn.setOnClickListener(view -> checkAndUploadQuest());
         deleteBtn.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Are you sure you want to delete this Quest?");
@@ -91,6 +93,26 @@ public class EditQuestActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
+    private void checkAndUploadQuest() {
+        String err = "";
+        db.quests.document(questName.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String err = "";
+                String inputtedName = questName.getText().toString();
+                String previousName = ActiveQuest.getInstance().getQuest().getName();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot Quest = task.getResult();
+                    if (inputtedName.compareTo(previousName) == 0 || !Quest.exists()) {
+                        uploadQuest();
+                    } else {
+                        errorMsg.setText("A quest with this name already exists.");
+                    }
+                }
+            }
+        });
+    }
+// edit -> change things -> save -> overview -> list -> overview of changed
     //TODO authenticate that the quest is valid, title not already used, non empty desc
     private void uploadQuest() {
         String title = questName.getText().toString();
@@ -99,6 +121,7 @@ public class EditQuestActivity extends AppCompatActivity {
         String creator = user.getUsername();
 
         String err = "";
+
         boolean validImageAndDesc = false;
         boolean emptyStrings = desc.equals("") || title.equals("");
 

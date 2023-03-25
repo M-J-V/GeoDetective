@@ -4,17 +4,17 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
-public class questImages {
+public class QuestImages {
 
-    private static questImages instance = null;
+    private static QuestImages instance = null;
 
     private static ArrayList<Bitmap> images = null;
 
-    private questImages(){ }
+    private QuestImages(){ }
 
-    public static questImages getInstance() {
+    public static QuestImages getInstance() {
         if (instance == null) {
-            instance = new questImages();
+            instance = new QuestImages();
         }
         return instance;
     }

@@ -50,6 +50,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
         location = new Location(this);
 
+
+
         // Update UI
         questName.setText(activeQuestInstance.getQuest().getName());
         questDescription.setText(activeQuestInstance.getQuest().getDescription());
@@ -72,7 +74,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
             if (timer != null) {
                 timer.stop();
             }
-            activeQuestInstance.disconnectActiveQuest();
+            //activeQuestInstance.disconnectActiveQuest();
             finish();
         });
 
@@ -183,9 +185,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        //ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+        //activeQuestInstance.setQuest(null);
         super.onDestroy();
-        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-        activeQuestInstance.setQuest(null);
     }
 
     @Override
