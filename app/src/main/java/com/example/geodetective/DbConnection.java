@@ -128,9 +128,10 @@ public class DbConnection {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Log.d("WOAH", "size is " + newQuest.getImage().getByteCount());
         if (newQuest.getImage().getByteCount() > 190512) {
-            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            Log.d("WOAH", "too many bytes brother");
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 1, baos);
         } else {
-            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 100, baos);
         }
 
         byte[] data = baos.toByteArray();
