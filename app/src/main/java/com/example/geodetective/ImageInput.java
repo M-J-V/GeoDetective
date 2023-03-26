@@ -1,9 +1,7 @@
 package com.example.geodetective;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -25,10 +23,10 @@ public class ImageInput {
     }
 
     private void askPermissions(boolean triedToUseResourceWithoutPermission) {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        //TODO Not both permissions should have to be granted, but is required now!
+        UserPreferences preferences = UserPreferences.getInstance(activity);
 
-        boolean permissionsAsked = sharedPref.contains("cameraPermissions") && sharedPref.contains("galleryPermissions");
+        boolean permissionsAsked = preferences.contains("cameraPermissions") && preferences.contains("galleryPermissions");
         if(permissionsAsked && !triedToUseResourceWithoutPermission)
             return;
 
@@ -38,24 +36,20 @@ public class ImageInput {
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Give both gallery and camera permissions")) {
                 //Give both permissions
-                editor.putBoolean("cameraPermissions", true);
-                editor.putBoolean("galleryPermissions", true);
-                editor.apply();
+                preferences.putPreference("cameraPermissions", true);
+                preferences.putPreference("galleryPermissions", true);
             } else if (options[item].equals("Give camera permissions")) {
                 //Give camera permission
-                editor.putBoolean("cameraPermissions", true);
-                editor.putBoolean("galleryPermissions", false);
-                editor.apply();
+                preferences.putPreference("cameraPermissions", true);
+                preferences.putPreference("galleryPermissions", false);
             } else if (options[item].equals("Give gallery permissions")) {
                 //Give gallery permission
-                editor.putBoolean("cameraPermissions", false);
-                editor.putBoolean("galleryPermissions", true);
-                editor.apply();
+                preferences.putPreference("cameraPermissions", false);
+                preferences.putPreference("galleryPermissions", true);
             } else if (options[item].equals("Don't give permissions")) {
                 //Don't give permissions
-                editor.putBoolean("cameraPermissions", false);
-                editor.putBoolean("galleryPermissions", false);
-                editor.apply();
+                preferences.putPreference("cameraPermissions", false);
+                preferences.putPreference("galleryPermissions", false);
             }
         });
         builder.show();
@@ -63,7 +57,7 @@ public class ImageInput {
 
     // Select image from gallery or take a photo.
     public void selectImage() {
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        UserPreferences preferences = UserPreferences.getInstance(activity);
 
         AlertDialog.Builder permissionsBuilder = new AlertDialog.Builder(activity);
         permissionsBuilder.setTitle("Permissions missing");
@@ -76,16 +70,18 @@ public class ImageInput {
         builder.setTitle("Choose picture!");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                if(!sharedPref.getBoolean("cameraPermissions",false)) {
+                if(!preferences.getBoolean("cameraPermissions", false)) {
                     Toast.makeText(activity, "You need to give permissions to access your camera to add images to your quests.", Toast.LENGTH_LONG).show();
                     permissionsBuilder.show();
                     return;
+                }else{
+                    Toast.makeText(activity, ""+preferences.getBoolean("cameraPermissions", false), Toast.LENGTH_LONG).show();
                 }
 
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 activity.startActivityForResult(cameraIntent, CAMERA_REQUEST);
             } else if (options[item].equals("Choose from Gallery")) {
-                if(!sharedPref.getBoolean("galleryPermissions",false)) {
+                if(!preferences.getBoolean("galleryPermissions",false)) {
                     Toast.makeText(activity, "You need to give permissions to access your gallery to add images to your quests.", Toast.LENGTH_LONG).show();
                     permissionsBuilder.show();
                     return;

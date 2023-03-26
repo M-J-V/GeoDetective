@@ -44,6 +44,9 @@
 <!--    <string name="audiQuest">Audi-Quest</string>-->
 <!--    <string name="atlasQuest">Aurora-Quest</string>-->
     <string name="delete">Delete Profile</string>
+    <string name="cameraPermissions">Camera permission</string>
+    <string name="galleryPermissions">Gallery permission</string>
+    <string name="SwitchString">Switch</string>
 
 
 </resources>

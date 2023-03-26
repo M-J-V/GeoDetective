@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/profInfo"
+        android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/usernameTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,8 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/username"
-        android:textSize="16sp"
         android:textColor="@color/black"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/trustedTxt"
         app:layout_constraintEnd_toStartOf="@+id/usernameInfo"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,13 +63,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/blank"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/usernameTxt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/usernameTxt"
-        app:layout_constraintStart_toEndOf="@id/usernameTxt"/>
+        app:layout_constraintStart_toEndOf="@id/usernameTxt"
+        app:layout_constraintTop_toTopOf="@+id/usernameTxt"/>
 
     <Button
         android:id="@+id/button_edit_profile"
@@ -138,5 +138,43 @@
         app:layout_constraintStart_toStartOf="@+id/button_permission"
         app:layout_constraintTop_toBottomOf="@+id/button_permission" />
 
+    <TextView
+        android:id="@+id/cameraPermissions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40sp"
+        android:text="@string/cameraPermissions"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/galleryPermissions"
+        app:layout_constraintStart_toStartOf="@id/button_permission"
+        app:layout_constraintTop_toBottomOf="@+id/Text"/>
+    <TextView
+        android:id="@+id/galleryPermissions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/galleryPermissions"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/button_permission"
+        app:layout_constraintStart_toEndOf="@+id/cameraPermissions"
+        app:layout_constraintTop_toBottomOf="@+id/Text"/>
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/cameraSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40sp"
+        android:text="@string/SwitchString"
+        app:layout_constraintEnd_toStartOf="@id/gallerySwitch"
+        app:layout_constraintStart_toStartOf="@+id/cameraPermissions"
+        app:layout_constraintTop_toBottomOf="@+id/cameraPermissions"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/gallerySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40sp"
+        android:text="@string/SwitchString"
+        app:layout_constraintEnd_toEndOf="@id/galleryPermissions"
+        app:layout_constraintStart_toEndOf="@+id/cameraSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/galleryPermissions"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

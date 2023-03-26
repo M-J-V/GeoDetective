@@ -1,32 +1,31 @@
 package com.example.geodetective;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
     ActiveUser user = ActiveUser.getInstance();
     DbConnection db = DbConnection.getInstance();
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +37,15 @@ public class ProfileActivity extends AppCompatActivity {
         Button delete_button = findViewById(R.id.button_delete);
         Button request_button = findViewById(R.id.button_permission);
         ImageButton returnBtn = findViewById(R.id.BackBtn);
+
+        // Get switches from activity
+        SwitchCompat cameraSwitch = findViewById(R.id.cameraSwitch);
+        SwitchCompat gallerySwitch = findViewById(R.id.gallerySwitch);
+
+        UserPreferences preferences = UserPreferences.getInstance(this);
+
+        cameraSwitch.setChecked(preferences.getBoolean("cameraPermissions", false));
+        gallerySwitch.setChecked(preferences.getBoolean("galleryPermissions", false));
 
         //get user details textView
         TextView usernameTxt = findViewById(R.id.usernameInfo);
@@ -94,44 +102,55 @@ public class ProfileActivity extends AppCompatActivity {
             user.disconnectUser();
         });
 
+        cameraSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.putPreference("cameraPermissions", isChecked);
+
+            Toast.makeText(this, "Changed camera permissions to " + preferences.getBoolean("cameraPermissions", false), Toast.LENGTH_SHORT).show();
+        });
+
+        gallerySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.putPreference("galleryPermissions", isChecked);
+
+            Toast.makeText(this, "Changed gallery permissions to "+preferences.getBoolean("galleryPermissions", false), Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     private void getAttempts() {
         Query userAttempts = db.attempts.whereEqualTo("Username", user.getUsername());
-        ArrayList<String> titles = new ArrayList<String>();
-        ArrayList<String> times = new ArrayList<String>();
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<String> times = new ArrayList<>();
         // Boolean Arraylists don't play nice being passed through intents
-        ArrayList<Integer> outcomes = new ArrayList<Integer>();
-        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        titles.add(doc.get("Quest").toString());
+        ArrayList<Integer> outcomes = new ArrayList<>();
+        userAttempts.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot doc : task.getResult()) {
+                    titles.add(Objects.requireNonNull(doc.get("Quest")).toString());
 
-                        times.add(formatDate(doc.get("Time Completed").toString()));
+                    times.add(formatDate(Objects.requireNonNull(doc.get("Time Completed")).toString()));
 
-                        if((Boolean)doc.get("Success")) {
-                            outcomes.add(1);
-                        } else {
-                            outcomes.add(0);
-                        }
+                    //noinspection ConstantConditions
+                    if((Boolean)doc.get("Success")) {
+                        outcomes.add(1);
+                    } else {
+                        outcomes.add(0);
                     }
-                    loadHistoryActivity(titles,times,outcomes);
                 }
+                loadHistoryActivity(titles,times,outcomes);
             }
         });
     }
 
     private String formatDate(String strDate) {
         Date date;
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        SimpleDateFormat outputDate = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        SimpleDateFormat outputDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         try {
             date = df.parse(strDate);
         } catch (ParseException e) {
             throw new RuntimeException("Failed to parse date: ", e);
         }
+        assert date != null;
         return outputDate.format(date);
     }
 
