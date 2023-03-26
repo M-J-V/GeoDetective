@@ -21,13 +21,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         //Check connectivity and register a network state change listener.
         if (!ConnectivityChecker.hasInternetConnection(this))
             ConnectivityChecker.openNoInternetDialog(this);
+        if (!ConnectivityChecker.hasGPSConnection(this))
+            ConnectivityChecker.openNoGPSDialog(this);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.location.PROVIDERS_CHANGED");
         registerReceiver(connectivityChecker, filter);
 
         // Get buttons from activity

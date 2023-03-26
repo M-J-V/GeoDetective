@@ -17,9 +17,6 @@
         android:theme="@style/Theme.GeoDetective"
         tools:targetApi="31">
         <activity
-            android:name=".CustomHistoryActivity"
-            android:exported="false" />
-        <activity
             android:name=".HistoryActivity"
             android:exported="false" />
         <activity
@@ -38,7 +35,10 @@
             android:name=".CreateQuestActivity"
             android:exported="false" />
         <activity
-            android:name=".ConnectivityAlert"
+            android:name=".InternetConnectivityAlert"
+            android:exported="false" />
+        <activity
+            android:name=".GPSConnectivityAlert"
             android:exported="false" />
         <activity
             android:name=".QuestOverviewActivity"
@@ -72,6 +72,8 @@
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
+                <action android:name="android.location.PROVIDERS_CHANGED"
+                    tools:ignore="BatteryLife"/>
             </intent-filter>
         </receiver>
     </application>

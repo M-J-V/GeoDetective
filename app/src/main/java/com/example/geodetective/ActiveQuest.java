@@ -25,4 +25,9 @@ public class ActiveQuest {
         quest = setterQuest;
     }
 
+    public void disconnectActiveQuest() {
+        instance = null;
+        quest = null;
+    }
+
 }

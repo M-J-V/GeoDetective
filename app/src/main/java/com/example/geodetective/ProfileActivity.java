@@ -1,6 +1,10 @@
 package com.example.geodetective;
 
 import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -92,14 +96,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         delete_button.setOnClickListener(v -> {
-            // delete current user
-            db.deleteUserAndQuests(user.getUsername(), user.getPassword());
 
-            // Go back to login page
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to delete your account?");
+            builder.setPositiveButton("Yes", (dialog, which) -> deleteUser());
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 
-            // remove current active user
-            user.disconnectUser();
+        });
+
+    }
+
+    private void deleteUser() {
+        // delete current user
+        db.deleteUserAndQuests(user.getUsername(), user.getPassword());
+
+        // Go back to login page
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
+        // remove current active user
+        user.disconnectUser();
         });
 
         cameraSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {

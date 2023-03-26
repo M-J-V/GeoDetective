@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -26,7 +28,8 @@ public class HomeActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
-    questImages images = questImages.getInstance();
+    QuestImages images = QuestImages.getInstance();
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
         // Get Text from activity
         TextView errorTxt1 = findViewById(R.id.ErrorTextHome1);
         TextView errorTxt2 = findViewById(R.id.ErrorTextHome2);
+
+        pd = new ProgressDialog(this);
 
         //Set on click listeners
         createQuestBtn.setOnClickListener(v -> {
@@ -75,6 +80,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getQuests() {
+        pd.setTitle("Loading Quests!");
+        pd.show();
         db.questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
@@ -92,7 +99,6 @@ public class HomeActivity extends AppCompatActivity {
         db.quests.document(titles.get(pos)).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
-                Log.d("DEBUG", titles.get(pos).toString());
                 String creatorUser = Objects.requireNonNull(doc.get("Creator")).toString();
                 creators.add(creatorUser);
                 if ( pos == numQuests - 1 ) {
@@ -107,14 +113,16 @@ public class HomeActivity extends AppCompatActivity {
 
     // The function uses recursion rather than a for loop to ensure there are no timing issues since get() is asynchronous
     private void getImages(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages, int pos) {
-        final long ONE_MEGABYTE = 1024*1024;
+        final long ONE_MEGABYTE = 1024*1024*10;
         int numQuests = titles.size();
 
         StorageReference storeRef = db.storage.child("questImages").child(titles.get(pos));
         storeRef.getBytes(ONE_MEGABYTE).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 byte[] bytes = task.getResult();
+
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Log.d("WOAH", pos + " bytes: " + image.getAllocationByteCount() + " for " + titles.get(pos));
                 questImages.add(image);
                 if ( pos == numQuests - 1 ) {
                     loadQuestListActivity(titles, creators, questImages);
@@ -133,6 +141,7 @@ public class HomeActivity extends AppCompatActivity {
         images.setImages(questImages);
         questList.putStringArrayListExtra("titles", titles);
         questList.putStringArrayListExtra("creators", creators);
+        pd.dismiss();
         startActivity(questList);
     }
 

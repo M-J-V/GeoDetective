@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".HomeActivity">
 
         <ImageView
@@ -37,10 +37,8 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/quest_name_input"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Quest_Image"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/Quest_Image" />
 
         <EditText
             android:id="@+id/quest_name_input"
@@ -120,7 +118,6 @@
             android:id="@+id/errorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/blank"
             android:textColor="@color/red"
             app:layout_constraintEnd_toEndOf="@+id/quest_hint_input"
             app:layout_constraintStart_toStartOf="@+id/quest_hint_input"

@@ -15,7 +15,7 @@
     <string name="submitQuest">Submit Quest</string>
     <string name="saveQuest">Save Quest</string>
     <string name="questDescription">Quest Description</string>
-    <string name="questHint">Quest Hint (optional)</string>
+    <string name="questHint">Quest Hint (Optional)</string>
     <string name="Back">Back</string>
     <string name="myText">myText</string>
     <string name="changeUsername">Change Username</string>
@@ -39,11 +39,13 @@
     <string name="editProf">Edit Profile</string>
     <string name="history">History</string>
     <string name="permission">Request Create Permission</string>
-
-    <!--    <string name="metaQuest">Meta-Quest</string>-->
-<!--    <string name="audiQuest">Audi-Quest</string>-->
-<!--    <string name="atlasQuest">Aurora-Quest</string>-->
     <string name="delete">Delete Profile</string>
+    <string name="editChooseQuest">Choose New Image</string>
+    <string name="editQuestName">Edit Quest Name</string>
+    <string name="editSubmitQuest">Submit Edited Quest</string>
+    <string name="editQuestDescription">Edit Quest Description</string>
+    <string name="editQuestHint">Edit Quest Hint</string>
+    <string name="deleteQuest">Delete Quest</string>
     <string name="cameraPermissions">Camera permission</string>
     <string name="galleryPermissions">Gallery permission</string>
     <string name="SwitchString">Switch</string>
