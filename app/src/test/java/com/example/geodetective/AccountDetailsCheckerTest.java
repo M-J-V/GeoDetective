@@ -138,11 +138,11 @@ public class AccountDetailsCheckerTest extends TestCase {
         String username = "alex21";
         String password = "abcdefghijk1@";
         String passwordAgain = "abcdefghijk1@";
-//        try {
-//            checker.checkDetails(username, password, passwordAgain);
-//            fail("Exception not thrown");
-//        } catch (IllegalArgumentException e) {
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            checker.checkDetails(username, password, passwordAgain);
+            fail("Exception not thrown");
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
