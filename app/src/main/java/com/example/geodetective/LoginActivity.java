@@ -43,11 +43,14 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener(v -> {
             // Start home activity
-            // User successfully logs in
-            user.setUsername("Gijs");
-            user.setPassword("Yea");
-            user.setTrusted(true);
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            String username = usernameWidget.getText().toString();
+            String password = passwordWidget.getText().toString();
+
+            try {
+                loginUser(username,password,errorText);
+            } catch (Throwable e) {
+                errorText.setText(e.getMessage());
+            }
 
         });
 
