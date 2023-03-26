@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -121,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
                 byte[] bytes = task.getResult();
 
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                Log.d("WOAH", pos + " bytes: " + image.getAllocationByteCount() );
+                Log.d("WOAH", pos + " bytes: " + image.getAllocationByteCount() + " for " + titles.get(pos));
                 questImages.add(image);
                 if ( pos == numQuests - 1 ) {
                     loadQuestListActivity(titles, creators, questImages);

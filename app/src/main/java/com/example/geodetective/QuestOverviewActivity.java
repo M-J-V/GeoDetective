@@ -60,7 +60,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
         editButton.setOnClickListener(v -> {
             String nameOfUser = user.getUsername();
             String nameOfCreator = activeQuestInstance.getQuest().getCreator();
-            if(nameOfCreator.compareTo(nameOfUser) == 0) {
+            if(userIsAllowedToEdit(nameOfUser, nameOfCreator)) {
                 startActivity((new Intent(getApplicationContext(), EditQuestActivity.class)));
             }
         });
@@ -94,6 +94,11 @@ public class QuestOverviewActivity extends AppCompatActivity {
             builder.show();
         });
 
+    }
+
+    private boolean userIsAllowedToEdit(String nameOfUser, String nameOfCreator) {
+        return ActiveUser.getInstance().getTrusted() ||
+                nameOfCreator.compareTo(nameOfUser) == 0;
     }
 
     @SuppressLint("SetTextI18n")
