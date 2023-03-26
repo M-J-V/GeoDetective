@@ -1,10 +1,6 @@
 package com.example.geodetective;
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -104,19 +101,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
-    }
-
-    private void deleteUser() {
-        // delete current user
-        db.deleteUserAndQuests(user.getUsername(), user.getPassword());
-
-        // Go back to login page
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
-        // remove current active user
-        user.disconnectUser();
-        });
-
         cameraSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             preferences.putPreference("cameraPermissions", isChecked);
 
@@ -129,6 +113,17 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Changed gallery permissions to "+preferences.getBoolean("galleryPermissions", false), Toast.LENGTH_SHORT).show();
         });
 
+    }
+
+    private void deleteUser() {
+        // delete current user
+        db.deleteUserAndQuests(user.getUsername(), user.getPassword());
+
+        // Go back to login page
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
+        // remove current active user
+        user.disconnectUser();
     }
 
     private void getAttempts() {

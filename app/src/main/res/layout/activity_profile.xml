@@ -62,9 +62,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/blank"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/usernameTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/usernameTxt"
@@ -141,21 +141,18 @@
         android:id="@+id/cameraPermissions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40sp"
         android:text="@string/cameraPermissions"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/galleryPermissions"
-        app:layout_constraintStart_toStartOf="@id/button_permission"
-        app:layout_constraintTop_toBottomOf="@+id/Text"/>
+        app:layout_constraintEnd_toStartOf="@+id/button_delete"
+        app:layout_constraintTop_toBottomOf="@+id/button_permission"/>
     <TextView
         android:id="@+id/galleryPermissions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/galleryPermissions"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@id/button_permission"
-        app:layout_constraintStart_toEndOf="@+id/cameraPermissions"
-        app:layout_constraintTop_toBottomOf="@+id/Text"/>
+        app:layout_constraintStart_toEndOf="@+id/button_delete"
+        app:layout_constraintTop_toBottomOf="@+id/button_permission"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/cameraSwitch"
@@ -163,7 +160,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40sp"
         android:text="@string/SwitchString"
-        app:layout_constraintEnd_toStartOf="@id/gallerySwitch"
+        app:layout_constraintEnd_toStartOf="@id/button_delete"
         app:layout_constraintStart_toStartOf="@+id/cameraPermissions"
         app:layout_constraintTop_toBottomOf="@+id/cameraPermissions"/>
 
@@ -174,6 +171,6 @@
         android:layout_marginStart="40sp"
         android:text="@string/SwitchString"
         app:layout_constraintEnd_toEndOf="@id/galleryPermissions"
-        app:layout_constraintStart_toEndOf="@+id/cameraSwitch"
+        app:layout_constraintStart_toEndOf="@+id/button_delete"
         app:layout_constraintTop_toBottomOf="@+id/galleryPermissions"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
