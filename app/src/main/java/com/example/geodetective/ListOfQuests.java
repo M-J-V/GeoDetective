@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -58,6 +59,13 @@ public class ListOfQuests extends AppCompatActivity {
         CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);
 
         listView.setAdapter(customBaseAdapter);
+
+        ImageButton backBtn = findViewById(R.id.backimagebutton);
+
+        backBtn.setOnClickListener(v -> {
+            // Start profile activity
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
