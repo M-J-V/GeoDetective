@@ -143,34 +143,39 @@
         android:layout_height="wrap_content"
         android:text="@string/cameraPermissions"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/button_delete"
-        app:layout_constraintTop_toBottomOf="@+id/button_permission"/>
+        app:layout_constraintEnd_toEndOf="@+id/trustedTxt"
+        app:layout_constraintStart_toStartOf="@+id/trustedTxt"
+        app:layout_constraintTop_toBottomOf="@+id/trustedTxt"
+        app:layout_constraintBottom_toTopOf="@+id/button_history"/>
+
     <TextView
         android:id="@+id/galleryPermissions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/galleryPermissions"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/button_delete"
-        app:layout_constraintTop_toBottomOf="@+id/button_permission"/>
+        app:layout_constraintBottom_toTopOf="@+id/button_history"
+        app:layout_constraintEnd_toEndOf="@+id/cameraPermissions"
+        app:layout_constraintStart_toStartOf="@+id/cameraPermissions"
+        app:layout_constraintTop_toBottomOf="@+id/cameraPermissions" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/cameraSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40sp"
         android:text="@string/SwitchString"
-        app:layout_constraintEnd_toStartOf="@id/button_delete"
-        app:layout_constraintStart_toStartOf="@+id/cameraPermissions"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPermissions"/>
+        app:layout_constraintBottom_toBottomOf="@+id/cameraPermissions"
+        app:layout_constraintEnd_toEndOf="@+id/trustedInfo"
+        app:layout_constraintStart_toStartOf="@+id/trustedInfo"
+        app:layout_constraintTop_toTopOf="@+id/cameraPermissions" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/gallerySwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40sp"
         android:text="@string/SwitchString"
-        app:layout_constraintEnd_toEndOf="@id/galleryPermissions"
-        app:layout_constraintStart_toEndOf="@+id/button_delete"
-        app:layout_constraintTop_toBottomOf="@+id/galleryPermissions"/>
+        app:layout_constraintBottom_toBottomOf="@+id/galleryPermissions"
+        app:layout_constraintEnd_toEndOf="@+id/cameraSwitch"
+        app:layout_constraintStart_toStartOf="@+id/cameraSwitch"
+        app:layout_constraintTop_toTopOf="@+id/galleryPermissionsPermissions" />
 </androidx.constraintlayout.widget.ConstraintLayout>

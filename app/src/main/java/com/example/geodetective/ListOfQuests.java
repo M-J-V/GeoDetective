@@ -64,7 +64,7 @@ public class ListOfQuests extends AppCompatActivity {
 
         backBtn.setOnClickListener(v -> {
             // Start profile activity
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

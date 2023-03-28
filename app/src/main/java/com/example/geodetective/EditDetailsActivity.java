@@ -139,7 +139,7 @@ public class EditDetailsActivity extends AppCompatActivity {
                 db.createNewUser(newUsername, newPassword);
                 user.setUsername(newUsername);
                 user.setPassword(newPassword);
-                msg.setText("Profile updated succesfully");
+                msg.setText("Profile updated successfully");
                 msg.setTextColor(Color.BLACK);
 
             }
