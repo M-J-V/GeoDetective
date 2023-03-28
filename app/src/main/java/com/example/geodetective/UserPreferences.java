@@ -19,15 +19,15 @@ import java.io.IOException;
 public class UserPreferences {
 
     private static UserPreferences instance = null;
-    private final File preferences;
+    private final File preferencesFile;
     private JSONObject jsonObject = null;
 
     private UserPreferences(@NonNull Context context) {
-        preferences = new File(context.getFilesDir(), "preferences.json");
+        preferencesFile = new File(context.getFilesDir(), "preferences.json");
 
         try {
-            if(preferences.createNewFile()) {
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferences));
+            if(preferencesFile.createNewFile()) {
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(preferencesFile));
                 bufferedWriter.write(getJSON().toString());
                 bufferedWriter.close();
             }
@@ -53,11 +53,16 @@ public class UserPreferences {
         return instance;
     }
 
-    public Object getPreference(String key) {
-        try {
-            return getJSON().get(key);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+    public Object getPreference(String preference) {
+        JSONObject preferences = getJSON();
+        if(preferences.has(preference)){
+            try {
+                return preferences.get(preference);
+            } catch (JSONException e) {
+                return null;
+            }
+        } else {
+            return null;
         }
     }
 
@@ -94,7 +99,7 @@ public class UserPreferences {
     private String readFile() {
         FileReader fileReader;
         try {
-            fileReader = new FileReader(preferences);
+            fileReader = new FileReader(preferencesFile);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             StringBuilder stringBuilder = new StringBuilder();
             String line = bufferedReader.readLine();
@@ -110,7 +115,7 @@ public class UserPreferences {
     }
 
     private void writeJSONtoPreferences() throws IOException {
-        FileWriter fileWriter = new FileWriter(preferences);
+        FileWriter fileWriter = new FileWriter(preferencesFile);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(getJSON().toString());
         bufferedWriter.close();
@@ -119,7 +124,7 @@ public class UserPreferences {
 
     private JSONObject getJSON() {
         if(jsonObject == null) {
-            if(preferences.exists()) {
+            if(preferencesFile.exists()) {
                 try {
                     jsonObject = new JSONObject(readFile());
                 } catch (JSONException e) {
