@@ -136,7 +136,7 @@ public class EditDetailsActivity extends AppCompatActivity {
         db.users.document(deletedUser).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                db.createNewUser(newUsername, newPassword);
+                db.createNewUser(newUsername, newPassword, user.getTrusted());
                 user.setUsername(newUsername);
                 user.setPassword(newPassword);
                 msg.setText("Profile updated successfully");

@@ -91,12 +91,12 @@ public class DbConnection {
         attempts.document(username+"_"+quest+"_"+timeCompleted).set(attempt);
     }
 
-    public void createNewUser(String username, String password) {
+    public void createNewUser(String username, String password, boolean trusted) {
         // Create a new user with username and password
         Map<String, Object> user = new HashMap<>();
         user.put("Username", username);
         user.put("Password", password);
-        user.put("Trusted", false);
+        user.put("Trusted", trusted);
 
         // Add new user to database
         users.document(username).set(user);

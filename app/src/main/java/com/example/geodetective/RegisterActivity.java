@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (User.exists()) {
                         errorMsg = "Username already in use";
                     } else {
-                        db.createNewUser(username, password);
+                        db.createNewUser(username, password, false);
                         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                     }
                 } else {
