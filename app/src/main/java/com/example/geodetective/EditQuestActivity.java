@@ -71,10 +71,19 @@ public class EditQuestActivity extends AppCompatActivity {
 
         fillInputFields(ActiveQuest.getInstance());
 
-        submitQuestBtn.setOnClickListener(view -> checkAndUploadQuest());
+        submitQuestBtn.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Are you sure you want to edit this Quest?");
+            builder.setMessage("Data and attempts connected to old quest details will not be updated");
+            builder.setPositiveButton("Yes", (dialog, which) -> checkAndUploadQuest());
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
+
+        });
+
+
         deleteBtn.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Are you sure you want to delete this Quest?");
+            builder.setTitle("Are you sure you want to delete this Quest?");
             builder.setPositiveButton("Yes", (dialog, which) -> deleteQuest());
             builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
         });
@@ -110,8 +119,7 @@ public class EditQuestActivity extends AppCompatActivity {
             });
         }
     }
-// edit -> change things -> save -> overview -> list -> overview of changed
-    //TODO authenticate that the quest is valid, title not already used, non empty desc
+
     private void uploadQuest() {
         String title = questName.getText().toString();
         String desc = questDescription.getText().toString();
@@ -154,6 +162,10 @@ public class EditQuestActivity extends AppCompatActivity {
     }
 
     private void replaceQuest(Quest previousQuest, Quest newQuest) {
+        // Delete quest image too
+        db.storage.child("questImages").child(previousQuest.getName()).delete();
+
+        // Replace quest
         db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
             db.updateQuestListAndCreate(previousQuest.getName(), newQuest, getApplicationContext());
 
