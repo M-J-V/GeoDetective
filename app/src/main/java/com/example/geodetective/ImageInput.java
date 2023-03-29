@@ -74,10 +74,7 @@ public class ImageInput {
                     Toast.makeText(activity, "You need to give permissions to access your camera to add images to your quests.", Toast.LENGTH_LONG).show();
                     permissionsBuilder.show();
                     return;
-                }else{
-                    Toast.makeText(activity, ""+preferences.getBoolean("cameraPermissions", false), Toast.LENGTH_LONG).show();
                 }
-
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 activity.startActivityForResult(cameraIntent, CAMERA_REQUEST);
             } else if (options[item].equals("Choose from Gallery")) {
