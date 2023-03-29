@@ -126,16 +126,21 @@ public class DbConnection {
 
         // Upload image to storage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Log.d("WOAH", "size is " + newQuest.getImage().getByteCount());
-        if (newQuest.getImage().getByteCount() > 1000000) {
-            Log.d("WOAH", "too many bytes brother");
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 10, baos);
-        } else {
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 80, baos);
-        }
 
+        newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, baos);
         byte[] data = baos.toByteArray();
+        float imageSize = data.length/1000;
+
+        Log.d("WOAH", "size is " + imageSize);
+        if (imageSize > 1000) {
+            Log.d("WOAH", "too many bytes brother");
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 25, baos);
+        } else {
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        }
+        data = baos.toByteArray();
         uploadBitmap(newQuest.getName(), data, context);
+
 
         // Due to the way firebase interacts with collections, we must keep a list of all quest names.
         addToAllQuestsList(newQuest.getName());
