@@ -1,7 +1,7 @@
 package com.example.geodetective;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -13,20 +13,23 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.Locale;
 
 public class Timer {
-    private final Activity activity;
+    private final Context context;
     private final ViewGroup layout;
     private boolean stop = false;
     private TextView timer;
 
-    public Timer(Activity activity, ViewGroup layout) {
-        this.activity = activity;
+    public Timer(Context context, ViewGroup layout) {
+        if(context == null || layout == null)
+            throw new IllegalArgumentException("Activity or layout cannot be null");
+
+        this.context = context;
         this.layout = layout;
     }
 
     @SuppressLint("SetTextI18n")
     public void add() {
         // Create timer
-        timer = new TextView(activity);
+        timer = new TextView(context);
         timer.setText("00:00:00");
         timer.setTextColor(Color.BLACK);
         timer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
