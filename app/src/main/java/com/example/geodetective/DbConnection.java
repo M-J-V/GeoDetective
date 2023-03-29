@@ -127,11 +127,11 @@ public class DbConnection {
         // Upload image to storage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Log.d("WOAH", "size is " + newQuest.getImage().getByteCount());
-        if (newQuest.getImage().getByteCount() > 190512) {
+        if (newQuest.getImage().getByteCount() > 1000000) {
             Log.d("WOAH", "too many bytes brother");
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 1, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 10, baos);
         } else {
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 100, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 80, baos);
         }
 
         byte[] data = baos.toByteArray();
