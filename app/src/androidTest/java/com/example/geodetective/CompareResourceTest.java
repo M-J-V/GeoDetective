@@ -1,10 +1,13 @@
 package com.example.geodetective;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Test;
-import android.content.Context;
 
 
 public class CompareResourceTest {
