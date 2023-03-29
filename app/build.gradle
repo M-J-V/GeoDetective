@@ -41,6 +41,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'org.mockito:mockito-core:5.2.0'
+    androidTestImplementation 'net.bytebuddy:byte-buddy:1.14.3'
+    androidTestImplementation 'net.bytebuddy:byte-buddy-agent:1.14.3'
+    androidTestImplementation 'org.mockito:mockito-android:5.2.0'
+    androidTestImplementation 'org.objenesis:objenesis:3.3'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation platform('com.google.firebase:firebase-bom:31.2.3')
     implementation 'com.google.firebase:firebase-firestore:24.4.5'
