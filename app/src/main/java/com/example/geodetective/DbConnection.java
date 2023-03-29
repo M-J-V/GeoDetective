@@ -1,18 +1,8 @@
 package com.example.geodetective;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
-import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +12,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -32,10 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,6 +71,11 @@ public class DbConnection {
         request.put("Username", username);
         request.put("Request", username + " has requested permission to create quests");
         requests.document(username).set(request);
+        Log.d("Test", "Test");
+    }
+
+    public void removeRequest(String username) {
+        requests.document(username).delete();
     }
 
     public void createAttempt(String username, String quest, boolean win) {
@@ -127,11 +118,11 @@ public class DbConnection {
         // Upload image to storage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Log.d("WOAH", "size is " + newQuest.getImage().getByteCount());
-        if (newQuest.getImage().getByteCount() > 190512) {
+        if (newQuest.getImage().getByteCount() > 1000000) {
             Log.d("WOAH", "too many bytes brother");
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 1, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 10, baos);
         } else {
-            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 100, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.WEBP, 80, baos);
         }
 
         byte[] data = baos.toByteArray();

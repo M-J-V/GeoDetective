@@ -77,6 +77,9 @@ public class UserPreferences {
     }
 
     public void putPreference(String key, Object value) {
+        if(key == null || value == null)
+            throw new IllegalArgumentException("Key or value must not be null");
+
         try {
             getJSON().put(key, value);
             writeJSONtoPreferences();
