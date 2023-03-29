@@ -146,7 +146,7 @@
         app:layout_constraintEnd_toEndOf="@+id/trustedTxt"
         app:layout_constraintStart_toStartOf="@+id/trustedTxt"
         app:layout_constraintTop_toBottomOf="@+id/trustedTxt"
-        app:layout_constraintBottom_toTopOf="@+id/button_history"/>
+        app:layout_constraintBottom_toTopOf="@+id/galleryPermissions"/>
 
     <TextView
         android:id="@+id/galleryPermissions"
@@ -177,5 +177,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/galleryPermissions"
         app:layout_constraintEnd_toEndOf="@+id/cameraSwitch"
         app:layout_constraintStart_toStartOf="@+id/cameraSwitch"
-        app:layout_constraintTop_toTopOf="@+id/galleryPermissionsPermissions" />
+        app:layout_constraintTop_toTopOf="@+id/galleryPermissions" />
 </androidx.constraintlayout.widget.ConstraintLayout>
