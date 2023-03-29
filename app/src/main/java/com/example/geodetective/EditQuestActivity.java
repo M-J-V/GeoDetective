@@ -69,13 +69,6 @@ public class EditQuestActivity extends AppCompatActivity {
         // Select image from gallery or take a photo.
         chooseImageBtn.setOnClickListener(v -> imageInput.selectImage());
 
-        // Request location permissions
-        //location.requestPermissions();
-
-        // Get current location
-        //location.updateCurrentLocation();
-
-
         fillInputFields(ActiveQuest.getInstance());
 
         submitQuestBtn.setOnClickListener(view -> checkAndUploadQuest());
@@ -95,22 +88,27 @@ public class EditQuestActivity extends AppCompatActivity {
 
     private void checkAndUploadQuest() {
         String err = "";
-        db.quests.document(questName.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                String err = "";
-                String inputtedName = questName.getText().toString();
-                String previousName = ActiveQuest.getInstance().getQuest().getName();
-                if (task.isSuccessful()) {
-                    DocumentSnapshot Quest = task.getResult();
-                    if (inputtedName.compareTo(previousName) == 0 || !Quest.exists()) {
-                        uploadQuest();
-                    } else {
-                        errorMsg.setText("A quest with this name already exists.");
+        String newQuestName = questName.getText().toString();
+
+        if(newQuestName.equals("")) {
+            errorMsg.setText("Please enter a Quest Title");
+        } else {
+            db.quests.document(newQuestName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    String err = "";
+                    String previousName = ActiveQuest.getInstance().getQuest().getName();
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot Quest = task.getResult();
+                        if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
+                            uploadQuest();
+                        } else {
+                            errorMsg.setText("A quest with this name already exists.");
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 // edit -> change things -> save -> overview -> list -> overview of changed
     //TODO authenticate that the quest is valid, title not already used, non empty desc
