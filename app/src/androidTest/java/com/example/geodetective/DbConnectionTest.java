@@ -2,6 +2,8 @@ package com.example.geodetective;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
+import static com.example.geodetective.DbConnection.getInstance;
+
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,16 +24,15 @@ import java.util.Map;
 
 public class DbConnectionTest extends TestCase {
 
-//    DbConnection dbConnection;
-//
-//    @Before
-//    public void setDbConnection() {
-//        dbConnection = new DbConnection();
-//    }
+    DbConnection dbConnection;
+
+    @Before
+    public void setDbConnection() {
+        dbConnection = getInstance();
+    }
 
     @Test
     public void createNewQuestTest() {
-        DbConnection dbConnection = DbConnection.getInstance();
         Context context = getApplicationContext();
         Bitmap image = BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.auditorium);
         Location location = new Location(38.8951, -77.0364);
@@ -40,6 +41,11 @@ public class DbConnectionTest extends TestCase {
         dbConnection.createNewQuest(oneQuest, context);
         assertTrue(dbConnection.quests.equals(oneQuest));
 
+    }
+
+    @Test
+    public void testSendRequest() {
+        dbConnection.sendRequest("dìvo");
     }
 
 //    @Test
