@@ -38,11 +38,11 @@ public class ImageInput {
                 //Give both permissions
                 preferences.putPreference("cameraPermissions", true);
                 preferences.putPreference("galleryPermissions", true);
-            } else if (options[item].equals("Give camera permissions")) {
+            } else if (options[item].equals("Give only camera permissions")) {
                 //Give camera permission
                 preferences.putPreference("cameraPermissions", true);
                 preferences.putPreference("galleryPermissions", false);
-            } else if (options[item].equals("Give gallery permissions")) {
+            } else if (options[item].equals("Give only gallery permissions")) {
                 //Give gallery permission
                 preferences.putPreference("cameraPermissions", false);
                 preferences.putPreference("galleryPermissions", true);
