@@ -133,7 +133,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     // Get image from camera or gallery
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        imageInput.onActivityResult(requestCode, resultCode, data, questImage);
+        imageInput.onActivityResult(requestCode, resultCode, data, questImage, getApplicationContext());
     }
 
     // Handle permission request result

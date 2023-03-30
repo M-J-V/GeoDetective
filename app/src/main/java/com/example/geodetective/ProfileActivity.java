@@ -95,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         delete_button.setOnClickListener(v -> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Are you sure you want to delete your account?");
+            builder.setTitle("Are you sure you want to delete your account?");
             builder.setPositiveButton("Yes", (dialog, which) -> deleteUser());
             builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 

@@ -1,6 +1,7 @@
 package com.example.geodetective;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -51,7 +52,11 @@ public class EditDetailsActivity extends AppCompatActivity {
             String oldUsername = user.getUsername();
             String newUsername = newUserEditText.getText().toString();
 
-            updateUsername(oldUsername, newUsername, userMsg);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Are you sure you want to edit your Username?");
+            builder.setMessage("Quests and attempts created will remain connected to your old Username.");
+            builder.setPositiveButton("Yes", (dialog, which) -> updateUsername(oldUsername, newUsername, userMsg));
+            builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
         });
 
         updatePassBtn.setOnClickListener(v -> {
@@ -136,7 +141,7 @@ public class EditDetailsActivity extends AppCompatActivity {
         db.users.document(deletedUser).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                db.createNewUser(newUsername, newPassword);
+                db.createNewUser(newUsername, newPassword, user.getTrusted());
                 user.setUsername(newUsername);
                 user.setPassword(newPassword);
                 msg.setText("Profile updated successfully");
