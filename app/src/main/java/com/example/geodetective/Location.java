@@ -2,7 +2,6 @@ package com.example.geodetective;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -43,9 +41,11 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = null;
-        this.manager = null;
+        this.manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         checkLocationServices();
     }
+
+
 
     public Location(@NonNull Activity activity) {
         this.latitude = 0;
