@@ -44,7 +44,7 @@ public class DbConnection {
     CollectionReference requests;
     StorageReference storage;
 
-    private DbConnection() {
+    DbConnection() {
         this.db = FirebaseFirestore.getInstance();
         this.users = db.collection("Users");
         this.quests = db.collection("Quests");
@@ -137,7 +137,7 @@ public class DbConnection {
         addToAllQuestsList(newQuest.getName());
     }
 
-    private void addToAllQuestsList(String title) {
+    void addToAllQuestsList(String title) {
         questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

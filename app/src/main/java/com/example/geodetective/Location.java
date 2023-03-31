@@ -46,6 +46,8 @@ public class Location {
         this.manager = null;
     }
 
+
+
     public Location(@NonNull Activity activity) {
         this.latitude = 0;
         this.longitude = 0;
