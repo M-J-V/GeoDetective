@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener(v -> {
             // Start home activity
-            String username = usernameWidget.getText().toString();
+            String username = usernameWidget.getText().toString().trim();
             String password = passwordWidget.getText().toString();
 
             try {
