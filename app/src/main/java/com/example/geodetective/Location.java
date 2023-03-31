@@ -44,7 +44,6 @@ public class Location {
         this.longitude = longitude;
         this.activity = null;
         this.manager = null;
-        checkLocationServices();
     }
 
     public Location(@NonNull Activity activity) {
