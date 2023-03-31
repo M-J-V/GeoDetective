@@ -1,10 +1,8 @@
 package com.example.geodetective;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,21 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-
-import java.util.concurrent.TimeUnit;
-
 // TODO: there are still some time-related issues when updating location.
 //  if you press finish quest before the method updateCurrentLocation in onResume has
 //  finished executing, you will get a wrong location of the user.
 
 public class QuestOverviewActivity extends AppCompatActivity {
-    private Location location;
-    private Timer timer = null;
     ActiveUser user = ActiveUser.getInstance();
     ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
     DbConnection db = DbConnection.getInstance();
+    private Location location;
+    private Timer timer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +96,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void endQuest() {
-        location.updateCurrentLocation((location) -> endQuestLambda(location),this);
+        location.updateCurrentLocation((location) -> endQuestLambda(location));
     }
 
     private void endQuestLambda(Location location) {

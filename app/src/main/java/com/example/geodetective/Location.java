@@ -2,7 +2,6 @@ package com.example.geodetective;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -119,7 +117,7 @@ public class Location {
     }
 
     @SuppressLint("MissingPermission")
-    public void updateCurrentLocation(LocFunction func, Context ctx) throws IllegalStateException {
+    public void updateCurrentLocation(LocFunction func) throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
             throw new IllegalStateException("Activity is not set");
