@@ -50,7 +50,7 @@ public class EditDetailsActivity extends AppCompatActivity {
 
         updateUsernameBtn.setOnClickListener(v -> {
             String oldUsername = user.getUsername();
-            String newUsername = newUserEditText.getText().toString();
+            String newUsername = newUserEditText.getText().toString().trim();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you sure you want to edit your Username?");

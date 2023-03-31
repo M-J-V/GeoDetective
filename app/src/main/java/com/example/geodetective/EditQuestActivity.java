@@ -97,7 +97,7 @@ public class EditQuestActivity extends AppCompatActivity {
 
     private void checkAndUploadQuest() {
         String err = "";
-        String newQuestName = questName.getText().toString();
+        String newQuestName = questName.getText().toString().trim();
 
         if(newQuestName.equals("")) {
             errorMsg.setText("Please enter a Quest Title");
@@ -121,7 +121,7 @@ public class EditQuestActivity extends AppCompatActivity {
     }
 
     private void uploadQuest() {
-        String title = questName.getText().toString();
+        String title = questName.getText().toString().trim();
         String desc = questDescription.getText().toString();
         String hint = questHint.getText().toString();
         String creator = user.getUsername();

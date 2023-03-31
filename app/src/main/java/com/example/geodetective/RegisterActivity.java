@@ -42,8 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupBtn.setOnClickListener(v -> {
             // Start home activity
-            DbConnection db = DbConnection.getInstance();
-            String username = usernameWidget.getText().toString();
+            String username = usernameWidget.getText().toString().trim();
             String password = passwordWidget.getText().toString();
             String passwordAgain = passwordAgainWidget.getText().toString();
 
