@@ -117,7 +117,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void deleteUser() {
         // delete current user
-        db.deleteUserAndQuests(user.getUsername(), user.getPassword());
+        db.deleteUserAndQuests(user.getUsername());
 
         // Go back to login page
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
