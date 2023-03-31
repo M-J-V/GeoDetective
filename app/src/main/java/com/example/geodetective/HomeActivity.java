@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // The function uses recursion rather than a for loop to ensure there are no timing issues since get() is asynchronous
     private void getImages(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages, int pos) {
-        final long ONE_MEGABYTE = 1024*1024*10;
+        final long ONE_MEGABYTE = 1024*1024*9;
         int numQuests = titles.size();
 
         StorageReference storeRef = db.storage.child("questImages").child(titles.get(pos));
@@ -122,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
                 byte[] bytes = task.getResult();
 
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                Log.d("WOAH", pos + " bytes: " + image.getAllocationByteCount() + " for " + titles.get(pos));
+                Log.d("WOAH", pos + " kilobytes: " + bytes.length/1000 + " for " + titles.get(pos));
                 questImages.add(image);
                 if ( pos == numQuests - 1 ) {
                     loadQuestListActivity(titles, creators, questImages);
