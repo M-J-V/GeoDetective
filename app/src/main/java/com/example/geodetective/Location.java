@@ -46,8 +46,6 @@ public class Location {
         this.manager = null;
     }
 
-
-
     public Location(@NonNull Activity activity) {
         this.latitude = 0;
         this.longitude = 0;
@@ -121,7 +119,7 @@ public class Location {
     }
 
     @SuppressLint("MissingPermission")
-    public void updateCurrentLocation(LocFunction func, Context ctx) throws IllegalStateException {
+    public void updateCurrentLocation(LocFunction func) throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
             throw new IllegalStateException("Activity is not set");

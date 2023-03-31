@@ -18,13 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.io.ByteArrayOutputStream;
-
 public class CreateQuestActivity extends AppCompatActivity {
-    private Location location;
-    private ImageInput imageInput;
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
+    private Location location;
+    private ImageInput imageInput;
     private ImageView questImage;
     private EditText questName;
     private EditText questDescription;
@@ -102,7 +100,7 @@ public class CreateQuestActivity extends AppCompatActivity {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             questUpload = new Quest(title, creator, desc, hint, bitmap, location);
 
-            location.updateCurrentLocation((location) -> addQuest(location), this);
+            location.updateCurrentLocation((location) -> addQuest(location));
         }
 
         errorMsg.setText(err);
