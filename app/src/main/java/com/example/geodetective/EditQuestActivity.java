@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.io.ByteArrayOutputStream;
 
@@ -29,6 +30,8 @@ public class EditQuestActivity extends AppCompatActivity {
     private  ImageInput imageInput;
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
+
+    ActiveQuest activeQuest = ActiveQuest.getInstance();
     private ImageView questImage;
     private EditText questName;
     private EditText questDescription;
@@ -40,7 +43,7 @@ public class EditQuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_quest);
 
-        location = ActiveQuest.getInstance().getQuest().getLocation();
+        location = activeQuest.getQuest().getLocation();
         imageInput = new ImageInput(this);
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
@@ -69,12 +72,14 @@ public class EditQuestActivity extends AppCompatActivity {
         // Select image from gallery or take a photo.
         chooseImageBtn.setOnClickListener(v -> imageInput.selectImage());
 
-        fillInputFields(ActiveQuest.getInstance());
+        fillInputFields(activeQuest);
 
         submitQuestBtn.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you sure you want to edit this Quest?");
-            builder.setMessage("Data and attempts connected to old quest details will not be updated");
+            if (!questName.getText().toString().equals(activeQuest.getQuest().getName())){
+                builder.setMessage("Changing the Quest Name will delete attempts made so far on this Quest.");
+            }
             builder.setPositiveButton("Yes", (dialog, which) -> checkAndUploadQuest());
             builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 
@@ -90,8 +95,8 @@ public class EditQuestActivity extends AppCompatActivity {
     }
 
     private void deleteQuest() {
-        db.deleteQuest(ActiveQuest.getInstance().getQuest());
-        ActiveQuest.getInstance().disconnectActiveQuest();
+        db.deleteQuest(activeQuest.getQuest());
+       activeQuest.disconnectActiveQuest();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
@@ -106,7 +111,7 @@ public class EditQuestActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     String err = "";
-                    String previousName = ActiveQuest.getInstance().getQuest().getName();
+                    String previousName = activeQuest.getQuest().getName();
                     if (task.isSuccessful()) {
                         DocumentSnapshot Quest = task.getResult();
                         if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
@@ -148,7 +153,7 @@ public class EditQuestActivity extends AppCompatActivity {
         if(validImageAndDesc) {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
-            replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
+            replaceQuest(activeQuest.getQuest(), newQuest);
         }
 
         errorMsg.setText(err);
@@ -165,11 +170,17 @@ public class EditQuestActivity extends AppCompatActivity {
         // Delete quest image too
         db.storage.child("questImages").child(previousQuest.getName()).delete();
 
+        // Delete attempts on old questName if changed
+        if(!previousQuest.getName().equals(newQuest.getName())) {
+            Query questAttempts = db.attempts.whereEqualTo("Quest", previousQuest.getName());
+            db.deleteAttempts(questAttempts);
+        }
+
         // Replace quest
         db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
             db.updateQuestListAndCreate(previousQuest.getName(), newQuest, getApplicationContext());
 
-            ActiveQuest.getInstance().setQuest(newQuest);
+            activeQuest.setQuest(newQuest);
 
         })
         .addOnFailureListener(e -> {

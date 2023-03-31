@@ -268,19 +268,6 @@ public class DbConnection {
         });
     }
 
-    public void deleteAttemptsOnQuestTitle(String questTitle) {
-        Query userAttempts = attempts.whereEqualTo("Quest", questTitle);
-        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
-                    doc.getReference().delete();
-                }
-
-            }
-        });
-    }
-
     public void updateQuestCreator(String oldUsername, String newUsername) {
         Query userAttempts = quests.whereEqualTo("Creator", oldUsername);
         userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
