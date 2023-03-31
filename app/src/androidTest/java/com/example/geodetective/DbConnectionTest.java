@@ -75,11 +75,11 @@ public class DbConnectionTest {
     }
 
     @Test
-    public void deleteUserAndQuestsInvalidInput() {
+    public void deleteUserQuestsInvalidInput() {
         DbConnection dbConnection = DbConnection.getInstance();
         try {
-            dbConnection.deleteUserAndQuests(null);
-            fail("DbConnection.deleteUserAndQuests() did not threw an exception");
+            dbConnection.deleteUserQuests(null);
+            fail("DbConnection.deleteUserAndQuests() did not throw an exception");
         } catch (Exception ignored) {
         }
     }

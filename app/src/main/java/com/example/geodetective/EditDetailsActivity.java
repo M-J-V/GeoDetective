@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 public class EditDetailsActivity extends AppCompatActivity {
     ActiveUser user = ActiveUser.getInstance();
@@ -54,7 +55,7 @@ public class EditDetailsActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you sure you want to edit your Username?");
-            builder.setMessage("Quests and attempts created will remain connected to your old Username.");
+            builder.setMessage("Attempts made on the old Username will be deleted.");
             builder.setPositiveButton("Yes", (dialog, which) -> updateUsername(oldUsername, newUsername, userMsg));
             builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
         });
@@ -89,7 +90,10 @@ public class EditDetailsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot User = task.getResult();
                             if (User.exists()) {
-                                replaceUser(user.getUsername(), user.getUsername(), hashNewPass, msg);
+                                User.getReference().update("Password",hashNewPass);
+                                user.setPassword(hashNewPass);
+                                Msg = "Profile updated successfully";
+                                msg.setTextColor(Color.BLACK);
                             } else {
                                 Msg = "Username is not in Database";
                             }
@@ -123,7 +127,9 @@ public class EditDetailsActivity extends AppCompatActivity {
                             Msg = "Username is already in use";
                         } else {
                             // Username can be used
-                            replaceUser(oldUsername, newUsername, user.getPassword(), msg);
+                            Query userAttempts = db.attempts.whereEqualTo("Username", oldUsername);
+                            db.deleteAttempts(userAttempts);
+                            replaceUser(oldUsername, newUsername, msg);
                         }
                     } else {
                         Msg = "Error getting data from Database";
@@ -137,13 +143,14 @@ public class EditDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void replaceUser(String deletedUser, String newUsername, String newPassword, TextView msg) {
+    private void replaceUser(String deletedUser, String newUsername, TextView msg) {
+
+        db.updateQuestCreator(deletedUser, newUsername);
         db.users.document(deletedUser).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                db.createNewUser(newUsername, newPassword, user.getTrusted());
+                db.createNewUser(newUsername, user.getPassword(), user.getTrusted());
                 user.setUsername(newUsername);
-                user.setPassword(newPassword);
                 msg.setText("Profile updated successfully");
                 msg.setTextColor(Color.BLACK);
 

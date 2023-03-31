@@ -117,7 +117,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void deleteUser() {
         // delete current user
-        db.deleteUserAndQuests(user.getUsername());
+        db.deleteUserQuests(user.getUsername());
+        Query userAttempts = db.attempts.whereEqualTo("Username", user);
+        db.deleteAttempts(userAttempts);
+        db.deleteUser(user.getUsername());
 
         // Go back to login page
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));

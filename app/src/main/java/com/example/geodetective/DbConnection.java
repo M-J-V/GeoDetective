@@ -5,11 +5,16 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -115,9 +120,7 @@ public class DbConnection {
         byte[] data = ByArOuST.toByteArray();
         float imageSize = (float) data.length/1000;
 
-        Log.d("WOAH", "size is " + imageSize);
         if (imageSize > 1000) {
-            Log.d("WOAH", "too many bytes brother");
             newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 25, ByArOuST);
         } else {
             newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, ByArOuST);
@@ -156,7 +159,8 @@ public class DbConnection {
         }).addOnSuccessListener(taskSnapshot -> Toast.makeText(context, "Quest uploaded!", Toast.LENGTH_SHORT).show());
     }
 
-    private void getAndDeleteCreatedQuests (String username, ArrayList<String> questsCreated) {
+    private void getAndDeleteCreatedQuests (String username) {
+        ArrayList<String> questsCreated = new ArrayList<String>();
         Query createdQuests = quests.whereEqualTo("Creator", username);
         createdQuests.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -170,8 +174,6 @@ public class DbConnection {
                 deleteFromAllQuestsListMultiple(questsCreated);
                 // Delete all quest images from storage
                 deleteQuestImages(questsCreated);
-                // Delete user from Users collection
-                deleteUser(username);
             }
         });
     }
@@ -190,7 +192,7 @@ public class DbConnection {
         storeRef.child(questTitle).delete();
     }
 
-    private void deleteUser(String username){
+    public void deleteUser(String username){
         users.document(username).delete();
     }
 
@@ -239,19 +241,57 @@ public class DbConnection {
         deleteFromAllQuestsList(deletedQuest, quest, context, true);
     }
 
-    public void deleteUserAndQuests(String username){
+    public void deleteUserQuests(String username){
         if(username == null)
             throw new IllegalArgumentException("Username cannot be null");
 
         // Get all quest titles created by the user
-        ArrayList<String> questsCreated = new ArrayList<>();
-        getAndDeleteCreatedQuests(username, questsCreated);
+        getAndDeleteCreatedQuests(username);
     }
 
     public void deleteQuest(Quest quest) {
         quests.document(quest.getName()).delete().addOnSuccessListener(aVoid -> {
             deleteFromAllQuestsList(quest.getName(),null, null,false);
             deleteQuestImage(quest.getName());
+        });
+    }
+
+    public void deleteAttempts (Query query){
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    doc.getReference().delete();
+                }
+
+            }
+        });
+    }
+
+    public void deleteAttemptsOnQuestTitle(String questTitle) {
+        Query userAttempts = attempts.whereEqualTo("Quest", questTitle);
+        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    doc.getReference().delete();
+                }
+
+            }
+        });
+    }
+
+    public void updateQuestCreator(String oldUsername, String newUsername) {
+        Query userAttempts = quests.whereEqualTo("Creator", oldUsername);
+        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    doc.getReference().update("Creator", newUsername);
+
+                }
+
+            }
         });
     }
 
