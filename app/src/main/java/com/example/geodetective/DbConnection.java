@@ -137,6 +137,7 @@ public class DbConnection {
         questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
                 List<String> titles = (List<String>) doc.get("quests");
                 assert titles != null;
                 titles.add(title);
@@ -204,6 +205,7 @@ public class DbConnection {
         questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
                 List<String> titles = (List<String>) doc.get("quests");
                 for (String title : questTitles) {
                     assert titles != null;
@@ -220,6 +222,7 @@ public class DbConnection {
         questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
                 List<String> titles = (List<String>) doc.get("quests");
                 assert titles != null;
                 titles.remove(deletedQuest);
