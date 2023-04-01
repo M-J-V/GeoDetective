@@ -2,7 +2,10 @@ package com.example.geodetective;
 
 import static org.junit.Assert.*;
 import android.graphics.Bitmap;
-import org.junit.Before;
+
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Quest;
+
 import org.junit.Test;
 
 public class QuestTest {

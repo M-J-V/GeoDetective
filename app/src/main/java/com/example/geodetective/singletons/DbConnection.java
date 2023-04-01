@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.singletons;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.geodetective.gameComponents.Quest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -35,13 +36,13 @@ import java.util.Objects;
 public class DbConnection {
 
     private static DbConnection connection = null;
-    FirebaseFirestore db;
-    CollectionReference users;
-    CollectionReference quests;
-    CollectionReference attempts;
-    CollectionReference questNames;
-    CollectionReference requests;
-    StorageReference storage;
+    public FirebaseFirestore db;
+    public CollectionReference users;
+    public CollectionReference quests;
+    public CollectionReference attempts;
+    public CollectionReference questNames;
+    public CollectionReference requests;
+    public StorageReference storage;
 
     DbConnection() {
         this.db = FirebaseFirestore.getInstance();
@@ -133,7 +134,7 @@ public class DbConnection {
         addToAllQuestsList(newQuest.getName());
     }
 
-    void addToAllQuestsList(String title) {
+    private void addToAllQuestsList(String title) {
         if(title == null)
             throw new IllegalArgumentException("Title is null");
 

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.gameComponents;
 
 import android.graphics.Bitmap;
 

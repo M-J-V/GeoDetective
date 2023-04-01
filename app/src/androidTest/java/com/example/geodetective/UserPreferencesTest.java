@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.example.geodetective.singletons.UserPreferences;
+
 import org.junit.Test;
 
 public class UserPreferencesTest {

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.R;
+import com.example.geodetective.gameComponents.Timer;
 
 // TODO: there are still some time-related issues when updating location.
 //  if you press finish quest before the method updateCurrentLocation in onResume has
@@ -130,7 +137,10 @@ public class QuestOverviewActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Quest not finished!");
             builder.setMessage("You have not completed the quest successfully.");
-            builder.setPositiveButton("Continue quest", (dialog, which) -> dialog.dismiss());
+            builder.setPositiveButton("Continue quest", (dialog, which) -> {
+                db.createAttempt(user.getUsername(), activeQuestInstance.getQuest().getName(), false);
+                dialog.dismiss();
+            });
             builder.setNegativeButton("Abort quest", (dialog, which) -> {
                 // Submit attempt to database
                 db.createAttempt(user.getUsername(), activeQuestInstance.getQuest().getName(), false);

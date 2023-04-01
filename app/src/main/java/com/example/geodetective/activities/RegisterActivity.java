@@ -1,24 +1,22 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.geodetective.helpers.AccountDetailsChecker;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     DbConnection db = DbConnection.getInstance();

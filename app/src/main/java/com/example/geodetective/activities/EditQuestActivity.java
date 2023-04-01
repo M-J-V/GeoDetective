@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -6,28 +6,31 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.gameComponents.ImageInput;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-import java.io.ByteArrayOutputStream;
-
 public class EditQuestActivity extends AppCompatActivity {
     private Location location;
-    private  ImageInput imageInput;
+    private ImageInput imageInput;
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
 

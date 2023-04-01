@@ -2,6 +2,9 @@ package com.example.geodetective;
 
 import static org.junit.Assert.fail;
 
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.singletons.DbConnection;
+
 import org.junit.Test;
 
 public class DbConnectionTest {
@@ -50,16 +53,6 @@ public class DbConnectionTest {
             //noinspection ConstantConditions
             dbConnection.createNewQuest(null, null);
             fail("DbConnection.createNewQuest() did not threw an exception");
-        } catch (Exception ignored) {
-        }
-    }
-
-    @Test
-    public void addToAllQuestsListInvalidInput() {
-        DbConnection dbConnection = DbConnection.getInstance();
-        try {
-            dbConnection.addToAllQuestsList(null);
-            fail("DbConnection.addToAllQuestsList() did not threw an exception");
         } catch (Exception ignored) {
         }
     }

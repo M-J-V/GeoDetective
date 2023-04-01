@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.gameComponents.ImageInput;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class CreateQuestActivity extends AppCompatActivity {
@@ -100,7 +106,7 @@ public class CreateQuestActivity extends AppCompatActivity {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             questUpload = new Quest(title, creator, desc, hint, bitmap, location);
 
-            location.updateCurrentLocation((location) -> addQuest(location));
+            location.updateCurrentLocation(this::addQuest);
         }
 
         errorMsg.setText(err);

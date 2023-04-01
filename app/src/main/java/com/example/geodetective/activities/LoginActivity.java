@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,6 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.connectivity.ConnectivityChecker;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.R;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class LoginActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.helpers;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
