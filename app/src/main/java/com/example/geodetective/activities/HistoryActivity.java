@@ -1,23 +1,15 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
-import static com.example.geodetective.R.id.customListView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.geodetective.listAdapters.CustomHistoryAdapter;
+import com.example.geodetective.R;
 
 import java.util.ArrayList;
 

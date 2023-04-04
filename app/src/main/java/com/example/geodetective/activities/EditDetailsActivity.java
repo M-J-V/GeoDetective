@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -12,6 +12,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.geodetective.helpers.AccountDetailsChecker;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

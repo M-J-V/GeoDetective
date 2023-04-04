@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.R;
+import com.example.geodetective.singletons.UserPreferences;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 

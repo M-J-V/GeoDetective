@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,8 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.singletons.QuestImages;
+import com.example.geodetective.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
@@ -136,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadQuestListActivity(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages) {
-        Intent questList = new Intent(getApplicationContext(), ListOfQuests.class);
+        Intent questList = new Intent(getApplicationContext(), ListOfQuestsActivity.class);
         //questList.putParcelableArrayListExtra("images",questImages); // Passing Bitmaps like this is not very memory efficient
         images.setImages(questImages);
         questList.putStringArrayListExtra("titles", titles);

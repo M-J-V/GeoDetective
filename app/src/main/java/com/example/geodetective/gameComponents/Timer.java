@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.gameComponents;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.geodetective.R;
 
 import java.util.Locale;
 

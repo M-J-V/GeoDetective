@@ -1,5 +1,7 @@
 package com.example.geodetective;
 
+import com.example.geodetective.helpers.AccountDetailsChecker;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;

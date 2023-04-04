@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,13 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.singletons.QuestImages;
+import com.example.geodetective.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -19,7 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 
 
-public class ListOfQuests extends AppCompatActivity {
+public class ListOfQuestsActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveQuest activeQuest = ActiveQuest.getInstance();
@@ -40,7 +47,7 @@ public class ListOfQuests extends AppCompatActivity {
             questImages.set(positionPressed, activeQuestInstance.getQuest().getImage());
             titles.set(positionPressed, activeQuestInstance.getQuest().getName());
             creators.set(positionPressed, activeQuestInstance.getQuest().getCreator());
-            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);
+            CustomListOfQuestsAdapter customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
             listView.setAdapter(customBaseAdapter);
             activeQuestInstance.disconnectActiveQuest();
             positionPressed = -1;
@@ -56,7 +63,7 @@ public class ListOfQuests extends AppCompatActivity {
         questImages = imgs.getImages();
         titles = getIntent().getStringArrayListExtra("titles");
         creators = getIntent().getStringArrayListExtra("creators");
-        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), titles, creators, questImages);
+        CustomListOfQuestsAdapter customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
 
         listView.setAdapter(customBaseAdapter);
 

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.connectivity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,21 +8,24 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-public class GPSConnectivityAlert extends Activity {
+import com.example.geodetective.activities.LoginActivity;
+import com.example.geodetective.connectivity.ConnectivityChecker;
 
+public class InternetConnectivityAlert extends Activity {
     public void createDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        String internetMessage;
 
-        builder.setTitle("No GPS connection");
-        builder.setMessage("You need a GPS connection to use this app.");
-        ConnectivityChecker.hasGPSConnection(context);
+        builder.setTitle("No internet connection");
+        builder.setMessage("You need an internet connection to use this app.");
+        ConnectivityChecker.hasInternetConnection(context);
         builder.setPositiveButton("Try again", (dialog, which) -> {
-            if (ConnectivityChecker.hasGPSConnection(context)) {
-                Toast.makeText(context, "GPS connection established", Toast.LENGTH_SHORT).show();
+            if (ConnectivityChecker.hasInternetConnection(context)) {
+                Toast.makeText(context, "Internet connection established", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             } else {
-                Toast.makeText(context, "No GPS connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
                 createDialog(context);
             }

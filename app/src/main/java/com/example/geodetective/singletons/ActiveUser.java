@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.singletons;
 
 public class ActiveUser {
     private String username;

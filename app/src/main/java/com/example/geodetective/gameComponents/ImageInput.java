@@ -1,15 +1,16 @@
-package com.example.geodetective;
+package com.example.geodetective.gameComponents;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.example.geodetective.singletons.UserPreferences;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -96,46 +97,44 @@ public class ImageInput {
         });
         builder.show();
     }
-        // Get image from camera or gallery
-        protected void onActivityResult(int requestCode, int resultCode, Intent data, ImageView questImage, Context context) {
-            if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
+    // Get image from camera or gallery
+    public void onActivityResult(int requestCode, int resultCode, Intent data, ImageView questImage, Context context) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            byte[] imageInByte = baos.toByteArray();
+            float imageSize = imageInByte.length/1000;
+            if (imageSize > 3000) {
+                Toast.makeText(context, "Image is too large", Toast.LENGTH_LONG).show();
+            } else {
+                questImage.setImageBitmap(photo);
+            }
+            //questImage.setImageBitmap(photo);
+        }
+
+        if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
+            Bitmap photo;
+            try {
+                photo = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), data.getData());
+                Toast.makeText(context, "Loading Image", Toast.LENGTH_LONG).show();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                 photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
                 byte[] imageInByte = baos.toByteArray();
                 float imageSize = imageInByte.length/1000;
-                Log.d("WOAH", "size is " + imageSize);
                 if (imageSize > 3000) {
                     Toast.makeText(context, "Image is too large", Toast.LENGTH_LONG).show();
                 } else {
                     questImage.setImageBitmap(photo);
                 }
-                //questImage.setImageBitmap(photo);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             }
-
-            if (requestCode == SELECT_PICTURE && resultCode == Activity.RESULT_OK) {
-                Bitmap photo;
-                try {
-                    photo = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), data.getData());
-                    Toast.makeText(context, "Loading Image", Toast.LENGTH_LONG).show();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                    photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-                    byte[] imageInByte = baos.toByteArray();
-                    float imageSize = imageInByte.length/1000;
-                    Log.d("WOAH", "size is " + imageSize);
-                    if (imageSize > 3000) {
-                        Toast.makeText(context, "Image is too large", Toast.LENGTH_LONG).show();
-                    } else {
-                        questImage.setImageBitmap(photo);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
-                //questImage.setImageBitmap(photo);
-            }
+            //questImage.setImageBitmap(photo);
         }
+    }
 }
 

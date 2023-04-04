@@ -1,6 +1,6 @@
-package com.example.geodetective;
+package com.example.geodetective.singletons;
 
-import android.widget.ImageView;
+import com.example.geodetective.gameComponents.Quest;
 
 public class ActiveQuest {
 
