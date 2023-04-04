@@ -27,16 +27,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
-
+    UserPreferences preferences;
     ActiveUser user = ActiveUser.getInstance();
     DbConnection db = DbConnection.getInstance();
 
-    UserPreferences preferences = UserPreferences.getInstance(this);
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        preferences = UserPreferences.getInstance(this.getBaseContext());
 
         //get buttons from activity
         Button history_button = findViewById(R.id.button_history);
