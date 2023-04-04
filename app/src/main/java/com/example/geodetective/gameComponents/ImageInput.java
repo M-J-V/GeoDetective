@@ -21,6 +21,8 @@ public class ImageInput {
     private static final int SELECT_PICTURE = 200;
     private final Activity activity;
 
+    UserPreferences preferences;
+
     public ImageInput(Activity activity) {
         this.activity = activity;
         askPermissions(false);
@@ -28,7 +30,7 @@ public class ImageInput {
 
     private void askPermissions(boolean triedToUseResourceWithoutPermission) {
         //TODO Not both permissions should have to be granted, but is required now!
-        UserPreferences preferences = UserPreferences.getInstance(activity);
+        preferences = UserPreferences.getInstance(activity);
 
         boolean permissionsAsked = preferences.contains("cameraPermissions") && preferences.contains("galleryPermissions");
         if(permissionsAsked && !triedToUseResourceWithoutPermission)
@@ -61,7 +63,7 @@ public class ImageInput {
 
     // Select image from gallery or take a photo.
     public void selectImage() {
-        UserPreferences preferences = UserPreferences.getInstance(activity);
+        preferences = UserPreferences.getInstance(activity);
 
         AlertDialog.Builder permissionsBuilder = new AlertDialog.Builder(activity);
         permissionsBuilder.setTitle("Permissions missing");

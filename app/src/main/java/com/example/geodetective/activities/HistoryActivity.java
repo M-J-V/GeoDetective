@@ -14,7 +14,7 @@ import com.example.geodetective.R;
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
-
+    CustomHistoryAdapter customHistoryAdapter;
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +26,10 @@ public class HistoryActivity extends AppCompatActivity {
         ArrayList<String> titles = getIntent().getStringArrayListExtra("titles");
         ArrayList<String> times = getIntent().getStringArrayListExtra("timesCompleted");
         ArrayList<Integer> outcomes = getIntent().getIntegerArrayListExtra("outcomes");
-        CustomHistoryAdapter customHistoryAdapter = new CustomHistoryAdapter(getApplicationContext(),titles, times, outcomes);
+        customHistoryAdapter = new CustomHistoryAdapter(getApplicationContext(),titles, times, outcomes);
         listView.setAdapter(customHistoryAdapter);
         //get buttons
         ImageButton backBtn = findViewById(R.id.backimagebutton);
-
-        //get text view
-        TextView historyText = findViewById(R.id.textHistoryQuest);
 
         backBtn.setOnClickListener(v -> {
             // Start profile activity
