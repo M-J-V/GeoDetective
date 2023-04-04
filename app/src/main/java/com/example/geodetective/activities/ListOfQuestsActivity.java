@@ -37,6 +37,7 @@ public class ListOfQuestsActivity extends AppCompatActivity {
     ArrayList<Bitmap> questImages;
     ArrayList<String> titles;
     ArrayList<String> creators;
+    CustomListOfQuestsAdapter customBaseAdapter;
 
     @Override
     protected void onResume() {
@@ -47,7 +48,7 @@ public class ListOfQuestsActivity extends AppCompatActivity {
             questImages.set(positionPressed, activeQuestInstance.getQuest().getImage());
             titles.set(positionPressed, activeQuestInstance.getQuest().getName());
             creators.set(positionPressed, activeQuestInstance.getQuest().getCreator());
-            CustomListOfQuestsAdapter customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
+            customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
             listView.setAdapter(customBaseAdapter);
             activeQuestInstance.disconnectActiveQuest();
             positionPressed = -1;

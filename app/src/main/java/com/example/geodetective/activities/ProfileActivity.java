@@ -30,6 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     ActiveUser user = ActiveUser.getInstance();
     DbConnection db = DbConnection.getInstance();
+
+    UserPreferences preferences = UserPreferences.getInstance(this);
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +48,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Get switches from activity
         SwitchCompat cameraSwitch = findViewById(R.id.cameraSwitch);
         SwitchCompat gallerySwitch = findViewById(R.id.gallerySwitch);
-
-        UserPreferences preferences = UserPreferences.getInstance(this);
 
         cameraSwitch.setChecked(preferences.getBoolean("cameraPermissions", false));
         gallerySwitch.setChecked(preferences.getBoolean("galleryPermissions", false));
