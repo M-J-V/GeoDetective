@@ -12,9 +12,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.geodetective.R;
 import com.example.geodetective.singletons.ActiveUser;
 import com.example.geodetective.singletons.DbConnection;
-import com.example.geodetective.R;
 import com.example.geodetective.singletons.UserPreferences;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -27,9 +27,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
-    UserPreferences preferences;
-    ActiveUser user = ActiveUser.getInstance();
-    DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private UserPreferences preferences;
 
     @SuppressLint("SetTextI18n")
     @Override
