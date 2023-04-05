@@ -12,24 +12,24 @@ import org.junit.Test;
 
 public class CompareResourceTest {
 
-    CompareResource resourceComparer;
+    CompareResource resourceCompare;
 
     @Before
     public void setUp() {
-        resourceComparer = new CompareResource();
+        resourceCompare = new CompareResource();
     }
 
     @Test
     public void stringResourceSameAsPassedString_returnsTrue() {
         Context context = getApplicationContext();
-        boolean result = resourceComparer.isEqual(context, R.string.app_name, "GeoDetective");
+        boolean result = resourceCompare.isEqual(context, R.string.app_name, "GeoDetective");
         assertTrue(result);
     }
 
     @Test
     public void stringResourceDifferentAsPassedString_returnsFalse() {
         Context context = getApplicationContext();
-        boolean result = resourceComparer.isEqual(context, R.string.app_name, "NotGeoDetective");
+        boolean result = resourceCompare.isEqual(context, R.string.app_name, "NotGeoDetective");
         assertFalse(result);
     }
 

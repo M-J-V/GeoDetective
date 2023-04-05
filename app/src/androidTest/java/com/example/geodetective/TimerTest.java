@@ -11,7 +11,7 @@ public class TimerTest {
     @Test
     public void invalidConstructor() {
         try{
-            Timer timer = new Timer(null, null);
+            new Timer(null, null);
             fail("Timer constructor did not throw an exception");
         } catch (Exception ignored) {}
     }

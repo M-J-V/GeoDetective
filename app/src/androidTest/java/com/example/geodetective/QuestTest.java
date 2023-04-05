@@ -1,7 +1,9 @@
 package com.example.geodetective;
 
-import static org.junit.Assert.*;
-import android.graphics.Bitmap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
@@ -16,16 +18,15 @@ public class QuestTest {
         String creator = "John Doe";
         String description = "Find the hidden treasure!";
         String hint = "Look under the big tree";
-        Bitmap image = null;
 //        Location location = new Location(37.7749, -122.4194);
 
-        Quest quest = new Quest(name, creator, description, hint, image, null);
+        Quest quest = new Quest(name, creator, description, hint, null, null);
 
         assertEquals(name, quest.getName());
         assertEquals(creator, quest.getCreator());
         assertEquals(description, quest.getDescription());
         assertEquals(hint, quest.getHint());
-        assertEquals(image, quest.getImage());
+        assertNull(quest.getImage());
 //        assertEquals(location, quest.getLocation());
 
         String newName = "My New Quest";
@@ -44,9 +45,8 @@ public class QuestTest {
         quest.setHint(newHint);
         assertEquals(newHint, quest.getHint());
 
-        Bitmap newImage = null;
-        quest.setImage(newImage);
-        assertEquals(newImage, quest.getImage());
+        quest.setImage(null);
+        assertNull(quest.getImage());
 
         Location newLocation = new Location(38.9072, -77.0369);
         quest.setLocation(newLocation);
