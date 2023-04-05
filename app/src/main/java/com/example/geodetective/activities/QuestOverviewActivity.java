@@ -12,24 +12,33 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.R;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Timer;
 import com.example.geodetective.singletons.ActiveQuest;
 import com.example.geodetective.singletons.ActiveUser;
 import com.example.geodetective.singletons.DbConnection;
-import com.example.geodetective.gameComponents.Location;
-import com.example.geodetective.R;
-import com.example.geodetective.gameComponents.Timer;
 
-// TODO: there are still some time-related issues when updating location.
-//  if you press finish quest before the method updateCurrentLocation in onResume has
-//  finished executing, you will get a wrong location of the user.
-
+/**
+ * The QuestOverviewActivity class sets up the UI and handles button clicks for the quest overview
+ * activity in an Android app.
+ */
 public class QuestOverviewActivity extends AppCompatActivity {
-    ActiveUser user = ActiveUser.getInstance();
-    ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-    DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
     private Location location;
     private Timer timer = null;
 
+    /**
+     * This function sets up the UI and handles button clicks for the quest overview activity in an
+     * Android app.
+     *
+     * @param savedInstanceState savedInstanceState is a Bundle object that contains the data that was
+     * saved in the previous state of the activity. It is used to restore the state of the activity
+     * when it is recreated, for example, when the device is rotated or when the activity is destroyed
+     * and recreated due to a configuration change.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,16 +105,35 @@ public class QuestOverviewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * The function checks if the active user is trusted or if the name of the creator matches the name
+     * of the user trying to edit.
+     *
+     * @param nameOfUser The name of the user who wants to edit something.
+     * @param nameOfCreator The name of the user who created the content that is being edited.
+     * @return A boolean value is being returned.
+     */
     private boolean userIsAllowedToEdit(String nameOfUser, String nameOfCreator) {
         return ActiveUser.getInstance().getTrusted() ||
                 nameOfCreator.compareTo(nameOfUser) == 0;
     }
 
+    /**
+     * The function "endQuest()" updates the current location and calls the "endQuestLambda()"
+     * function.
+     */
     @SuppressLint("SetTextI18n")
     private void endQuest() {
-        location.updateCurrentLocation((location) -> endQuestLambda(location));
+        location.updateCurrentLocation(this::endQuestLambda);
     }
 
+    /**
+     * This method checks if the user has completed a quest successfully and displays a message
+     * accordingly.
+     *
+     * @param location The current location of the user.
+     */
+    @SuppressLint("SetTextI18n")
     private void endQuestLambda(Location location) {
 
         //location.compareToQuest(ActiveQuest.getInstance());
@@ -162,6 +190,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function starts a quest, sets a timer, and changes the text of a button.
+     */
     @SuppressLint("SetTextI18n")
     private void startQuest() {
         ActiveQuest.getInstance().getQuest().start();
@@ -172,6 +203,9 @@ public class QuestOverviewActivity extends AppCompatActivity {
         startQuestButton.setText("Finish Quest");
     }
 
+    /**
+     * This function updates the UI and location when the activity resumes.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -189,15 +223,25 @@ public class QuestOverviewActivity extends AppCompatActivity {
         questName.setText(activeQuestInstance.getQuest().getName());
         questDescription.setText(activeQuestInstance.getQuest().getDescription());
         questImage.setImageBitmap(activeQuestInstance.getQuest().getImage());
+
+        // Update Location
+        location.updateCurrentLocation((location) -> this.location = location);
     }
 
+    /**
+     * This function sets the active quest instance to null when the activity is destroyed in Java.
+     */
     @Override
     protected void onDestroy() {
-        //ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-        //activeQuestInstance.setQuest(null);
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+        activeQuestInstance.setQuest(null);
         super.onDestroy();
     }
 
+    /**
+     * This function stops a timer if it is running and calls the superclass method to handle the back
+     * button press event in an Android app.
+     */
     @Override
     public void onBackPressed() {
         if(timer != null) {
@@ -206,6 +250,20 @@ public class QuestOverviewActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * This function handles the result of a permission request for location access.
+     *
+     * @param requestCode An integer value that identifies the request code that was passed to
+     * requestPermissions() method when requesting permission.
+     * @param permissions An array of strings representing the permissions requested by the app. These
+     * permissions are requested by the user at runtime and are used to access certain features or data
+     * on the device, such as location, camera, contacts, etc.
+     * @param grantResults grantResults is an integer array that contains the results of the permission
+     * requests. Each element in the array corresponds to the permission request at the same index in
+     * the permissions array. The value of the element can be either PackageManager.PERMISSION_GRANTED
+     * or PackageManager.PERMISSION_DENIED, depending on whether the user granted or denied the
+     * permission
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
