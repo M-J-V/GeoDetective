@@ -21,7 +21,7 @@ public class ImageInput {
     private static final int SELECT_PICTURE = 200;
     private final Activity activity;
 
-    UserPreferences preferences;
+    private UserPreferences preferences;
 
     public ImageInput(Activity activity) {
         this.activity = activity;
@@ -103,11 +103,11 @@ public class ImageInput {
     public void onActivityResult(int requestCode, int resultCode, Intent data, ImageView questImage, Context context) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
 
-            photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-            byte[] imageInByte = baos.toByteArray();
-            float imageSize = imageInByte.length/1000;
+            photo.compress(Bitmap.CompressFormat.JPEG, 90, bAOS);
+            byte[] imageInByte = bAOS.toByteArray();
+            float imageSize = (float) imageInByte.length/1000;
             if (imageSize > 3000) {
                 Toast.makeText(context, "Image is too large", Toast.LENGTH_LONG).show();
             } else {
@@ -121,11 +121,11 @@ public class ImageInput {
             try {
                 photo = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), data.getData());
                 Toast.makeText(context, "Loading Image", Toast.LENGTH_LONG).show();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
 
-                photo.compress(Bitmap.CompressFormat.JPEG, 90, baos);
-                byte[] imageInByte = baos.toByteArray();
-                float imageSize = imageInByte.length/1000;
+                photo.compress(Bitmap.CompressFormat.JPEG, 90, bAOS);
+                byte[] imageInByte = bAOS.toByteArray();
+                float imageSize = (float) imageInByte.length/1000;
                 if (imageSize > 3000) {
                     Toast.makeText(context, "Image is too large", Toast.LENGTH_LONG).show();
                 } else {
@@ -133,9 +133,7 @@ public class ImageInput {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                return;
             }
-            //questImage.setImageBitmap(photo);
         }
     }
 }
