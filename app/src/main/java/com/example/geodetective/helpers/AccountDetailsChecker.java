@@ -8,7 +8,6 @@ package com.example.geodetective.helpers;
  */
 public class AccountDetailsChecker {
 
-    // the instance of the class
     private static AccountDetailsChecker instance = null;
 
     private AccountDetailsChecker() { }
