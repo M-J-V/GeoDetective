@@ -1,5 +1,6 @@
 package com.example.geodetective.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
@@ -16,25 +17,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.geodetective.singletons.ActiveQuest;
-import com.example.geodetective.singletons.ActiveUser;
-import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.R;
 import com.example.geodetective.gameComponents.ImageInput;
 import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
-import com.example.geodetective.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 public class EditQuestActivity extends AppCompatActivity {
-    private Location location;
-    private ImageInput imageInput;
     DbConnection db = DbConnection.getInstance();
     ActiveUser user = ActiveUser.getInstance();
-
     ActiveQuest activeQuest = ActiveQuest.getInstance();
+    private Location location;
+    private ImageInput imageInput;
     private ImageView questImage;
     private EditText questName;
     private EditText questDescription;
@@ -103,25 +101,21 @@ public class EditQuestActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
+    @SuppressLint("SetTextI18n")
     private void checkAndUploadQuest() {
-        String err = "";
         String newQuestName = questName.getText().toString().trim();
 
         if(newQuestName.equals("")) {
             errorMsg.setText("Please enter a Quest Title");
         } else {
-            db.quests.document(newQuestName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    String err = "";
-                    String previousName = activeQuest.getQuest().getName();
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot Quest = task.getResult();
-                        if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
-                            uploadQuest();
-                        } else {
-                            errorMsg.setText("A quest with this name already exists.");
-                        }
+            db.quests.document(newQuestName).get().addOnCompleteListener(task -> {
+                String previousName = activeQuest.getQuest().getName();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot Quest = task.getResult();
+                    if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
+                        uploadQuest();
+                    } else {
+                        errorMsg.setText("A quest with this name already exists.");
                     }
                 }
             });
