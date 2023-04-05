@@ -1,15 +1,14 @@
 package com.example.geodetective.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.example.geodetective.listAdapters.CustomHistoryAdapter;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.geodetective.R;
+import com.example.geodetective.listAdapters.CustomHistoryAdapter;
 
 import java.util.ArrayList;
 
@@ -21,7 +20,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        listView = (ListView) findViewById(R.id.customListView);
+        listView = findViewById(R.id.customListView);
         // Get all information for the list
         ArrayList<String> titles = getIntent().getStringArrayListExtra("titles");
         ArrayList<String> times = getIntent().getStringArrayListExtra("timesCompleted");
