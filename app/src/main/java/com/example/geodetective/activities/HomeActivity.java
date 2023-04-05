@@ -26,10 +26,10 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
-    DbConnection db = DbConnection.getInstance();
-    ActiveUser user = ActiveUser.getInstance();
-    QuestImages images = QuestImages.getInstance();
-    ProgressDialog pd;
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final QuestImages images = QuestImages.getInstance();
+    private ProgressDialog pd;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
