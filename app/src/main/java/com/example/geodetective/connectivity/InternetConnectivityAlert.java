@@ -9,13 +9,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.geodetective.activities.LoginActivity;
-import com.example.geodetective.connectivity.ConnectivityChecker;
 
 public class InternetConnectivityAlert extends Activity {
     public void createDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        String internetMessage;
-
         builder.setTitle("No internet connection");
         builder.setMessage("You need an internet connection to use this app.");
         ConnectivityChecker.hasInternetConnection(context);
