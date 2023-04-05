@@ -16,8 +16,8 @@ import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class RegisterActivity extends AppCompatActivity {
-    DbConnection db = DbConnection.getInstance();
-    AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private final AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
