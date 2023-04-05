@@ -40,7 +40,7 @@ public class ImageInput {
      * already tried to use a resource (such as the camera or gallery) without having the necessary
      * permissions.
      */
-    private void askPermissions(boolean triedToUseResourceWithoutPermission) {
+    public void askPermissions(boolean triedToUseResourceWithoutPermission) {
         preferences = UserPreferences.getInstance(activity);
 
         boolean permissionsAsked = preferences.contains("cameraPermissions") && preferences.contains("galleryPermissions");

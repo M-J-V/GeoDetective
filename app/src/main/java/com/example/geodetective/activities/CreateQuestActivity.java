@@ -6,6 +6,7 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
 import com.example.geodetective.singletons.ActiveUser;
 import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.singletons.UserPreferences;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 /**
@@ -39,6 +41,7 @@ public class CreateQuestActivity extends AppCompatActivity {
     private EditText questHint;
     private TextView errorMsg;
 
+    private UserPreferences preferences;
     private Quest questUpload;
 
     /**
@@ -73,6 +76,15 @@ public class CreateQuestActivity extends AppCompatActivity {
 
         // get error text view from activity
         errorMsg = findViewById(R.id.errorText);
+
+        // get preferences
+        preferences = UserPreferences.getInstance(this);
+        boolean permissionGiven = preferences.getBoolean("cameraPermissions", false) ||
+                preferences.getBoolean("galleryPermissions",false);
+
+        if (!permissionGiven) {
+            imageInput.askPermissions(true);
+        }
 
         // Set back button functionality
         backBtn.setOnClickListener(v -> {
