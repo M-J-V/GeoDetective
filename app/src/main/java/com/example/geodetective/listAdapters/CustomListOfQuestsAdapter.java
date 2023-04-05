@@ -1,5 +1,6 @@
 package com.example.geodetective.listAdapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -15,14 +16,12 @@ import java.util.ArrayList;
 
 public class CustomListOfQuestsAdapter extends BaseAdapter {
 
-    Context context;
-    ArrayList<String> titles;
-    ArrayList<String> creators;
-    ArrayList<Bitmap> questImages;
-    LayoutInflater inflater;
+    private final ArrayList<String> titles;
+    private final ArrayList<String> creators;
+    private final ArrayList<Bitmap> questImages;
+    private final LayoutInflater inflater;
 
     public CustomListOfQuestsAdapter(Context ctx, ArrayList<String> quests, ArrayList<String> authors, ArrayList<Bitmap> images) {
-        this.context = ctx;
         this.titles = quests;
         this.creators = authors;
         this.questImages = images;
@@ -43,12 +42,13 @@ public class CustomListOfQuestsAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.activity_custom_list_view, null);
-        TextView txtView = (TextView) view.findViewById(R.id.textView);
-        TextView txtViewAuthor = (TextView) view.findViewById(R.id.textDesc);
-        ImageView buildingImg = (ImageView) view.findViewById(R.id.imageIcon);
+        TextView txtView = view.findViewById(R.id.textView);
+        TextView txtViewAuthor = view.findViewById(R.id.textDesc);
+        ImageView buildingImg = view.findViewById(R.id.imageIcon);
         txtView.setText(titles.get(position));
         txtViewAuthor.setText(creators.get(position));
         buildingImg.setImageBitmap(questImages.get(position));
