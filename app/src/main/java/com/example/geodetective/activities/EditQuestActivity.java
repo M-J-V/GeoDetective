@@ -28,9 +28,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 public class EditQuestActivity extends AppCompatActivity {
-    DbConnection db = DbConnection.getInstance();
-    ActiveUser user = ActiveUser.getInstance();
-    ActiveQuest activeQuest = ActiveQuest.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final ActiveQuest activeQuest = ActiveQuest.getInstance();
     private Location location;
     private ImageInput imageInput;
     private ImageView questImage;
