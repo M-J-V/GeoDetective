@@ -4,33 +4,29 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.geodetective.singletons.ActiveQuest;
-import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
-import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.R;
 import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.singletons.DbConnection;
 import com.example.geodetective.singletons.QuestImages;
-import com.example.geodetective.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class ListOfQuestsActivity extends AppCompatActivity {
 
     DbConnection db = DbConnection.getInstance();
     ActiveQuest activeQuest = ActiveQuest.getInstance();
-    QuestImages imgs = QuestImages.getInstance();
+    QuestImages images = QuestImages.getInstance();
     ListView listView;
     Activity activity = this;
     int positionPressed = -1;
@@ -60,8 +56,8 @@ public class ListOfQuestsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_quests);
-        listView = (ListView) findViewById(R.id.customListView);
-        questImages = imgs.getImages();
+        listView = findViewById(R.id.customListView);
+        questImages = images.getImages();
         titles = getIntent().getStringArrayListExtra("titles");
         creators = getIntent().getStringArrayListExtra("creators");
         CustomListOfQuestsAdapter customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
@@ -75,34 +71,28 @@ public class ListOfQuestsActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        listView.setOnItemClickListener((adapterView, view, position, l) -> {
 
-                // Get basic info from existing arraylist
-                String questName = titles.get(position);
-                String creator = creators.get(position);
-                Bitmap imageBitmap = questImages.get(position);
-                positionPressed = position;
+            // Get basic info from existing arraylist
+            String questName = titles.get(position);
+            String creator = creators.get(position);
+            Bitmap imageBitmap = questImages.get(position);
+            positionPressed = position;
 
 
-                // Remaining info comes from quest in database
-                db.quests.document(questName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot doc = task.getResult();
-                            String questDesc = doc.get("Description").toString();
-                            String questHint = doc.get("Hint").toString();
-                            double questLat = (double) doc.get("latitude");
-                            double questLong = (double) doc.get("longitude");
-                            Location location = new Location(questLat, questLong, activity);
-                            activeQuest.setQuest(new Quest(questName, creator, questDesc, questHint, imageBitmap, location));
-                            startActivity(new Intent (getApplicationContext(), QuestOverviewActivity.class));
-                        }
-                    }
-                });
-            }
+            // Remaining info comes from quest in database
+            db.quests.document(questName).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    String questDesc = Objects.requireNonNull(doc.get("Description")).toString();
+                    String questHint = Objects.requireNonNull(doc.get("Hint")).toString();
+                    double questLat = (double) Objects.requireNonNull(doc.get("latitude"));
+                    double questLong = (double) Objects.requireNonNull(doc.get("longitude"));
+                    Location location = new Location(questLat, questLong, activity);
+                    activeQuest.setQuest(new Quest(questName, creator, questDesc, questHint, imageBitmap, location));
+                    startActivity(new Intent (getApplicationContext(), QuestOverviewActivity.class));
+                }
+            });
         });
     }
 }

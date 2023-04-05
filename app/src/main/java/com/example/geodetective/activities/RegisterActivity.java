@@ -1,8 +1,5 @@
 package com.example.geodetective.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,12 +7,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.geodetective.helpers.AccountDetailsChecker;
-import com.example.geodetective.singletons.DbConnection;
-import com.example.geodetective.helpers.LoginEncoder;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.geodetective.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.geodetective.helpers.AccountDetailsChecker;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -63,23 +60,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser (String username, String password, TextView errorText) throws IllegalArgumentException {
 
-        db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                String errorMsg = "";
-                if (task.isSuccessful()) {
-                    DocumentSnapshot User = task.getResult();
-                    if (User.exists()) {
-                        errorMsg = "Username already in use";
-                    } else {
-                        db.createNewUser(username, password, false);
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    }
+        db.users.document(username).get().addOnCompleteListener(task -> {
+            String errorMsg = "";
+            if (task.isSuccessful()) {
+                DocumentSnapshot User = task.getResult();
+                if (User.exists()) {
+                    errorMsg = "Username already in use";
                 } else {
-                    errorMsg = "Error getting data from Database";
+                    db.createNewUser(username, password, false);
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
-                errorText.setText(errorMsg);
+            } else {
+                errorMsg = "Error getting data from Database";
             }
+            errorText.setText(errorMsg);
         });
     }
 }
