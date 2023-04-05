@@ -10,7 +10,20 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.geodetective.activities.LoginActivity;
 
+/**
+ * The InternetConnectivityAlert class creates a dialog box that prompts the user to establish an
+ * internet connection before using the app.
+ */
 public class InternetConnectivityAlert extends Activity {
+    /**
+     * The function creates an alert dialog that prompts the user to establish an internet connection
+     * to use the app, with options to try again or exit the app.
+     *
+     * @param context The context parameter is a reference to the current state of the application or
+     * activity. It provides access to resources, preferences, and other application-specific
+     * information. In this case, it is used to create an AlertDialog and to check for internet
+     * connectivity.
+     */
     public void createDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("No internet connection");
@@ -38,6 +51,14 @@ public class InternetConnectivityAlert extends Activity {
         dialog.show();
     }
 
+    /**
+     * This function creates a dialog in the onCreate method of an Android activity.
+     *
+     * @param savedInstanceState savedInstanceState is a Bundle object that contains the previous state
+     * of the activity. It is used to restore the activity to its previous state in case it is
+     * destroyed and recreated, such as during a configuration change (e.g. screen rotation) or when
+     * the system needs to free up memory. The savedInstanceState bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
