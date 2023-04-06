@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/geo_green">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".activities.HomeActivity">
+
+        <ImageView
+            android:id="@+id/Quest_Image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintBottom_toTopOf="@+id/choose_Quest_Image_Btn"
+            app:layout_constraintEnd_toStartOf="@+id/quest_name_input"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/BackBtn"
+            app:srcCompat="@mipmap/ic_launcher"
+            tools:ignore="ImageContrastCheck" />
+
+        <Button
+            android:id="@+id/choose_Quest_Image_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/geo_green_darker"
+            android:minHeight="50dp"
+            android:text="@string/editChooseQuest"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+            app:layout_constraintEnd_toEndOf="@id/Quest_Image"
+            app:layout_constraintStart_toStartOf="@id/Quest_Image"
+            app:layout_constraintTop_toBottomOf="@id/Quest_Image" />
+
+        <EditText
+            android:id="@+id/quest_name_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:gravity="center"
+            android:hint="@string/editQuestName"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="20"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
+            app:layout_constraintBottom_toTopOf="@+id/quest_description_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/Quest_Image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/quest_description_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:gravity="center"
+            android:hint="@string/editQuestDescription"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
+            app:layout_constraintBottom_toTopOf="@+id/quest_hint_input"
+            app:layout_constraintEnd_toEndOf="@+id/quest_name_input"
+            app:layout_constraintStart_toStartOf="@+id/quest_name_input"
+            app:layout_constraintTop_toBottomOf="@id/quest_name_input" />
+
+        <EditText
+            android:id="@+id/quest_hint_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
+            android:backgroundTint="@color/geo_green_darker"
+            android:hint="@string/editQuestHint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:gravity="center"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/submit_quest_btn"
+            app:layout_constraintEnd_toEndOf="@+id/quest_name_input"
+            app:layout_constraintStart_toStartOf="@+id/quest_name_input"
+            app:layout_constraintTop_toBottomOf="@id/quest_description_input" />
+
+        <Button
+            android:id="@+id/submit_quest_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/geo_green_darker"
+            android:minHeight="50dp"
+            android:text="@string/editSubmitQuest"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/quest_name_input"
+            app:layout_constraintStart_toStartOf="@+id/quest_name_input"
+            app:layout_constraintTop_toBottomOf="@+id/quest_hint_input" />
+
+        <ImageButton
+            android:id="@+id/BackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:contentDescription="@string/Back"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/errorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            app:layout_constraintEnd_toEndOf="@+id/quest_hint_input"
+            app:layout_constraintStart_toStartOf="@+id/quest_hint_input"
+            app:layout_constraintTop_toBottomOf="@+id/quest_hint_input" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/deleteQuest"
+            android:backgroundTint="@color/design_default_color_error"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"
+            app:layout_constraintStart_toStartOf="@+id/choose_Quest_Image_Btn"
+            app:layout_constraintTop_toBottomOf="@+id/choose_Quest_Image_Btn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
