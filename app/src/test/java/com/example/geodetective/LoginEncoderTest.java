@@ -1,6 +1,9 @@
 package com.example.geodetective;
 
 import static org.junit.Assert.assertEquals;
+
+import com.example.geodetective.helpers.LoginEncoder;
+
 import org.junit.Test;
 
 public class LoginEncoderTest {

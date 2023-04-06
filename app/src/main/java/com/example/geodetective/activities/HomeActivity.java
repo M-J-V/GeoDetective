@@ -1,5 +1,6 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,12 +11,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.example.geodetective.R;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.singletons.QuestImages;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 
@@ -23,13 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//TODO you can open an activity multiple times by clicking a button twice before it loads, especially if database requests need to be made for the list of quests this is quite slow.
 public class HomeActivity extends AppCompatActivity {
 
-    DbConnection db = DbConnection.getInstance();
-    ActiveUser user = ActiveUser.getInstance();
-    QuestImages images = QuestImages.getInstance();
-    ProgressDialog pd;
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final QuestImages images = QuestImages.getInstance();
+    private ProgressDialog pd;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         db.questNames.document("questsID").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
                 List<String> questTitles = (List<String>) doc.get("quests");
                 ArrayList<String> titles = new ArrayList<>(Objects.requireNonNull(questTitles));
                 ArrayList <String> creators = new ArrayList<>();
@@ -136,7 +138,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadQuestListActivity(ArrayList<String> titles, ArrayList<String> creators, ArrayList<Bitmap> questImages) {
-        Intent questList = new Intent(getApplicationContext(), ListOfQuests.class);
+        Intent questList = new Intent(getApplicationContext(), ListOfQuestsActivity.class);
         //questList.putParcelableArrayListExtra("images",questImages); // Passing Bitmaps like this is not very memory efficient
         images.setImages(questImages);
         questList.putStringArrayListExtra("titles", titles);
@@ -146,15 +148,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void updateTrust() {
-        db.users.document(user.getUsername()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                String errorMsg = "";
-                if (task.isSuccessful()) {
-                    DocumentSnapshot User = task.getResult();
-                    if (User.exists()) {
-                        user.setTrusted((boolean) User.get("Trusted"));
-                    }
+        db.users.document(user.getUsername()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot User = task.getResult();
+                if (User.exists()) {
+                    user.setTrusted((boolean) Objects.requireNonNull(User.get("Trusted")));
                 }
             }
         });

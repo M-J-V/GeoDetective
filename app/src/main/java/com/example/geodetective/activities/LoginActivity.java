@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,13 +9,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.geodetective.R;
+import com.example.geodetective.connectivity.ConnectivityChecker;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
-    DbConnection db = DbConnection.getInstance();
-    ActiveUser user = ActiveUser.getInstance();
-    ConnectivityChecker connectivityChecker = new ConnectivityChecker();
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final ConnectivityChecker connectivityChecker = new ConnectivityChecker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn.setOnClickListener(v -> {
             // Start home activity
-            String username = usernameWidget.getText().toString();
+            String username = usernameWidget.getText().toString().trim();
             String password = passwordWidget.getText().toString();
 
             try {

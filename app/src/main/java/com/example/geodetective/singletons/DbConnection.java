@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.singletons;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,9 +7,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.geodetective.gameComponents.Quest;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A singleton class that is used to connect and interface with the firebase database.
@@ -36,13 +36,13 @@ import java.util.Map;
 public class DbConnection {
 
     private static DbConnection connection = null;
-    FirebaseFirestore db;
-    CollectionReference users;
-    CollectionReference quests;
-    CollectionReference attempts;
-    CollectionReference questNames;
-    CollectionReference requests;
-    StorageReference storage;
+    public FirebaseFirestore db;
+    public CollectionReference users;
+    public CollectionReference quests;
+    public CollectionReference attempts;
+    public CollectionReference questNames;
+    public CollectionReference requests;
+    public StorageReference storage;
 
     DbConnection() {
         this.db = FirebaseFirestore.getInstance();
@@ -74,11 +74,10 @@ public class DbConnection {
         Log.d("Test", "Test");
     }
 
-    public void removeRequest(String username) {
-        requests.document(username).delete();
-    }
-
     public void createAttempt(String username, String quest, boolean win) {
+        if(username == null || quest == null)
+            throw new IllegalArgumentException("Username or quest is null");
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
         String timeCompleted = sdf.format(new Date());
 
@@ -116,20 +115,18 @@ public class DbConnection {
         quests.document(newQuest.getName()).set(quest);
 
         // Upload image to storage
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream ByArOuST = new ByteArrayOutputStream();
 
-        newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, baos);
-        byte[] data = baos.toByteArray();
-        float imageSize = data.length/1000;
+        newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, ByArOuST);
+        byte[] data = ByArOuST.toByteArray();
+        float imageSize = (float) data.length/1000;
 
-        Log.d("WOAH", "size is " + imageSize);
         if (imageSize > 1000) {
-            Log.d("WOAH", "too many bytes brother");
-            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 25, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 25, ByArOuST);
         } else {
-            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, baos);
+            newQuest.getImage().compress(Bitmap.CompressFormat.JPEG, 90, ByArOuST);
         }
-        data = baos.toByteArray();
+        data = ByArOuST.toByteArray();
         uploadBitmap(newQuest.getName(), data, context);
 
 
@@ -137,77 +134,67 @@ public class DbConnection {
         addToAllQuestsList(newQuest.getName());
     }
 
-    void addToAllQuestsList(String title) {
-        questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot doc = task.getResult();
-                    List<String> titles = (List<String>) doc.get("quests");
-                    titles.add(title);
-                    Map<String, Object> questTitles = new HashMap<>();
-                    questTitles.put("quests", titles);
-                    questNames.document("questsID").set(questTitles);
+    private void addToAllQuestsList(String title) {
+        if(title == null)
+            throw new IllegalArgumentException("Title is null");
 
-                }
+        questNames.document("questsID").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
+                List<String> titles = (List<String>) doc.get("quests");
+                assert titles != null;
+                titles.add(title);
+                Map<String, Object> questTitles = new HashMap<>();
+                questTitles.put("quests", titles);
+                questNames.document("questsID").set(questTitles);
+
             }
         });
     }
 
     private void uploadBitmap(String title, byte[] data, Context context) {
-        StorageReference storRef = storage.child("questImages").child(title);
-        UploadTask uploadTask = storRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(context, "Quest uploaded!", Toast.LENGTH_SHORT).show();
-            }
-        });
+        StorageReference storeRef = storage.child("questImages").child(title);
+        UploadTask uploadTask = storeRef.putBytes(data);
+        uploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+        }).addOnSuccessListener(taskSnapshot -> Toast.makeText(context, "Quest uploaded!", Toast.LENGTH_SHORT).show());
     }
 
-    private void getAndDeleteCreatedQuests (String username, ArrayList<String> questsCreated) {
+    private void getAndDeleteCreatedQuests (String username) {
+        ArrayList<String> questsCreated = new ArrayList<String>();
         Query createdQuests = quests.whereEqualTo("Creator", username);
-        createdQuests.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        questsCreated.add(doc.get("Title").toString());
-                    }
-
-                    // Delete all quests from Quests collection
-                    deleteQuests(questsCreated);
-                    // Delete all quests from list of existing quests
-                    deleteFromAllQuestsListMultiple(questsCreated);
-                    // Delete all quest images from storage
-                    deleteQuestImages(questsCreated);
-                    // Delete user from Users collection
-                    deleteUser(username);
+        createdQuests.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                for (QueryDocumentSnapshot doc : task.getResult()) {
+                    questsCreated.add(Objects.requireNonNull(doc.get("Title")).toString());
                 }
+
+                // Delete all quests from Quests collection
+                deleteQuests(questsCreated);
+                // Delete all quests from list of existing quests
+                deleteFromAllQuestsListMultiple(questsCreated);
+                // Delete all quest images from storage
+                deleteQuestImages(questsCreated);
             }
         });
     }
 
     private void deleteQuestImages(ArrayList<String> questList){
-        StorageReference storRef = storage.child("questImages");
+        StorageReference storeRef = storage.child("questImages");
         StorageReference image;
         for (String title: questList) {
-            image = storRef.child(title);
+            image = storeRef.child(title);
             image.delete();
         }
     }
 
     private void deleteQuestImage(String questTitle){
-        StorageReference storRef = storage.child("questImages");
-        storRef.child(questTitle).delete();
+        StorageReference storeRef = storage.child("questImages");
+        storeRef.child(questTitle).delete();
     }
 
-    private void deleteUser(String username){
+    public void deleteUser(String username){
         users.document(username).delete();
     }
 
@@ -218,38 +205,36 @@ public class DbConnection {
     }
 
     private void deleteFromAllQuestsListMultiple(ArrayList<String> questTitles) {
-        questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot doc = task.getResult();
-                    List<String> titles = (List<String>) doc.get("quests");
-                    for (String title : questTitles) {
-                        titles.remove(title);
-                    }
-                    Map<String, Object> questTitles = new HashMap<>();
-                    questTitles.put("quests", titles);
-                    questNames.document("questsID").set(questTitles);
+        questNames.document("questsID").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
+                List<String> titles = (List<String>) doc.get("quests");
+                for (String title : questTitles) {
+                    assert titles != null;
+                    titles.remove(title);
                 }
+                Map<String, Object> questTitles1 = new HashMap<>();
+                questTitles1.put("quests", titles);
+                questNames.document("questsID").set(questTitles1);
             }
         });
     }
 
     private void deleteFromAllQuestsList(String deletedQuest, Quest newQuest, Context context, boolean create) {
-        questNames.document("questsID").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot doc = task.getResult();
-                    List<String> titles = (List<String>) doc.get("quests");
-                    titles.remove(deletedQuest);
-                    Map<String, Object> questTitles = new HashMap<>();
-                    questTitles.put("quests", titles);
-                    questNames.document("questsID").set(questTitles);
+        questNames.document("questsID").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot doc = task.getResult();
+                @SuppressWarnings("unchecked")
+                List<String> titles = (List<String>) doc.get("quests");
+                assert titles != null;
+                titles.remove(deletedQuest);
+                Map<String, Object> questTitles = new HashMap<>();
+                questTitles.put("quests", titles);
+                questNames.document("questsID").set(questTitles);
 
-                    if (create) {
-                        createNewQuest(newQuest, context);
-                    }
+                if (create) {
+                    createNewQuest(newQuest, context);
                 }
             }
         });
@@ -260,16 +245,44 @@ public class DbConnection {
         deleteFromAllQuestsList(deletedQuest, quest, context, true);
     }
 
-    public void deleteUserAndQuests(String username, String password){
+    public void deleteUserQuests(String username){
+        if(username == null)
+            throw new IllegalArgumentException("Username cannot be null");
+
         // Get all quest titles created by the user
-        ArrayList<String> questsCreated = new ArrayList<String>();
-        getAndDeleteCreatedQuests(username, questsCreated);
+        getAndDeleteCreatedQuests(username);
     }
 
     public void deleteQuest(Quest quest) {
         quests.document(quest.getName()).delete().addOnSuccessListener(aVoid -> {
             deleteFromAllQuestsList(quest.getName(),null, null,false);
             deleteQuestImage(quest.getName());
+        });
+    }
+
+    public void deleteAttempts (Query query){
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    doc.getReference().delete();
+                }
+
+            }
+        });
+    }
+
+    public void updateQuestCreator(String oldUsername, String newUsername) {
+        Query userAttempts = quests.whereEqualTo("Creator", oldUsername);
+        userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot doc : task.getResult().getDocuments()) {
+                    doc.getReference().update("Creator", newUsername);
+
+                }
+
+            }
         });
     }
 

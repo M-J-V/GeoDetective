@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".HomeActivity">
+        tools:context=".activities.HomeActivity">
 
         <ImageView
             android:id="@+id/Quest_Image"
@@ -49,9 +49,12 @@
             android:layout_marginBottom="25dp"
             android:backgroundTint="@color/geo_green_darker"
             android:hint="@string/editQuestName"
+            android:gravity="center"
             android:importantForAutofill="no"
             android:inputType="text"
             android:minHeight="48dp"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
             android:maxLength="20"
             app:layout_constraintBottom_toTopOf="@+id/quest_description_input"
             app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"
@@ -66,7 +69,10 @@
             android:backgroundTint="@color/geo_green_darker"
             android:hint="@string/editQuestDescription"
             android:importantForAutofill="no"
+            android:gravity="center"
             android:inputType="textMultiLine"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
             android:minHeight="48dp"
             app:layout_constraintBottom_toTopOf="@+id/quest_hint_input"
             app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"
@@ -78,10 +84,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
+            android:textColor="@color/black"
+            android:textColorHint="#004D40"
             android:backgroundTint="@color/geo_green_darker"
             android:hint="@string/editQuestHint"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
+            android:gravity="center"
             android:minHeight="48dp"
             app:layout_constraintBottom_toTopOf="@+id/submit_quest_btn"
             app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"

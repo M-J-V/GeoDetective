@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.geodetective.R;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
+import com.example.geodetective.singletons.UserPreferences;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -23,14 +27,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private UserPreferences preferences;
 
-    ActiveUser user = ActiveUser.getInstance();
-    DbConnection db = DbConnection.getInstance();
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        preferences = UserPreferences.getInstance(this.getBaseContext());
 
         //get buttons from activity
         Button history_button = findViewById(R.id.button_history);
@@ -42,8 +49,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Get switches from activity
         SwitchCompat cameraSwitch = findViewById(R.id.cameraSwitch);
         SwitchCompat gallerySwitch = findViewById(R.id.gallerySwitch);
-
-        UserPreferences preferences = UserPreferences.getInstance(this);
 
         cameraSwitch.setChecked(preferences.getBoolean("cameraPermissions", false));
         gallerySwitch.setChecked(preferences.getBoolean("galleryPermissions", false));
@@ -117,7 +122,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void deleteUser() {
         // delete current user
-        db.deleteUserAndQuests(user.getUsername(), user.getPassword());
+        db.deleteUserQuests(user.getUsername());
+        Query userAttempts = db.attempts.whereEqualTo("Username", user);
+        db.deleteAttempts(userAttempts);
+        db.deleteUser(user.getUsername());
 
         // Go back to login page
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.gameComponents;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,9 +20,11 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
-interface LocFunction {
-    void run(Location location);
-}
+/**
+ * The Location class provides methods for managing and obtaining location information, including
+ * checking and requesting location permissions, updating the current location, and calculating the
+ * distance between two locations.
+ */
 public class Location {
     public static final int PERMISSIONS_REQUEST = 1;
     final LocationManager manager;
@@ -41,11 +43,8 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = null;
-        this.manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        checkLocationServices();
+        this.manager = null;
     }
-
-
 
     public Location(@NonNull Activity activity) {
         this.latitude = 0;
@@ -55,6 +54,10 @@ public class Location {
         checkLocationServices();
     }
 
+    /**
+     * The function checks if the location services are enabled and prompts the user to enable them if
+     * they are not.
+     */
     public void checkLocationServices() {
         if (manager == null)
             throw new IllegalStateException("Location manager is not set");
@@ -71,30 +74,80 @@ public class Location {
         }
     }
 
+    /**
+     * The function returns the latitude value as a double.
+     *
+     * @return The method is returning a double value which represents the latitude.
+     */
     public double getLatitude() {
         return latitude;
     }
 
+    /**
+     * This function sets the latitude value of an object.
+     *
+     * @param latitude latitude is a variable of type double that represents the geographic latitude of
+     * a location. It is used in a method to set the value of the latitude instance variable of an
+     * object.
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * The function returns the longitude value as a double.
+     *
+     * @return The method is returning a double value which represents the longitude.
+     */
     public double getLongitude() {
         return longitude;
     }
 
+    /**
+     * This function sets the longitude value of an object.
+     *
+     * @param longitude longitude is a variable of type double that represents the geographic longitude
+     * coordinate of a location. This method sets the value of the longitude variable for an object
+     * instance.
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    /**
+     * The function returns the activity object.
+     *
+     * @return The method `getActivity()` is returning an object of type `Activity`.
+     */
     public Activity getActivity() {
         return activity;
     }
 
+    /**
+     * This function sets the activity for a Java class.
+     *
+     * @param activity The parameter "activity" is an object of the class "Activity". The method
+     * "setActivity" sets the value of the instance variable "activity" to the value passed as a
+     * parameter. This is commonly used in Android development to set the current activity context for
+     * a class.
+     */
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
+    /**
+     * This Java function calculates the distance between two locations using their latitude and
+     * longitude coordinates.
+     *
+     * @param location The "location" parameter is an object of the "Location" class, which represents
+     * a geographic location with latitude and longitude coordinates. It is used to calculate the
+     * distance between the current location (represented by the latitude and longitude instance
+     * variables of the current object) and the location passed as a parameter.
+     * @return The `distanceTo` method is returning a `float` value which represents the distance
+     * between the current location and the location passed as a parameter. The distance is calculated
+     * using the `distanceBetween` method of the `android.location.Location` class. The distance is
+     * stored in the first element of the `results` array, which is then returned by the method.
+     */
     public float distanceTo(@NonNull Location location) {
         float[] results = new float[3];
         android.location.Location.distanceBetween(latitude, longitude,
@@ -102,10 +155,20 @@ public class Location {
         return results[0];
     }
 
+    /**
+     * This function checks if the activity variable is null or not.
+     *
+     * @return The method is returning a boolean value. It returns `true` if the `activity` variable is
+     * `null`, and `false` otherwise.
+     */
     private boolean activityIsSet() {
         return activity == null;
     }
 
+    /**
+     * This function checks if the activity is set and if the permission to access location is granted,
+     * and requests the permission if not.
+     */
     public void requestPermissions() throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
@@ -119,8 +182,17 @@ public class Location {
         }
     }
 
+    /**
+     * This Java function updates the current location of the device and runs a specified function with
+     * the updated location information.
+     *
+     * @param func `func` is an instance of the `LocFunction` interface, which has a single method
+     * `run()` that takes an argument of type `LocationHelper`. This interface is used to pass a
+     * function that will be executed after the current location is successfully obtained. The
+     * `LocationHelper` object is passed
+     */
     @SuppressLint("MissingPermission")
-    public void updateCurrentLocation(LocFunction func, Context ctx) throws IllegalStateException {
+    public void updateCurrentLocation(LocFunction func) throws IllegalStateException {
         // Check if activity is set
         if (activityIsSet()) {
             throw new IllegalStateException("Activity is not set");
@@ -154,6 +226,18 @@ public class Location {
         });
     }
 
+    /**
+     * This function checks if a permission request has been granted and shows a dialog to the user if
+     * it has not been granted.
+     *
+     * @param requestCode An integer code that identifies the request for permission. This code is used
+     * to match the request with the response received in the onRequestPermissionsResult() method.
+     * @param grantResults An array of integers representing the results of the permission requests.
+     * Each element in the array corresponds to a permission requested in the original
+     * requestPermissions() call. The value of the element indicates whether the permission was granted
+     * or denied. A value of PackageManager.PERMISSION_GRANTED indicates that the permission was
+     * granted, while a value
+     */
     public void onRequestPermissionsResult(int requestCode, int[] grantResults) throws IllegalStateException{
         // Check if activity is set
         if (activityIsSet()) {
@@ -189,6 +273,17 @@ public class Location {
         }
     }
 
+    /**
+     * This function cancels a dialog and finishes the activity when clicked.
+     *
+     * @param dialog The dialog parameter is the dialog that triggered the click event. It is of type
+     * DialogInterface, which is an interface used to create dialogs and manage their events. In this
+     * case, the onClick method is called when a button in the dialog is clicked, and the dialog
+     * parameter represents that dialog.
+     * @param which The "which" parameter in this method represents the button that was clicked by the
+     * user in the dialog box. It is an integer value that corresponds to the position of the button in
+     * the dialog box. For example, if there are two buttons in the dialog box, "OK" and "Cancel",
+     */
     private void onClick(DialogInterface dialog, int which) {
         dialog.cancel();
         activity.finish();

@@ -1,4 +1,4 @@
-package com.example.geodetective;
+package com.example.geodetective.singletons;
 
 import android.app.AlertDialog;
 import android.content.Context;

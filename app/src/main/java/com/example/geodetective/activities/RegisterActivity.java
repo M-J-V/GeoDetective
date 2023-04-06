@@ -1,28 +1,23 @@
-package com.example.geodetective;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.geodetective.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.geodetective.R;
+import com.example.geodetective.helpers.AccountDetailsChecker;
+import com.example.geodetective.helpers.LoginEncoder;
+import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
-    DbConnection db = DbConnection.getInstance();
-    AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private final AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         signupBtn.setOnClickListener(v -> {
             // Start home activity
-            DbConnection db = DbConnection.getInstance();
-            String username = usernameWidget.getText().toString();
+            String username = usernameWidget.getText().toString().trim();
             String password = passwordWidget.getText().toString();
             String passwordAgain = passwordAgainWidget.getText().toString();
 
@@ -66,23 +60,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser (String username, String password, TextView errorText) throws IllegalArgumentException {
 
-        db.users.document(username).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task){
-                String errorMsg = "";
-                if (task.isSuccessful()) {
-                    DocumentSnapshot User = task.getResult();
-                    if (User.exists()) {
-                        errorMsg = "Username already in use";
-                    } else {
-                        db.createNewUser(username, password, false);
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                    }
+        db.users.document(username).get().addOnCompleteListener(task -> {
+            String errorMsg = "";
+            if (task.isSuccessful()) {
+                DocumentSnapshot User = task.getResult();
+                if (User.exists()) {
+                    errorMsg = "Username already in use";
                 } else {
-                    errorMsg = "Error getting data from Database";
+                    db.createNewUser(username, password, false);
+                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 }
-                errorText.setText(errorMsg);
+            } else {
+                errorMsg = "Error getting data from Database";
             }
+            errorText.setText(errorMsg);
         });
     }
 }

@@ -1,14 +1,15 @@
-package com.example.geodetective;
+package com.example.geodetective.listAdapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.geodetective.R;
 
 import java.util.ArrayList;
 
@@ -45,12 +46,13 @@ public class CustomHistoryAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.activity_custom_history, null);
-        TextView titleTxt = (TextView) view.findViewById(R.id.textTitle);
-        TextView timeTxt = (TextView) view.findViewById(R.id.textTime);
-        TextView passTxt = (TextView) view.findViewById(R.id.textResult);
+        TextView titleTxt = view.findViewById(R.id.textTitle);
+        TextView timeTxt = view.findViewById(R.id.textTime);
+        TextView passTxt = view.findViewById(R.id.textResult);
         titleTxt.setText(titles.get(position));
         timeTxt.setText(timesOfCompletion.get(position));
         if(outcomes.get(position) == 1) {

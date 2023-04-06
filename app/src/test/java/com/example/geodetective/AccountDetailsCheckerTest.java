@@ -1,10 +1,11 @@
 package com.example.geodetective;
 
-import junit.framework.TestCase;
+import com.example.geodetective.helpers.AccountDetailsChecker;
 
+import org.junit.Assert;
 import org.junit.Test;
 
-public class AccountDetailsCheckerTest extends TestCase {
+public class AccountDetailsCheckerTest {
 
     /**
      * Test to check that we only get one instance.
@@ -13,7 +14,7 @@ public class AccountDetailsCheckerTest extends TestCase {
     public void testGetInstance() {
         AccountDetailsChecker checker1 = AccountDetailsChecker.getInstance();
         AccountDetailsChecker checker2 = AccountDetailsChecker.getInstance();
-        assertTrue(checker1.equals(checker2));
+        Assert.assertEquals(checker1, checker2);
     }
 
     /**
@@ -25,7 +26,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String username = "alex21";
         String password = "Technicalproblem2@";
         String passwordAgain = "Technicalproblem2@";
-        assertTrue(checker.checkDetails(username, password, passwordAgain));
+        Assert.assertTrue(checker.checkDetails(username, password, passwordAgain));
     }
     /**
      * Test to check for no letters in password.
@@ -38,7 +39,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "12345678910";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -55,7 +56,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "abcdefghijklmn";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -72,7 +73,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "abcdefghijk123";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -89,7 +90,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "a1@";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -106,7 +107,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "abcdefghijk1@";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -123,7 +124,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "abcdefghijk1!";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -140,7 +141,7 @@ public class AccountDetailsCheckerTest extends TestCase {
         String passwordAgain = "abcdefghijk1@";
         try {
             checker.checkDetails(username, password, passwordAgain);
-            fail("Exception not thrown");
+            Assert.fail("Exception not thrown");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

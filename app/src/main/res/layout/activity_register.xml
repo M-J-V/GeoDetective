@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/geo_green"
-    tools:context=".RegisterActivity">
+    tools:context=".activities.RegisterActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -41,6 +41,7 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="@color/black"
+        android:textColorHint="#004D40"
         app:layout_constraintBottom_toTopOf="@id/Login_Password_Again"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
@@ -56,6 +57,7 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textColor="@color/black"
+        android:textColorHint="#004D40"
         app:layout_constraintBottom_toTopOf="@+id/Login_Password"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
@@ -71,6 +73,7 @@
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textColor="@color/black"
+        android:textColorHint="#004D40"
         app:layout_constraintBottom_toTopOf="@id/Signup_Btn"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"

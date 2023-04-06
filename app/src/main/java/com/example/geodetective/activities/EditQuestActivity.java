@@ -1,34 +1,38 @@
-package com.example.geodetective;
+package com.example.geodetective.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.geodetective.R;
+import com.example.geodetective.gameComponents.ImageInput;
+import com.example.geodetective.gameComponents.Location;
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.singletons.ActiveQuest;
+import com.example.geodetective.singletons.ActiveUser;
+import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.io.ByteArrayOutputStream;
+import com.google.firebase.firestore.Query;
 
 public class EditQuestActivity extends AppCompatActivity {
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final ActiveQuest activeQuest = ActiveQuest.getInstance();
     private Location location;
-    private  ImageInput imageInput;
-    DbConnection db = DbConnection.getInstance();
-    ActiveUser user = ActiveUser.getInstance();
+    private ImageInput imageInput;
     private ImageView questImage;
     private EditText questName;
     private EditText questDescription;
@@ -40,7 +44,7 @@ public class EditQuestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_quest);
 
-        location = ActiveQuest.getInstance().getQuest().getLocation();
+        location = activeQuest.getQuest().getLocation();
         imageInput = new ImageInput(this);
         // Get image from activity
         questImage = findViewById(R.id.Quest_Image);
@@ -69,12 +73,14 @@ public class EditQuestActivity extends AppCompatActivity {
         // Select image from gallery or take a photo.
         chooseImageBtn.setOnClickListener(v -> imageInput.selectImage());
 
-        fillInputFields(ActiveQuest.getInstance());
+        fillInputFields(activeQuest);
 
         submitQuestBtn.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you sure you want to edit this Quest?");
-            builder.setMessage("Data and attempts connected to old quest details will not be updated");
+            if (!questName.getText().toString().equals(activeQuest.getQuest().getName())){
+                builder.setMessage("Changing the Quest Name will delete attempts made so far on this Quest.");
+            }
             builder.setPositiveButton("Yes", (dialog, which) -> checkAndUploadQuest());
             builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss()).show();
 
@@ -90,30 +96,26 @@ public class EditQuestActivity extends AppCompatActivity {
     }
 
     private void deleteQuest() {
-        db.deleteQuest(ActiveQuest.getInstance().getQuest());
-        ActiveQuest.getInstance().disconnectActiveQuest();
+        db.deleteQuest(activeQuest.getQuest());
+       activeQuest.disconnectActiveQuest();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
+    @SuppressLint("SetTextI18n")
     private void checkAndUploadQuest() {
-        String err = "";
-        String newQuestName = questName.getText().toString();
+        String newQuestName = questName.getText().toString().trim();
 
         if(newQuestName.equals("")) {
             errorMsg.setText("Please enter a Quest Title");
         } else {
-            db.quests.document(newQuestName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    String err = "";
-                    String previousName = ActiveQuest.getInstance().getQuest().getName();
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot Quest = task.getResult();
-                        if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
-                            uploadQuest();
-                        } else {
-                            errorMsg.setText("A quest with this name already exists.");
-                        }
+            db.quests.document(newQuestName).get().addOnCompleteListener(task -> {
+                String previousName = activeQuest.getQuest().getName();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot Quest = task.getResult();
+                    if (newQuestName.compareTo(previousName) == 0 || !Quest.exists()) {
+                        uploadQuest();
+                    } else {
+                        errorMsg.setText("A quest with this name already exists.");
                     }
                 }
             });
@@ -121,7 +123,7 @@ public class EditQuestActivity extends AppCompatActivity {
     }
 
     private void uploadQuest() {
-        String title = questName.getText().toString();
+        String title = questName.getText().toString().trim();
         String desc = questDescription.getText().toString();
         String hint = questHint.getText().toString();
         String creator = user.getUsername();
@@ -148,7 +150,7 @@ public class EditQuestActivity extends AppCompatActivity {
         if(validImageAndDesc) {
             Bitmap bitmap = ((BitmapDrawable) questImage.getDrawable()).getBitmap();
             Quest newQuest = new Quest(title, creator, desc, hint, bitmap, location);
-            replaceQuest(ActiveQuest.getInstance().getQuest(), newQuest);
+            replaceQuest(activeQuest.getQuest(), newQuest);
         }
 
         errorMsg.setText(err);
@@ -165,11 +167,17 @@ public class EditQuestActivity extends AppCompatActivity {
         // Delete quest image too
         db.storage.child("questImages").child(previousQuest.getName()).delete();
 
+        // Delete attempts on old questName if changed
+        if(!previousQuest.getName().equals(newQuest.getName())) {
+            Query questAttempts = db.attempts.whereEqualTo("Quest", previousQuest.getName());
+            db.deleteAttempts(questAttempts);
+        }
+
         // Replace quest
         db.quests.document(previousQuest.getName()).delete().addOnSuccessListener(aVoid -> {
             db.updateQuestListAndCreate(previousQuest.getName(), newQuest, getApplicationContext());
 
-            ActiveQuest.getInstance().setQuest(newQuest);
+            activeQuest.setQuest(newQuest);
 
         })
         .addOnFailureListener(e -> {
