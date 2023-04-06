@@ -15,10 +15,23 @@ import com.example.geodetective.helpers.LoginEncoder;
 import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+/**
+ * The RegisterActivity class sets up the registration process for new users, checks for valid account
+ * details, and registers the user if the username is not already in use.
+ */
 public class RegisterActivity extends AppCompatActivity {
     private final DbConnection db = DbConnection.getInstance();
     private final AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
+    /**
+     * This function sets up the Register activity, gets the necessary widgets, and sets up listeners
+     * for the signup and back buttons.
+     *
+     * @param savedInstanceState The savedInstanceState parameter is a Bundle object that contains the
+     * activity's previously saved state. It is used to restore the activity's state when it is
+     * recreated, such as when the device is rotated or the activity is destroyed and recreated due to
+     * a configuration change.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +71,16 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This function registers a new user by checking if the username is already in use and creating a
+     * new user if it is not.
+     *
+     * @param username The username of the user trying to register.
+     * @param password The password parameter is a String variable that represents the password entered
+     * by the user during the registration process.
+     * @param errorText A TextView object that will display any error messages that occur during the
+     * registration process.
+     */
     private void registerUser (String username, String password, TextView errorText) throws IllegalArgumentException {
 
         db.users.document(username).get().addOnCompleteListener(task -> {
