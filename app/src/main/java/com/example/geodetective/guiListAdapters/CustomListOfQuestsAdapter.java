@@ -1,4 +1,4 @@
-package com.example.geodetective.listAdapters;
+package com.example.geodetective.guiListAdapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.geodetective.R;
 import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
-import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
+import com.example.geodetective.guiListAdapters.CustomListOfQuestsAdapter;
 import com.example.geodetective.singletons.ActiveQuest;
 import com.example.geodetective.singletons.DbConnection;
 import com.example.geodetective.singletons.QuestImages;
