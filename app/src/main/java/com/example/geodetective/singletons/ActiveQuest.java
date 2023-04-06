@@ -26,8 +26,9 @@ public class ActiveQuest {
     }
 
     public void disconnectActiveQuest() {
-        instance = null;
-        quest = null;
+        this.instance = null;
+        this.quest = null;
     }
+
 
 }

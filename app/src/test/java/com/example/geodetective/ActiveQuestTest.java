@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import android.app.Application;
 
+import com.example.geodetective.gameComponents.Quest;
+import com.example.geodetective.singletons.ActiveQuest;
+
 import org.junit.Test;
 
 public class ActiveQuestTest {
@@ -11,24 +14,28 @@ public class ActiveQuestTest {
     Quest quest = new Quest("John Doe", "Divo", "Find the hidden treasure!", "Look under the big tree", null, null);
 
     @Test
-    public void getInstanceNull() {
+    public void testGetInstance() {
         ActiveQuest activeQuest = ActiveQuest.getInstance();
-        assertEquals(activeQuest, null);
+        ActiveQuest newActiveQuest = ActiveQuest.getInstance();
+        assertEquals(activeQuest, newActiveQuest);
+        activeQuest.disconnectActiveQuest();
     }
 
     @Test
-    public void testQuestNotNullAfterSetting() {
+    public void testSetAndGetQuest() {
         ActiveQuest activeQuest = ActiveQuest.getInstance();
         activeQuest.setQuest(quest);
-        assertNotNull(activeQuest);
+        assertEquals(quest, activeQuest.getQuest());
+        activeQuest.disconnectActiveQuest();
     }
 
     @Test
     public void testDisconnectActiveQuest() {
         ActiveQuest activeQuest = ActiveQuest.getInstance();
-        activeQuest.setQuest(quest);
         activeQuest.disconnectActiveQuest();
-        assertNull(activeQuest);
+        assertEquals(activeQuest.getQuest(), null);
+        //assertNotNull(ActiveQuest.getInstance());
+        activeQuest.disconnectActiveQuest();
     }
 
 }
