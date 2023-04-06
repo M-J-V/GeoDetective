@@ -8,6 +8,10 @@ import org.junit.Test;
 
 public class LoginEncoderTest {
 
+    /**
+     * The function tests the hashing of a password using a specific algorithm and compares the result
+     * with an expected hashed value.
+     */
     @Test
     public void testHashWord() {
         String word = "password123";

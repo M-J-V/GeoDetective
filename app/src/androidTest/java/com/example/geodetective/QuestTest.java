@@ -12,6 +12,9 @@ import org.junit.Test;
 
 public class QuestTest {
 
+    /**
+     * The function tests the properties and setters of a Quest object in Java.
+     */
     @Test
     public void testQuestProperties() {
         String name = "My Quest";
@@ -53,6 +56,9 @@ public class QuestTest {
         assertEquals(newLocation, quest.getLocation());
     }
 
+    /**
+     * This function tests whether a quest can be started and stopped.
+     */
     @Test
     public void testQuestStarted() {
         Quest quest = new Quest("My Quest", "John Doe", "Find the hidden treasure!", "Look under the big tree", null, null);

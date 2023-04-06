@@ -10,6 +10,9 @@ import org.junit.Test;
 
 public class UserPreferencesTest {
 
+    /**
+     * This function tests that the UserPreferences singleton instance is not null.
+     */
     @Test
     public void getInstanceNonNull() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -18,6 +21,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This function tests if the UserPreferences.getPreference() method returns null when the
+     * preference does not exist.
+     */
     @Test
     public void getPreferenceReturnsNull() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -26,6 +33,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This function tests if the UserPreferences class can successfully retrieve a value that was
+     * previously stored.
+     */
     @Test
     public void getPreferenceReturnsValue() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -35,6 +46,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a unit test in Java that checks if the UserPreferences.getBoolean() method returns the
+     * default value when the key is not found.
+     */
     @Test
     public void getBooleanNull(){
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -43,6 +58,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This function tests if the UserPreferences.getBoolean() method returns the default value when
+     * the stored value is not a boolean.
+     */
     @Test
     public void getBooleanNotBoolean() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -52,6 +71,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a unit test in Java that checks if the UserPreferences class returns true when getting a
+     * boolean preference.
+     */
     @Test
     public void getBooleanTrue() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -61,6 +84,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a JUnit test case to verify that the `getBoolean()` method of the `UserPreferences`
+     * class returns false when the stored value is false.
+     */
     @Test
     public void getBooleanFalse() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -70,6 +97,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a JUnit test case that checks if an exception is thrown when invalid input is passed to
+     * the putPreference() method of the UserPreferences class.
+     */
     @Test
     public void invalidInputPut(){
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -80,6 +111,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a unit test in Java that checks if the UserPreferences class correctly returns true when
+     * checking if a preference exists.
+     */
     @Test
     public void containsTrue() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
@@ -89,6 +124,10 @@ public class UserPreferencesTest {
         }
     }
 
+    /**
+     * This is a JUnit test to check if the UserPreferences class correctly returns false when checking
+     * for a non-existent preference.
+     */
     @Test
     public void containsFalse() {
         UserPreferences userPreferences = UserPreferences.getInstance(ApplicationProvider.getApplicationContext());
