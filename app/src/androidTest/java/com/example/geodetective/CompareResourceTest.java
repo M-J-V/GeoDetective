@@ -12,13 +12,20 @@ import org.junit.Test;
 
 public class CompareResourceTest {
 
-    CompareResource resourceCompare;
+    private CompareResource resourceCompare;
 
+    /**
+     * This is a setup method in a Java test class that initializes a new instance of the
+     * CompareResource class.
+     */
     @Before
     public void setUp() {
         resourceCompare = new CompareResource();
     }
 
+    /**
+     * This function tests if a string resource in an Android app is equal to a passed string.
+     */
     @Test
     public void stringResourceSameAsPassedString_returnsTrue() {
         Context context = getApplicationContext();
@@ -26,6 +33,10 @@ public class CompareResourceTest {
         assertTrue(result);
     }
 
+    /**
+     * This function tests if a string resource in an Android application is equal to a passed string
+     * and returns false if they are different.
+     */
     @Test
     public void stringResourceDifferentAsPassedString_returnsFalse() {
         Context context = getApplicationContext();
