@@ -27,11 +27,16 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
  */
 public class Location {
     public static final int PERMISSIONS_REQUEST = 1;
-    final LocationManager manager;
+    private final LocationManager manager;
     private Activity activity;
     private double latitude;
     private double longitude;
     public Location(double latitude, double longitude, @NonNull Activity activity) {
+        if (latitude < -90 || latitude > 90)
+            throw new IllegalArgumentException("Latitude must be between -90 and 90");
+        if (longitude < -180 || longitude > 180)
+            throw new IllegalArgumentException("Longitude must be between -180 and 180");
+
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = activity;
@@ -40,6 +45,11 @@ public class Location {
     }
 
     public Location (double latitude, double longitude) {
+        if (latitude < -90 || latitude > 90)
+            throw new IllegalArgumentException("Latitude must be between -90 and 90");
+        if (longitude < -180 || longitude > 180)
+            throw new IllegalArgumentException("Longitude must be between -180 and 180");
+
         this.latitude = latitude;
         this.longitude = longitude;
         this.activity = null;
@@ -91,6 +101,8 @@ public class Location {
      * object.
      */
     public void setLatitude(double latitude) {
+        if (latitude < -90 || latitude > 90)
+            throw new IllegalArgumentException("Latitude must be between -90 and 90");
         this.latitude = latitude;
     }
 
@@ -111,6 +123,9 @@ public class Location {
      * instance.
      */
     public void setLongitude(double longitude) {
+        if (longitude < -180 || longitude > 180)
+            throw new IllegalArgumentException("Longitude must be between -180 and 180");
+
         this.longitude = longitude;
     }
 
@@ -161,7 +176,7 @@ public class Location {
      * @return The method is returning a boolean value. It returns `true` if the `activity` variable is
      * `null`, and `false` otherwise.
      */
-    private boolean activityIsSet() {
+    private boolean activityNotSet() {
         return activity == null;
     }
 
@@ -171,7 +186,7 @@ public class Location {
      */
     public void requestPermissions() throws IllegalStateException {
         // Check if activity is set
-        if (activityIsSet()) {
+        if (activityNotSet()) {
             throw new IllegalStateException("Activity is not set");
         }
 
@@ -194,7 +209,7 @@ public class Location {
     @SuppressLint("MissingPermission")
     public void updateCurrentLocation(LocFunction func) throws IllegalStateException {
         // Check if activity is set
-        if (activityIsSet()) {
+        if (activityNotSet()) {
             throw new IllegalStateException("Activity is not set");
         }
 
@@ -240,7 +255,7 @@ public class Location {
      */
     public void onRequestPermissionsResult(int requestCode, int[] grantResults) throws IllegalStateException{
         // Check if activity is set
-        if (activityIsSet()) {
+        if (activityNotSet()) {
             throw new IllegalStateException("Activity is not set");
         }
 
