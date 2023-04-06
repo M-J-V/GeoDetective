@@ -8,7 +8,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geodetective.R;
-import com.example.geodetective.listAdapters.CustomHistoryAdapter;
+import com.example.geodetective.guiListAdapters.CustomHistoryAdapter;
 
 import java.util.ArrayList;
 
