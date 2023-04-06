@@ -43,7 +43,7 @@
             android:id="@+id/quest_name_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
             android:backgroundTint="@color/geo_green_darker"
             android:gravity="center"
             android:hint="@string/editQuestName"
@@ -56,13 +56,13 @@
             app:layout_constraintBottom_toTopOf="@+id/quest_description_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/Quest_Image"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/text_details" />
 
         <EditText
             android:id="@+id/quest_description_input"
-            android:layout_width="wrap_content"
+            android:layout_width="235dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
             android:backgroundTint="@color/geo_green_darker"
             android:gravity="center"
             android:hint="@string/editQuestDescription"
@@ -80,7 +80,7 @@
             android:id="@+id/quest_hint_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:textColor="@color/black"
             android:textColorHint="#004D40"
             android:backgroundTint="@color/geo_green_darker"
@@ -143,5 +143,18 @@
             app:layout_constraintEnd_toEndOf="@+id/choose_Quest_Image_Btn"
             app:layout_constraintStart_toStartOf="@+id/choose_Quest_Image_Btn"
             app:layout_constraintTop_toBottomOf="@+id/choose_Quest_Image_Btn" />
+
+        <TextView
+            android:id="@+id/text_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quest Details"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@+id/BackBtn"
+            app:layout_constraintBottom_toTopOf="@+id/quest_name_input"
+            app:layout_constraintEnd_toEndOf="@+id/quest_name_input"
+            app:layout_constraintStart_toStartOf="@+id/quest_name_input" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

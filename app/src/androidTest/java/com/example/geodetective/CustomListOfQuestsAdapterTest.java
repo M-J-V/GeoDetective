@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 
 import androidx.test.core.app.ApplicationProvider;
 
-import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
+import com.example.geodetective.guiListAdapters.CustomListOfQuestsAdapter;
 
 import org.junit.Test;
 
