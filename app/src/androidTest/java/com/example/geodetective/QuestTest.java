@@ -2,7 +2,6 @@ package com.example.geodetective;
 
 import static org.junit.Assert.*;
 import android.graphics.Bitmap;
-import org.junit.Before;
 import org.junit.Test;
 
 public class QuestTest {
