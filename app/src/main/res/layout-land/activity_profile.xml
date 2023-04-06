@@ -8,6 +8,16 @@
     android:background="@color/geo_green"
     tools:context=".activities.ProfileActivity">
 
+    <View
+        android:id="@+id/bar"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:background="@color/geo_green_darker"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/text_profile_info"
         android:layout_width="wrap_content"
@@ -17,7 +27,7 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/usernameTxt"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +38,7 @@
         android:text="@string/trusted"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/galleryPermissions"
+        app:layout_constraintBottom_toTopOf="@+id/cameraPermissions"
         app:layout_constraintEnd_toEndOf="@+id/usernameTxt"
         app:layout_constraintStart_toStartOf="@+id/usernameTxt"
         app:layout_constraintTop_toBottomOf="@id/usernameTxt" />
@@ -66,9 +76,9 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/usernameTxt"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/bar"
         app:layout_constraintStart_toEndOf="@id/usernameTxt"
-        app:layout_constraintTop_toTopOf="@+id/usernameTxt"/>
+        app:layout_constraintTop_toTopOf="@+id/usernameTxt" />
 
     <Button
         android:id="@+id/button_edit_profile"
@@ -78,8 +88,8 @@
         android:text="@string/editProf"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/button_permission"
-        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
-        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintEnd_toEndOf="@+id/button_history"
+        app:layout_constraintStart_toStartOf="@+id/button_history"
         app:layout_constraintTop_toBottomOf="@+id/button_history" />
 
     <Button
@@ -89,10 +99,10 @@
         android:backgroundTint="@color/geo_green_darker"
         android:text="@string/history"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/button_permission"
-        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
-        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
-        app:layout_constraintTop_toBottomOf="@+id/trustedTxt" />
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bar"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_permission"
@@ -102,8 +112,8 @@
         android:text="@string/permission"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/button_delete"
-        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
-        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintEnd_toEndOf="@+id/button_edit_profile"
+        app:layout_constraintStart_toStartOf="@+id/button_edit_profile"
         app:layout_constraintTop_toBottomOf="@+id/button_edit_profile" />
 
     <ImageButton
@@ -128,8 +138,8 @@
         android:text="@string/delete"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/text_profile_info"
-        app:layout_constraintStart_toStartOf="@+id/text_profile_info"
+        app:layout_constraintEnd_toEndOf="@+id/button_permission"
+        app:layout_constraintStart_toStartOf="@+id/button_permission"
         app:layout_constraintTop_toBottomOf="@+id/button_permission" />
 
     <TextView
@@ -158,7 +168,7 @@
         android:layout_height="wrap_content"
         android:text="@string/galleryPermissions"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/button_history"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/cameraPermissions"
         app:layout_constraintStart_toStartOf="@+id/cameraPermissions"
         app:layout_constraintTop_toBottomOf="@+id/cameraPermissions" />
