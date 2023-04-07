@@ -145,7 +145,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
         double questLatitude = ActiveQuest.getInstance().getQuest().getLocation().getLatitude();
         double questLongitude = ActiveQuest.getInstance().getQuest().getLocation().getLongitude();
 
-        if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
+        if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 25) {
             // Stop timer
             ActiveQuest.getInstance().getQuest().stop();
             timer.stop();
