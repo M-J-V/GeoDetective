@@ -146,4 +146,8 @@ public class AccountDetailsCheckerTest {
             System.out.println(e.getMessage());
         }
     }
+
+    public static class ActiveQuestTest {
+
+    }
 }
