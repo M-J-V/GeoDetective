@@ -24,7 +24,7 @@ public class GPSConnectivityAlert extends Activity {
      * activity. It provides access to resources, preferences, and other application-specific
      * information. In this case, it is used to display the dialog box and check for GPS connectivity.
      */
-    public void createDialog(Context context) {
+    private void createDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("No GPS connection");

@@ -8,24 +8,22 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.geodetective.R;
-import com.example.geodetective.listAdapters.CustomHistoryAdapter;
+import com.example.geodetective.guiListAdapters.CustomHistoryAdapter;
 
 import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity {
-    CustomHistoryAdapter customHistoryAdapter;
-    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        listView = findViewById(R.id.customListView);
+        ListView listView = findViewById(R.id.customListView);
         // Get all information for the list
         ArrayList<String> titles = getIntent().getStringArrayListExtra("titles");
         ArrayList<String> times = getIntent().getStringArrayListExtra("timesCompleted");
         ArrayList<Integer> outcomes = getIntent().getIntegerArrayListExtra("outcomes");
-        customHistoryAdapter = new CustomHistoryAdapter(getApplicationContext(),titles, times, outcomes);
+        CustomHistoryAdapter customHistoryAdapter = new CustomHistoryAdapter(getApplicationContext(), titles, times, outcomes);
         listView.setAdapter(customHistoryAdapter);
         //get buttons
         ImageButton backBtn = findViewById(R.id.backimagebutton);
@@ -35,7 +33,4 @@ public class HistoryActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         });
     }
-
-
-
 }

@@ -6,7 +6,6 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,8 +39,6 @@ public class CreateQuestActivity extends AppCompatActivity {
     private EditText questDescription;
     private EditText questHint;
     private TextView errorMsg;
-
-    private UserPreferences preferences;
     private Quest questUpload;
 
     /**
@@ -78,7 +75,7 @@ public class CreateQuestActivity extends AppCompatActivity {
         errorMsg = findViewById(R.id.errorText);
 
         // get preferences
-        preferences = UserPreferences.getInstance(this);
+        UserPreferences preferences = UserPreferences.getInstance(this);
         boolean permissionGiven = preferences.getBoolean("cameraPermissions", false) ||
                 preferences.getBoolean("galleryPermissions",false);
 

@@ -3,6 +3,7 @@ package com.example.geodetective.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,6 +44,10 @@ public class QuestOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quest_overview);
+
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+
+        Log.d("WOAH", "Overview created");
 
         // Get buttons from activity
         Button submitQuestButton = findViewById(R.id.check_result_btn);
@@ -140,7 +145,7 @@ public class QuestOverviewActivity extends AppCompatActivity {
         double questLatitude = ActiveQuest.getInstance().getQuest().getLocation().getLatitude();
         double questLongitude = ActiveQuest.getInstance().getQuest().getLocation().getLongitude();
 
-        if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 100) {
+        if(location.distanceTo(new Location(questLatitude, questLongitude, this)) < 25) {
             // Stop timer
             ActiveQuest.getInstance().getQuest().stop();
             timer.stop();
@@ -233,8 +238,6 @@ public class QuestOverviewActivity extends AppCompatActivity {
      */
     @Override
     protected void onDestroy() {
-        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
-        activeQuestInstance.setQuest(null);
         super.onDestroy();
     }
 
@@ -247,6 +250,8 @@ public class QuestOverviewActivity extends AppCompatActivity {
         if(timer != null) {
             timer.stop();
         }
+        ActiveQuest activeQuestInstance = ActiveQuest.getInstance();
+        activeQuestInstance.setQuest(null);
         super.onBackPressed();
     }
 

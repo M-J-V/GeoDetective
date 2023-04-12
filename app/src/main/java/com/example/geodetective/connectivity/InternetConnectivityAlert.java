@@ -24,7 +24,7 @@ public class InternetConnectivityAlert extends Activity {
      * information. In this case, it is used to create an AlertDialog and to check for internet
      * connectivity.
      */
-    public void createDialog(Context context) {
+    private void createDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("No internet connection");
         builder.setMessage("You need an internet connection to use this app.");

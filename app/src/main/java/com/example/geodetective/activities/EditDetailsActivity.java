@@ -21,9 +21,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 public class EditDetailsActivity extends AppCompatActivity {
-    ActiveUser user = ActiveUser.getInstance();
-    DbConnection db = DbConnection.getInstance();
-    AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
+    private final ActiveUser user = ActiveUser.getInstance();
+    private final DbConnection db = DbConnection.getInstance();
+    private final AccountDetailsChecker checker = AccountDetailsChecker.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

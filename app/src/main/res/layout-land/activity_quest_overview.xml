@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/quest_overview_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".activities.QuestOverviewActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/quest_overview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/geo_green">
+
+    <TextView
+        android:id="@+id/quest_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/questName"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="@id/Quest_Image"
+        app:layout_constraintStart_toStartOf="@id/Quest_Image"
+        app:layout_constraintTop_toBottomOf="@id/BackBtn" />
+
+    <TextView
+        android:id="@+id/image_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/imageClue"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/Quest_Image"
+        app:layout_constraintStart_toStartOf="@id/Quest_Image" />
+
+        <ImageView
+            android:id="@+id/Quest_Image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="30dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/quest_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/quest_name"
+            app:srcCompat="@mipmap/ic_launcher"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/quest_description"
+            android:layout_width="235dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/questDescription"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/reveal_hint_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/Quest_Image"
+            app:layout_constraintTop_toBottomOf="@id/BackBtn" />
+
+    <Button
+        android:id="@+id/reveal_hint_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:minHeight="50dp"
+        android:text="@string/hintQuest"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@id/quest_description"
+        app:layout_constraintStart_toStartOf="@id/quest_description"
+        app:layout_constraintTop_toBottomOf="@id/quest_description"
+        app:layout_constraintBottom_toTopOf="@id/check_result_btn"/>
+
+        <Button
+            android:id="@+id/check_result_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:minHeight="50dp"
+            android:text="@string/checkResult"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/reveal_hint_btn"
+            app:layout_constraintStart_toStartOf="@id/reveal_hint_btn"
+            app:layout_constraintTop_toBottomOf="@id/reveal_hint_btn" />
+
+        <ImageButton
+            android:id="@+id/BackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/geo_green_darker"
+            android:contentDescription="@string/Back"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="?attr/homeAsUpIndicator"
+            tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
+
+    <ImageButton
+        android:id="@+id/EditBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/geo_green_darker"
+        android:contentDescription="@string/Back"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit"
+        tools:ignore="ImageContrastCheck" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

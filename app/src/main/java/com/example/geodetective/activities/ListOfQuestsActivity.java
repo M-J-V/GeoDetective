@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.geodetective.R;
 import com.example.geodetective.gameComponents.Location;
 import com.example.geodetective.gameComponents.Quest;
-import com.example.geodetective.listAdapters.CustomListOfQuestsAdapter;
+import com.example.geodetective.guiListAdapters.CustomListOfQuestsAdapter;
 import com.example.geodetective.singletons.ActiveQuest;
 import com.example.geodetective.singletons.DbConnection;
 import com.example.geodetective.singletons.QuestImages;
@@ -24,16 +24,15 @@ import java.util.Objects;
 
 public class ListOfQuestsActivity extends AppCompatActivity {
 
-    DbConnection db = DbConnection.getInstance();
-    ActiveQuest activeQuest = ActiveQuest.getInstance();
-    QuestImages images = QuestImages.getInstance();
-    ListView listView;
-    Activity activity = this;
-    int positionPressed = -1;
-    ArrayList<Bitmap> questImages;
-    ArrayList<String> titles;
-    ArrayList<String> creators;
-    CustomListOfQuestsAdapter customBaseAdapter;
+    private final DbConnection db = DbConnection.getInstance();
+    private final ActiveQuest activeQuest = ActiveQuest.getInstance();
+    private final QuestImages images = QuestImages.getInstance();
+    private final Activity activity = this;
+    private ListView listView;
+    private int positionPressed = -1;
+    private ArrayList<Bitmap> questImages;
+    private ArrayList<String> titles;
+    private ArrayList<String> creators;
 
     @Override
     protected void onResume() {
@@ -44,7 +43,7 @@ public class ListOfQuestsActivity extends AppCompatActivity {
             questImages.set(positionPressed, activeQuestInstance.getQuest().getImage());
             titles.set(positionPressed, activeQuestInstance.getQuest().getName());
             creators.set(positionPressed, activeQuestInstance.getQuest().getCreator());
-            customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
+            CustomListOfQuestsAdapter customBaseAdapter = new CustomListOfQuestsAdapter(getApplicationContext(), titles, creators, questImages);
             listView.setAdapter(customBaseAdapter);
             activeQuestInstance.disconnectActiveQuest();
             positionPressed = -1;

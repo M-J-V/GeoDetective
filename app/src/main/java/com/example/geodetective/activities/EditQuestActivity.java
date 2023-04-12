@@ -27,6 +27,19 @@ import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+/*
+
+Note: This class contains a lot of code that is similar/identical to the CreateQuestActivity class.
+These classes can be merged together to reduce code duplication, and was implemented in commit ca398e54.
+However, this was reverted in commit 670e04a1 because there were plans to change EditQuestActivity to an extend where merging would not be practical.
+Due to time constraints, these plans are not implemented, and the code duplication remains.
+
+ */
+
+/**
+ * The EditQuestActivity class allows users to edit an existing quest by filling in input fields,
+ * selecting an image, and submitting or deleting the quest.
+ */
 public class EditQuestActivity extends AppCompatActivity {
     private final DbConnection db = DbConnection.getInstance();
     private final ActiveUser user = ActiveUser.getInstance();
@@ -39,6 +52,11 @@ public class EditQuestActivity extends AppCompatActivity {
     private EditText questHint;
     private TextView errorMsg;
 
+    /**
+     This method sets up the Edit Quest activity where users can edit an existing Quest. It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components including selecting an image, filling input fields, and submitting or deleting a Quest.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +113,19 @@ public class EditQuestActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * The function deletes a quest from the database and disconnects the active quest before starting
+     * the HomeActivity.
+     */
     private void deleteQuest() {
         db.deleteQuest(activeQuest.getQuest());
        activeQuest.disconnectActiveQuest();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
     }
 
+    /**
+     * The function checks if a new quest name is valid and unique before uploading it to a database.
+     */
     @SuppressLint("SetTextI18n")
     private void checkAndUploadQuest() {
         String newQuestName = questName.getText().toString().trim();
@@ -122,6 +147,10 @@ public class EditQuestActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * The function uploads a quest with a title, description, hint, creator, and image, and displays
+     * an error message if any of the required fields are missing.
+     */
     private void uploadQuest() {
         String title = questName.getText().toString().trim();
         String desc = questDescription.getText().toString();
@@ -156,6 +185,12 @@ public class EditQuestActivity extends AppCompatActivity {
         errorMsg.setText(err);
     }
 
+    /**
+     * The function fills input fields with data from an ActiveQuest object.
+     *
+     * @param quest The parameter "quest" is an object of type ActiveQuest, which contains information
+     * about a quest that is currently active in the application.
+     */
     private void fillInputFields(ActiveQuest quest) {
         questName.setText(quest.getQuest().getName());
         questDescription.setText(quest.getQuest().getDescription());
@@ -163,6 +198,13 @@ public class EditQuestActivity extends AppCompatActivity {
         questImage.setImageBitmap(quest.getQuest().getImage());
     }
 
+    /**
+     * This function replaces a previous quest with a new quest, deleting the old quest image and any
+     * attempts on the old quest name if it has changed.
+     *
+     * @param previousQuest The Quest object that is being replaced by the newQuest object.
+     * @param newQuest The new quest that will replace the previous quest.
+     */
     private void replaceQuest(Quest previousQuest, Quest newQuest) {
         // Delete quest image too
         db.storage.child("questImages").child(previousQuest.getName()).delete();
@@ -186,13 +228,41 @@ public class EditQuestActivity extends AppCompatActivity {
         });
     }
 
-    // Get image from camera or gallery
+    /**
+     * This function calls the onActivityResult method of the imageInput object with the given
+     * parameters.
+     *
+     * @param requestCode requestCode is an integer value that is used to identify the request made by
+     * the calling activity. It is passed as a parameter to the startActivityForResult() method when
+     * the calling activity starts the target activity. The same value is returned to the calling
+     * activity when the target activity finishes and calls the setResult() method. This
+     * @param resultCode resultCode is an integer value that represents the result of the activity that
+     * was started for a particular request code. It can have one of three values: RESULT_OK,
+     * RESULT_CANCELED, or any custom result code set by the activity. RESULT_OK indicates that the
+     * activity completed successfully, RESULT_CANCELED indicates that
+     * @param data The `data` parameter in the `onActivityResult` method is an `Intent` object that
+     * contains the result data returned from the activity launched by the `startActivityForResult`
+     * method. This data can include information such as the user's selected image, text input, or
+     * other data depending on the activity
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         imageInput.onActivityResult(requestCode, resultCode, data, questImage, getApplicationContext());
     }
 
-    // Handle permission request result
+    /**
+     * This function handles the result of a permission request for location access.
+     *
+     * @param requestCode An integer code that identifies the request for permission. This code is used
+     * to match the request with the response.
+     * @param permissions An array of permissions requested by the app. Each permission is represented
+     * as a string.
+     * @param grantResults grantResults is an integer array that contains the results of the permission
+     * requests. Each element in the array corresponds to the permission request at the same index in
+     * the permissions array. The value of the element can be either PackageManager.PERMISSION_GRANTED
+     * or PackageManager.PERMISSION_DENIED, depending on whether the user granted or denied the
+     * permission
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -200,5 +270,4 @@ public class EditQuestActivity extends AppCompatActivity {
             location.onRequestPermissionsResult(requestCode, grantResults);
         }
     }
-
 }
