@@ -14,17 +14,29 @@ public class QuestImagesTest {
 
     private QuestImages questImages;
 
+    /**
+     * This function initializes questImages to avoid declaring
+     * and initializing it for every test cases made.
+     */
     @Before
     public void setUp() {
         questImages = QuestImages.getInstance();
     }
 
+    /**
+     * This function tests if the instance of QuestImages is the same
+     * as the new instance
+     */
     @Test
     public void testGetInstance() {
         QuestImages newImages = QuestImages.getInstance();
         assertEquals(questImages, newImages);
     }
 
+    /**
+     * This function tests if QuestImages' setImages() method
+     * successfully sets the list of images to the provided image.
+     */
     @Test
     public void testSetImages() {
         ArrayList<Bitmap> images = new ArrayList<>();
@@ -35,6 +47,11 @@ public class QuestImagesTest {
         assertNotNull(retrievedImages);
     }
 
+    /**
+     * This function tests if the getImages() method retrieves the same set
+     * of images that was set using the setImages() method
+     * in the QuestImages class.
+     */
     @Test
     public void testGetImages() {
         ArrayList<Bitmap> images = new ArrayList<>();

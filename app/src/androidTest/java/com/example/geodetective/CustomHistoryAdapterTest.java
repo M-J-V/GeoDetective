@@ -18,11 +18,19 @@ public class CustomHistoryAdapterTest {
 
     private Context context;
 
+    /**
+     * This function initializes the user. This is done to avoid initializing
+     * user for every test functions made.
+     */
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
     }
 
+    /**
+     * This method tests if the count of items
+     * in a custom history adapter is returned correctly.
+     */
     @Test
     public void testGetCount() {
         ArrayList<String> titles = new ArrayList<>();
@@ -39,6 +47,10 @@ public class CustomHistoryAdapterTest {
         assertEquals(2, adapter.getCount());
     }
 
+    /**
+     * This method verifies that getView method does
+     * not return a null view when provided with valid arguments.
+     */
     @Test
     public void testGetView() {
         ArrayList<String> titles = new ArrayList<>();
