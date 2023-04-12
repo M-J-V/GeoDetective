@@ -32,6 +32,11 @@ public class Timer {
         this.layout = layout;
     }
 
+    public Timer() {
+        context = null;
+        layout = null;
+    }
+
     /**
      * The function creates a timer and starts it, updating the timer display every second.
      */
