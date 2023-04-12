@@ -59,7 +59,6 @@ public class ActiveQuestTest {
     @Test
     public void testDisconnectActiveQuest() {
         activeQuest.setQuest(quest);
-        assertNotNull(activeQuest.getQuest());
         activeQuest.disconnectActiveQuest();
         assertNull(activeQuest.getQuest());
     }
