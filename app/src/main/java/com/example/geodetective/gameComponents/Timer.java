@@ -1,16 +1,11 @@
 package com.example.geodetective.gameComponents;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
-import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-
-import com.example.geodetective.R;
 
 import java.util.Locale;
 
@@ -19,48 +14,29 @@ import java.util.Locale;
  * the removal and stopping of the timer.
  */
 public class Timer {
-    private final Context context;
     private final ViewGroup layout;
+    private final TextView timer;
     private boolean stop = false;
-    private TextView timer;
 
-    public Timer(Context context, ViewGroup layout) {
-        if(context == null || layout == null)
-            throw new IllegalArgumentException("Activity or layout cannot be null");
+    public Timer(ViewGroup layout, TextView timerObject) {
+        if(layout == null || timerObject == null)
+            throw new IllegalArgumentException("Activity, layout, or timerObject cannot be null");
 
-        this.context = context;
         this.layout = layout;
-    }
-
-    public Timer() {
-        context = null;
-        layout = null;
+        this.timer = timerObject;
     }
 
     /**
      * The function creates a timer and starts it, updating the timer display every second.
      */
     @SuppressLint("SetTextI18n")
-    public void add() {
-        // Create timer
-        timer = new TextView(context);
-        timer.setText("00:00:00");
-        timer.setTextColor(Color.BLACK);
-        timer.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
-
-        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-        );
-        params.topToBottom = R.id.check_result_btn; // set the text view below the start button
-        params.startToStart = R.id.check_result_btn;
-        params.endToEnd = R.id.check_result_btn;
-        params.topMargin = 16; // set top margin to 16dp
-
+    public void add(ConstraintLayout.LayoutParams params) {
         timer.setLayoutParams(params);
-
         layout.addView(timer);
+        startTimer(timer);
+    }
 
+    public void startTimer(TextView timerObject){
         // Start timer
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -78,7 +54,7 @@ public class Timer {
                     minutes = 0;
                     hours++;
                 }
-                timer.setText(String.format(Locale.getDefault(),"%02d:%02d:%02d", hours, minutes, seconds));
+                timerObject.setText(String.format(Locale.getDefault(),"%02d:%02d:%02d", hours, minutes, seconds));
                 if (stop) {
                     stop = false;
                     handler.removeCallbacks(this);
@@ -89,7 +65,6 @@ public class Timer {
         };
         handler.postDelayed(runnable, 1000);
     }
-
     /**
      * The function removes a view called "timer" from a layout.
      */

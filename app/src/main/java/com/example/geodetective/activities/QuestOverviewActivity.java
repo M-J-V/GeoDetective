@@ -2,8 +2,10 @@ package com.example.geodetective.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.geodetective.R;
 import com.example.geodetective.gameComponents.Location;
@@ -202,8 +205,24 @@ public class QuestOverviewActivity extends AppCompatActivity {
     private void startQuest() {
         ActiveQuest.getInstance().getQuest().start();
 
-        timer = new Timer(this, findViewById(R.id.quest_overview_layout));
-        timer.add();
+        // Create timer
+        TextView timerObject = new TextView(this);
+        timerObject.setText("00:00:00");
+        timerObject.setTextColor(Color.BLACK);
+        timerObject.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+
+        timer = new Timer(findViewById(R.id.quest_overview_layout), timerObject);
+
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.topToBottom = R.id.check_result_btn; // set the text view below the start button
+        params.startToStart = R.id.check_result_btn;
+        params.endToEnd = R.id.check_result_btn;
+        params.topMargin = 16; // set top margin to 16dp
+
+        timer.add(params);
         Button startQuestButton = findViewById(R.id.check_result_btn);
         startQuestButton.setText("Finish Quest");
     }
