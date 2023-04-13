@@ -36,7 +36,7 @@ public class Timer {
         startTimer(timer);
     }
 
-    public void startTimer(TextView timerObject){
+    private void startTimer(TextView timerObject){
         // Start timer
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
