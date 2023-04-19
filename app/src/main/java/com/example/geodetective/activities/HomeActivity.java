@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ *  The HomeActivity class allows users to create quests, go on quests, go to Profile
+ *  or Log out.
+ */
 public class HomeActivity extends AppCompatActivity {
 
     private final DbConnection db = DbConnection.getInstance();
@@ -31,6 +35,13 @@ public class HomeActivity extends AppCompatActivity {
     private final QuestImages images = QuestImages.getInstance();
     private ProgressDialog pd;
     @SuppressLint("SetTextI18n")
+    /**
+     This method sets up the Home activity where users can create quests, go on quests, go to Profile
+     or Log out.
+     It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -16,12 +16,22 @@ import com.example.geodetective.singletons.ActiveUser;
 import com.example.geodetective.singletons.DbConnection;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+/**
+ * The LoginActivity class allows users to input their credentials to connect to their account.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private final DbConnection db = DbConnection.getInstance();
     private final ActiveUser user = ActiveUser.getInstance();
     private final ConnectivityChecker connectivityChecker = new ConnectivityChecker();
 
+    /**
+     This method sets up the Login activity where users can input their credentials to connect
+     to their account.
+     It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +108,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This method is called when this activity is popped off the stack.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

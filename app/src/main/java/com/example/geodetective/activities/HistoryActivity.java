@@ -12,7 +12,16 @@ import com.example.geodetective.guiListAdapters.CustomHistoryAdapter;
 
 import java.util.ArrayList;
 
+/**
+ * The HistoryActivity class allows users to see information about quests that the user took part in.
+ */
 public class HistoryActivity extends AppCompatActivity {
+    /**
+     This method sets up the History activity where users can see the quests they competed in.
+     It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

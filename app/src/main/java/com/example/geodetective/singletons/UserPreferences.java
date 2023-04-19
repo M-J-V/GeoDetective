@@ -16,6 +16,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * The UserPreferences class stores the active preferences in the app.
+ */
 public class UserPreferences {
 
     private static UserPreferences instance = null;
@@ -45,6 +48,11 @@ public class UserPreferences {
         }
     }
 
+    /**
+     * This method returns the already existing instance of the class or a
+     * new one (if it doesn't exist already).
+     * @return instance of the class
+     */
     public static UserPreferences getInstance(Context context) {
         if (instance == null) {
             instance = new UserPreferences(context);
@@ -53,6 +61,11 @@ public class UserPreferences {
         return instance;
     }
 
+    /**
+     * This method returns a selected preference.
+     * @param preference the selected preference
+     * @return the preference object
+     */
     public Object getPreference(String preference) {
         JSONObject preferences = getJSON();
         if(preferences.has(preference)){
@@ -66,6 +79,12 @@ public class UserPreferences {
         }
     }
 
+    /**
+     * This method returns whether a preference is allowed or not
+     * @param key the preference
+     * @param defaultValue default boolean value in case there is no boolean preference
+     * @return whether the preference is allowed or not
+     */
     public boolean getBoolean(String key, boolean defaultValue){
         Object bool = getPreference(key);
         if(bool == null)
@@ -76,6 +95,11 @@ public class UserPreferences {
         return (boolean) bool;
     }
 
+    /**
+     * This method adds a preference to the already existing ones.
+     * @param key the preference
+     * @param value whether it is allowed or not
+     */
     public void putPreference(String key, Object value) {
         if(key == null || value == null)
             throw new IllegalArgumentException("Key or value must not be null");
@@ -90,6 +114,11 @@ public class UserPreferences {
         }
     }
 
+    /**
+     * This method returns whether there exists a preference with a certain key.
+     * @param key the preference
+     * @return whether that preference exists
+     */
     public boolean contains(String key){
         try {
             return getJSON().has(key);

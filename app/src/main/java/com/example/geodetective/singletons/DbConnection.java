@@ -66,14 +66,23 @@ public class DbConnection {
         return connection;
     }
 
+    /**
+     * This method allows users to send requests to become trusted users.
+     * @param username the requesting account username
+     */
     public void sendRequest(String username) {
         Map<String, Object> request = new HashMap<>();
         request.put("Username", username);
         request.put("Request", username + " has requested permission to create quests");
         requests.document(username).set(request);
-        Log.d("Test", "Test");
     }
 
+    /**
+     * This method sends the outcomes of the quests' attempts to the database
+     * @param username the username of the account that attempted the quest
+     * @param quest the quest that was attempted
+     * @param win whether it was a successful attempt or not
+     */
     public void createAttempt(String username, String quest, boolean win) {
         if(username == null || quest == null)
             throw new IllegalArgumentException("Username or quest is null");
@@ -90,6 +99,12 @@ public class DbConnection {
         attempts.document(username+"_"+quest+"_"+timeCompleted).set(attempt);
     }
 
+    /**
+     * This method stores a new user's info in the database
+     * @param username the new account username
+     * @param password the new account password
+     * @param trusted whether the new account is trusted or not
+     */
     public void createNewUser(String username, String password, boolean trusted) {
         // Create a new user with username and password
         Map<String, Object> user = new HashMap<>();
@@ -101,6 +116,11 @@ public class DbConnection {
         users.document(username).set(user);
     }
 
+    /**
+     * This method creates a new quest in the database
+     * @param newQuest the new quest
+     * @param context the context
+     */
     public void createNewQuest(Quest newQuest, Context context){
         // Create a new user with username and password
         Map<String, Object> quest = new HashMap<>();
@@ -194,6 +214,10 @@ public class DbConnection {
         storeRef.child(questTitle).delete();
     }
 
+    /**
+     * This method deletes a user from the database.
+     * @param username username of the account to be deleted
+     */
     public void deleteUser(String username){
         users.document(username).delete();
     }
@@ -240,11 +264,21 @@ public class DbConnection {
         });
     }
 
+    /**
+     * This method deletes a quest and replaces it with a new quest.
+     * @param deletedQuest string of quest to be deleted
+     * @param quest quest object of new quest
+     * @param context context
+     */
     public void updateQuestListAndCreate(String deletedQuest, Quest quest, Context context) {
         deleteQuestImage(quest.getName());
         deleteFromAllQuestsList(deletedQuest, quest, context, true);
     }
 
+    /**
+     * This method deletes all the quests created by a certain user.
+     * @param username the username of the account of which all quests will be deleted
+     */
     public void deleteUserQuests(String username){
         if(username == null)
             throw new IllegalArgumentException("Username cannot be null");
@@ -253,6 +287,10 @@ public class DbConnection {
         getAndDeleteCreatedQuests(username);
     }
 
+    /**
+     * This method deletes a certain quest.
+     * @param quest the quest to be deleted
+     */
     public void deleteQuest(Quest quest) {
         quests.document(quest.getName()).delete().addOnSuccessListener(aVoid -> {
             deleteFromAllQuestsList(quest.getName(),null, null,false);
@@ -260,6 +298,10 @@ public class DbConnection {
         });
     }
 
+    /**
+     * This method deletes the attempts certain users to certain quests.
+     * @param query
+     */
     public void deleteAttempts (Query query){
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -272,6 +314,12 @@ public class DbConnection {
         });
     }
 
+    /**
+     * This method replaces the old username with the new username in th quest attempts of an account
+     * in case that account has changed the username.
+     * @param oldUsername
+     * @param newUsername
+     */
     public void updateQuestCreator(String oldUsername, String newUsername) {
         Query userAttempts = quests.whereEqualTo("Creator", oldUsername);
         userAttempts.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

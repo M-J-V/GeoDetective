@@ -21,7 +21,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+/**
+ *  The ListOfQuestsActivity allows users to explore the available quests, showing their photo,
+ *  their name and the name of their creator.
+ */
 public class ListOfQuestsActivity extends AppCompatActivity {
 
     private final DbConnection db = DbConnection.getInstance();
@@ -34,6 +37,10 @@ public class ListOfQuestsActivity extends AppCompatActivity {
     private ArrayList<String> titles;
     private ArrayList<String> creators;
 
+    /**
+     * This method is called whenever the user returns to this activity, after initiating it.
+     * In our case, this method updates the quests list (in the case in which one was edited).
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -51,6 +58,12 @@ public class ListOfQuestsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     This method sets up the List of Quests activity where users can see the quests that are available.
+     It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -26,12 +26,23 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * The ProfileActivity class allows users to see some of their account information, permissions,
+ * while also allowing to move to pages such as History and Edit details.
+ */
 public class ProfileActivity extends AppCompatActivity {
     private final ActiveUser user = ActiveUser.getInstance();
     private final DbConnection db = DbConnection.getInstance();
     private UserPreferences preferences;
 
     @SuppressLint("SetTextI18n")
+    /**
+     This method sets up the Profile activity where users can see some of their account
+     information, permissions, while also allowing to move to pages such as History and Edit details.
+     It initializes various UI components such as buttons, text inputs, and error messages;
+     It also sets up the functionality of these UI components.
+     @param savedInstanceState A saved instance state of the activity, which can be null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
