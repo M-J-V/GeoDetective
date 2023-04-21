@@ -1,5 +1,6 @@
 package com.example.geodetective;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 
@@ -12,6 +13,8 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.geodetective.gameComponents.Timer;
 
 import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
 
 public class TimerTest {
 
@@ -45,5 +48,41 @@ public class TimerTest {
     }
 
     //TODO Check if textview of timer updates every second, remove removes timer from layout, stop stops timer, getTime.
+
+    @Test
+    public void testRemoveLayout() {
+        Context context = ApplicationProvider.getApplicationContext();
+        TextView timer = new TextView(context);
+        ConstraintLayout layout = new ConstraintLayout(context);
+        Timer timerObject = new Timer(layout, timer);
+        timerObject.remove();
+        assertEquals("", timerObject.getTime());
+    }
+
+    @Test
+    public void testStopTimer() {
+        Context context = ApplicationProvider.getApplicationContext();
+        TextView timer = new TextView(context);
+        ConstraintLayout layout = new ConstraintLayout(context);
+        Timer timerObject = new Timer(layout, timer);
+        timerObject.stop();
+        assertEquals("", timerObject.getTime().toString());
+    }
+
+    @Test
+    public void testUpdateTimer() {
+        Context context = ApplicationProvider.getApplicationContext();
+        TextView timer = new TextView(context);
+        ConstraintLayout layout = new ConstraintLayout(context);
+        ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+        );
+        Timer timerObject = new Timer(layout, timer);
+        timerObject.add(params);
+        assertNotEquals("", timerObject.getTime().toString());
+    }
+
+
 }
 
